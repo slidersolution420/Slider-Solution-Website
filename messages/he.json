@@ -1,0 +1,183 @@
+{
+  "nav": {
+    "logo": "Slider Solution",
+    "wholesale": "סיטונאות",
+    "home": "דף הבית",
+    "reviews": "ביקורות",
+    "contact": "צור קשר"
+  },
+  "hero": {
+    "headline": "ערכת הקון המקורית הכל-בכול",
+    "subheadline": "טחן. מלא. עשן. מושלם.",
+    "cta": "קבל את הסליידר שלי ←",
+    "badge_shipping_il": "משלוח חינם בישראל",
+    "badge_shipping_intl": "חינם על 3+ יחידות ברחבי העולם",
+    "badge_patent": "מוגן בפטנט",
+    "badge_customers": "+1K לקוחות מרוצים",
+    "color_label": "צבע"
+  },
+  "features": {
+    "title": "כל מה שאתה צריך",
+    "subtitle": "ערכה אחת. ארבעה כלים. ללא טרחה.",
+    "grinder_title": "מטחנה מרובעת",
+    "grinder_desc": "טחינה מדויקת לעקביות מושלמת בכל פעם.",
+    "tray_title": "מגש מוגן מרוח",
+    "tray_desc": "לא יותר מוצר שאבד. עובד בכל מזג אוויר.",
+    "funnel_title": "משפך",
+    "funnel_desc": "מילוי ישיר ונקי. נקי בכל פעם.",
+    "storage_title": "קונים ואחסון",
+    "storage_desc": "קונים מגולגלים מראש עם קופסת אחסון אטומה."
+  },
+  "ticker": {
+    "text": "טחן ~ מלא ~ עשן  •  משלוח לכל העולם  •  מוגן בפטנט"
+  },
+  "howto": {
+    "title": "איך זה עובד",
+    "subtitle": "שלושה שלבים לקון המושלם שלך.",
+    "step1_title": "טחן",
+    "step1_desc": "טען את המוצר שלך למטחנה המרובעת.",
+    "step2_title": "מלא",
+    "step2_desc": "השתמש במשפך למלא את הקון בצורה נקייה.",
+    "step3_title": "עשן",
+    "step3_desc": "תהנה. חזור."
+  },
+  "reviews": {
+    "title": "מה הלקוחות שלנו אומרים",
+    "subtitle": "מעל 1,000 לקוחות מרוצים ברחבי העולם.",
+    "see_all": "ראה את כל הביקורות ←",
+    "page_title": "ביקורות לקוחות",
+    "page_subtitle": "ביקורות אמיתיות מאוהבי סליידר אמיתיים.",
+    "stars": "{count} כוכבים",
+    "verified": "רכישה מאומתת",
+    "empty": "אין ביקורות עדיין. היה הראשון!"
+  },
+  "buy": {
+    "title": "קבל את ערכת הסליידר שלך",
+    "color_label": "בחר את הצבע שלך",
+    "color_black": "שחור",
+    "color_blue": "כחול",
+    "color_purple": "סגול",
+    "add_to_cart": "הוסף לעגלה ←",
+    "urgency_today": "משלוח היום",
+    "urgency_tomorrow": "יישלח מחר",
+    "urgency_stock": "מלאי מוגבל",
+    "b2b_composition": "6 ערכות סה\"כ — 2 שחור + 2 כחול + 2 סגול",
+    "b2b_cta": "הזמן סיטונאי ←",
+    "b2b_qty_label": "מספר קרטונים",
+    "price_label": "מחיר"
+  },
+  "qty": {
+    "title": "כמה ערכות?",
+    "kit_1": "ערכה 1",
+    "kit_2": "2 ערכות",
+    "kit_3": "3 ערכות",
+    "most_popular": "הכי פופולרי",
+    "saves": "חוסך {amount}"
+  },
+  "trust": {
+    "shipping": "משלוח חינם בישראל / חינם על 3+ ברחבי העולם",
+    "secure": "תשלום מאובטח · תשלום מוצפן",
+    "guarantee": "אחריות החזר כסף 30 יום"
+  },
+  "sticky": {
+    "add_to_cart": "הוסף לעגלה ←"
+  },
+  "exit": {
+    "title_il": "הערכה שלך מחכה.",
+    "body_il": "כולל משלוח חינם.",
+    "title_intl_upgrade": "כמעט שם.",
+    "body_intl_upgrade": "הוסף עוד אחד — פתח משלוח חינם לכל העולם.",
+    "title_intl_free": "אתה מוסמך.",
+    "body_intl_free": "ההזמנה שלך מוסמכת למשלוח חינם לכל העולם.",
+    "cta": "השלם את ההזמנה שלי ←",
+    "dismiss": "אולי מאוחר יותר"
+  },
+  "cart": {
+    "title": "הסליידר שלך",
+    "empty": "עדיין אין כלום — בואו נתקן זאת.",
+    "checkout": "תשלום מאובטח ←",
+    "remove": "הסר",
+    "subtotal": "סכום ביניים",
+    "shipping": "משלוח",
+    "total": "אתה משלם היום",
+    "free": "חינם 🎉"
+  },
+  "checkout": {
+    "title": "משלוח מהיר לדלתך",
+    "address_placeholder": "לאן לשלוח את הסליידר שלך?",
+    "country_label": "שלח ל",
+    "zip_label": "מיקוד",
+    "order_summary": "ההזמנה שלך",
+    "shipping_row": "משלוח",
+    "free": "חינם 🎉",
+    "paid_shipping": "$25 · 7-21 יום",
+    "total": "אתה משלם היום",
+    "cta": "קבל את הסליידר שלי ←",
+    "processing": "מאבטח את ההזמנה שלך...",
+    "first_name": "שם פרטי",
+    "last_name": "שם משפחה",
+    "email": "אימייל",
+    "phone": "מספר טלפון",
+    "address": "כתובת רחוב",
+    "city": "עיר",
+    "state": "מדינה / מחוז"
+  },
+  "success": {
+    "title": "אתה בפנים. 🎉",
+    "subtitle": "הסליידר שלך בדרך אליך.",
+    "order_number": "הזמנה #{id}",
+    "email_sent": "שלחנו אישור ל{email}.",
+    "continue_shopping": "המשך קניות"
+  },
+  "wholesale": {
+    "modal_title": "פורטל שותפי סיטונאות",
+    "tab_login": "כניסה",
+    "tab_signup": "יצירת חשבון",
+    "first_name": "שם פרטי",
+    "last_name": "שם משפחה",
+    "phone": "מספר טלפון",
+    "email": "אימייל",
+    "username": "שם משתמש",
+    "password": "סיסמה",
+    "confirm_password": "אימות סיסמה",
+    "store_name": "שם החנות",
+    "address": "כתובת",
+    "city": "עיר",
+    "country": "מדינה",
+    "zip": "מיקוד",
+    "email_consent": "אני מסכים לקבל אימיילים, חדשות והנחות מסליידר",
+    "create_account": "צור את החשבון שלי",
+    "login_cta": "כניסה",
+    "forgot_password": "שכחת סיסמה?",
+    "join_cta": "הצטרף אלינו ←",
+    "footer_cta": "מחפש סיטונאות?",
+    "welcome_back": "ברוך שובך",
+    "account_created": "החשבון נוצר! ברוך הבא לסליידר סיטונאות.",
+    "login_success": "נכנסת בהצלחה.",
+    "error_email_taken": "האימייל הזה כבר רשום.",
+    "error_username_taken": "שם המשתמש הזה כבר תפוס.",
+    "error_invalid_credentials": "אימייל או סיסמה שגויים."
+  },
+  "email": {
+    "order_confirmation_subject": "הסליידר שלך אושר ✓ (#{id})",
+    "how_to_use_subject": "קבל את המקסימום מהסליידר שלך 🌿",
+    "leave_review_subject": "איך הסליידר שלך? ספר לנו 💬",
+    "abandoned_cart_subject": "הערכה שלך עדיין כאן.",
+    "wholesale_welcome_subject": "ברוך הבא לסליידר סיטונאות {name} 🎯",
+    "wholesale_reorder_subject": "הגיע הזמן להזמין מחדש? פורטל הסיטונאות שלך מוכן.",
+    "owner_alert_subject": "שותף חדש: {storeName} הצטרף"
+  },
+  "footer": {
+    "tagline": "ערכת הקון המקורית הכל-בכול",
+    "home": "דף הבית",
+    "reviews": "ביקורות",
+    "wholesale": "סיטונאות",
+    "contact": "צור קשר",
+    "privacy": "מדיניות פרטיות",
+    "terms": "תנאי שימוש",
+    "copyright": "© 2025 Slider Solution. כל הזכויות שמורות.",
+    "social_facebook": "פייסבוק",
+    "social_instagram": "אינסטגרם",
+    "social_linkedin": "לינקדאין"
+  }
+}

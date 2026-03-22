@@ -1,0 +1,183 @@
+{
+  "nav": {
+    "logo": "Slider Solution",
+    "wholesale": "Mayorista",
+    "home": "Inicio",
+    "reviews": "Reseñas",
+    "contact": "Contacto"
+  },
+  "hero": {
+    "headline": "El Kit de Cono Todo-en-Uno Original",
+    "subheadline": "Muele. Llena. Fuma. Perfeccionado.",
+    "cta": "Obtener mi Slider →",
+    "badge_shipping_il": "Envío Gratis a Israel",
+    "badge_shipping_intl": "Gratis en 3+ Unidades a Todo el Mundo",
+    "badge_patent": "Protegido por Patente",
+    "badge_customers": "+1K Clientes Felices",
+    "color_label": "Color"
+  },
+  "features": {
+    "title": "Todo lo que Necesitas",
+    "subtitle": "Un kit. Cuatro herramientas. Sin complicaciones.",
+    "grinder_title": "Molinillo Cuadrado",
+    "grinder_desc": "Molido de precisión para un relleno uniforme y consistente cada vez.",
+    "tray_title": "Bandeja Protegida del Viento",
+    "tray_desc": "Sin más producto perdido. Funciona en cualquier clima.",
+    "funnel_title": "Embudo",
+    "funnel_desc": "Relleno directo y sin desorden. Limpio cada vez.",
+    "storage_title": "Conos y Almacenamiento",
+    "storage_desc": "Conos pre-enrollados incluidos con estuche de almacenamiento hermético."
+  },
+  "ticker": {
+    "text": "Muele ~ Llena ~ Fuma  •  ENVÍO MUNDIAL  •  Protegido por Patente"
+  },
+  "howto": {
+    "title": "Cómo Funciona",
+    "subtitle": "Tres pasos para tu cono perfecto.",
+    "step1_title": "Muele",
+    "step1_desc": "Carga tu producto en el molinillo cuadrado.",
+    "step2_title": "Llena",
+    "step2_desc": "Usa el embudo para llenar tu cono limpiamente.",
+    "step3_title": "Fuma",
+    "step3_desc": "Disfruta. Repite."
+  },
+  "reviews": {
+    "title": "Lo Que Dicen Nuestros Clientes",
+    "subtitle": "Más de 1,000 clientes felices en todo el mundo.",
+    "see_all": "Ver todas las reseñas →",
+    "page_title": "Reseñas de Clientes",
+    "page_subtitle": "Reseñas reales de verdaderos fans de Slider.",
+    "stars": "{count} estrellas",
+    "verified": "Compra Verificada",
+    "empty": "Aún no hay reseñas. ¡Sé el primero!"
+  },
+  "buy": {
+    "title": "Obtén Tu Kit Slider",
+    "color_label": "Elige Tu Color",
+    "color_black": "Negro",
+    "color_blue": "Azul",
+    "color_purple": "Morado",
+    "add_to_cart": "Añadir al Carrito →",
+    "urgency_today": "Envío hoy",
+    "urgency_tomorrow": "Se envía mañana",
+    "urgency_stock": "Stock limitado disponible",
+    "b2b_composition": "6 Kits en Total — 2 Negro + 2 Azul + 2 Morado",
+    "b2b_cta": "Pedir al por Mayor →",
+    "b2b_qty_label": "Número de Cajas",
+    "price_label": "Precio"
+  },
+  "qty": {
+    "title": "¿Cuántos kits?",
+    "kit_1": "1 Kit",
+    "kit_2": "2 Kits",
+    "kit_3": "3 Kits",
+    "most_popular": "Más Popular",
+    "saves": "ahorra {amount}"
+  },
+  "trust": {
+    "shipping": "Envío gratis a Israel / Gratis en 3+ mundial",
+    "secure": "Pago seguro · Pago cifrado",
+    "guarantee": "Garantía de devolución de 30 días"
+  },
+  "sticky": {
+    "add_to_cart": "Añadir al Carrito →"
+  },
+  "exit": {
+    "title_il": "Tu kit está esperando.",
+    "body_il": "Envío gratis incluido.",
+    "title_intl_upgrade": "Casi ahí.",
+    "body_intl_upgrade": "Añade uno más — desbloquea envío gratis mundial.",
+    "title_intl_free": "Calificas.",
+    "body_intl_free": "Tu pedido califica para envío gratis mundial.",
+    "cta": "Completar mi pedido →",
+    "dismiss": "Quizás después"
+  },
+  "cart": {
+    "title": "Tu Slider",
+    "empty": "Nada aquí todavía — vamos a arreglarlo.",
+    "checkout": "Pago seguro →",
+    "remove": "Eliminar",
+    "subtotal": "Subtotal",
+    "shipping": "Entrega",
+    "total": "Pagas hoy",
+    "free": "Gratis 🎉"
+  },
+  "checkout": {
+    "title": "Entrega rápida a tu puerta",
+    "address_placeholder": "¿Dónde enviamos tu Slider?",
+    "country_label": "Entregar a",
+    "zip_label": "Código Postal",
+    "order_summary": "Tu Pedido",
+    "shipping_row": "Entrega",
+    "free": "Gratis 🎉",
+    "paid_shipping": "$25 · 7-21 días",
+    "total": "Pagas hoy",
+    "cta": "Obtener mi Slider →",
+    "processing": "Asegurando tu pedido...",
+    "first_name": "Nombre",
+    "last_name": "Apellido",
+    "email": "Correo Electrónico",
+    "phone": "Número de Teléfono",
+    "address": "Dirección",
+    "city": "Ciudad",
+    "state": "Estado / Provincia"
+  },
+  "success": {
+    "title": "Estás dentro. 🎉",
+    "subtitle": "Tu Slider está en camino.",
+    "order_number": "Pedido #{id}",
+    "email_sent": "Enviamos una confirmación a {email}.",
+    "continue_shopping": "Continuar Comprando"
+  },
+  "wholesale": {
+    "modal_title": "Portal de Socios Mayoristas",
+    "tab_login": "Iniciar Sesión",
+    "tab_signup": "Crear Cuenta",
+    "first_name": "Nombre",
+    "last_name": "Apellido",
+    "phone": "Número de Teléfono",
+    "email": "Correo Electrónico",
+    "username": "Nombre de Usuario",
+    "password": "Contraseña",
+    "confirm_password": "Confirmar Contraseña",
+    "store_name": "Nombre de la Tienda",
+    "address": "Dirección",
+    "city": "Ciudad",
+    "country": "País",
+    "zip": "Código Postal",
+    "email_consent": "Acepto recibir correos, noticias y descuentos de Slider",
+    "create_account": "Crear mi cuenta",
+    "login_cta": "Iniciar Sesión",
+    "forgot_password": "¿Olvidaste tu contraseña?",
+    "join_cta": "Únete a nosotros →",
+    "footer_cta": "¿Buscas mayoreo?",
+    "welcome_back": "Bienvenido de vuelta",
+    "account_created": "¡Cuenta creada! Bienvenido a Slider Wholesale.",
+    "login_success": "Sesión iniciada correctamente.",
+    "error_email_taken": "Este correo ya está registrado.",
+    "error_username_taken": "Este nombre de usuario ya está en uso.",
+    "error_invalid_credentials": "Correo o contraseña incorrectos."
+  },
+  "email": {
+    "order_confirmation_subject": "Tu Slider está confirmado ✓ (#{id})",
+    "how_to_use_subject": "Saca el máximo de tu Slider 🌿",
+    "leave_review_subject": "¿Cómo va tu Slider? Cuéntanos 💬",
+    "abandoned_cart_subject": "Tu kit todavía está aquí.",
+    "wholesale_welcome_subject": "Bienvenido a Slider Wholesale {name} 🎯",
+    "wholesale_reorder_subject": "¿Hora de reabastecer? Tu portal mayorista está listo.",
+    "owner_alert_subject": "Nuevo socio: {storeName} acaba de unirse"
+  },
+  "footer": {
+    "tagline": "El Kit de Cono Todo-en-Uno Original",
+    "home": "Inicio",
+    "reviews": "Reseñas",
+    "wholesale": "Mayorista",
+    "contact": "Contacto",
+    "privacy": "Política de Privacidad",
+    "terms": "Términos de Servicio",
+    "copyright": "© 2025 Slider Solution. Todos los derechos reservados.",
+    "social_facebook": "Facebook",
+    "social_instagram": "Instagram",
+    "social_linkedin": "LinkedIn"
+  }
+}
