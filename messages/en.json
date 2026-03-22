@@ -6,6 +6,19 @@
     "reviews": "Reviews",
     "contact": "Contact"
   },
+  "ageGate": {
+    "headline": "Welcome To Slider Solution Website",
+    "sub": "Are you 21 or older?",
+    "yes": "Yes, I'm 21+",
+    "no": "No, take me out"
+  },
+  "swatch": {
+    "label": {
+      "black": "Black kit",
+      "blue": "Blue kit",
+      "purple": "Purple kit"
+    }
+  },
   "hero": {
     "headline": "The Original All-in-One Cone Kit",
     "subheadline": "Grind. Fill. Smoke. Perfected.",
@@ -14,7 +27,8 @@
     "badge_shipping_intl": "Free on 3+ Units Worldwide",
     "badge_patent": "Patent Protected",
     "badge_customers": "+1K Happy Customers",
-    "color_label": "Color"
+    "color_label": "Color",
+    "sub": "The all-in-one kit that makes rolling easy, clean and consistent."
   },
   "features": {
     "title": "Everything You Need",
@@ -23,23 +37,23 @@
     "grinder_desc": "Precision-ground for a consistent, even fill every time.",
     "tray_title": "Wind-Protected Tray",
     "tray_desc": "No more lost product. Works in any weather.",
-    "funnel_title": "Funnel",
+    "funnel_title": "Funnel Attachment",
     "funnel_desc": "Direct, mess-free filling. Clean every time.",
     "storage_title": "Cones & Storage",
     "storage_desc": "Pre-rolled cones included with an airtight storage case."
   },
   "ticker": {
-    "text": "Grind ~ Fill ~ Smoke  •  WORLDWIDE SHIPPING  •  Patent Protected"
+    "text": "Grind ~ Fill ~ Smoke  •  WORLDWIDE SHIPPING  •  Patent Protected  •  +1K Happy Customers"
   },
   "howto": {
     "title": "How It Works",
     "subtitle": "Three steps to your perfect cone.",
     "step1_title": "Grind",
-    "step1_desc": "Load your product into the square grinder.",
+    "step1_desc": "Load your product into the square grinder for a perfectly even consistency.",
     "step2_title": "Fill",
-    "step2_desc": "Use the funnel to fill your cone cleanly.",
+    "step2_desc": "Use the funnel to fill your cone cleanly. No mess, no waste.",
     "step3_title": "Smoke",
-    "step3_desc": "Enjoy. Repeat."
+    "step3_desc": "Enjoy a perfectly filled cone every time. Repeat."
   },
   "reviews": {
     "title": "What Our Customers Say",
@@ -58,13 +72,14 @@
     "color_blue": "Blue",
     "color_purple": "Purple",
     "add_to_cart": "Add to Cart →",
-    "urgency_today": "Shipping today",
-    "urgency_tomorrow": "Ships tomorrow",
-    "urgency_stock": "Limited stock available",
+    "urgency_today": "🚀 Shipping today",
+    "urgency_tomorrow": "📦 Ships tomorrow",
+    "urgency_stock": "⚡ Limited stock available",
     "b2b_composition": "6 Kits Total — 2 Black + 2 Blue + 2 Purple",
     "b2b_cta": "Order Wholesale →",
     "b2b_qty_label": "Number of Boxes",
-    "price_label": "Price"
+    "price_label": "Price",
+    "b2b_wave4": "Coming in Wave 4"
   },
   "qty": {
     "title": "How many kits?",
@@ -72,19 +87,31 @@
     "kit_2": "2 Kits",
     "kit_3": "3 Kits",
     "most_popular": "Most Popular",
-    "saves": "saves {amount}"
+    "saves": "saves {amount}",
+    "1": { "label": "1 Kit" },
+    "2": { "label": "2 Kits" },
+    "3": { "label": "3 Kits" }
   },
   "trust": {
-    "shipping": "Free shipping in Israel / Free on 3+ worldwide",
-    "secure": "Secure checkout · Encrypted payment",
-    "guarantee": "30-day money-back guarantee"
+    "shipping": "Free shipping in Israel",
+    "shipping_sub": "Free on 3+ worldwide",
+    "secure": "Secure checkout",
+    "secure_sub": "Encrypted payment",
+    "guarantee": "30-day money-back guarantee",
+    "guarantee_sub": "No questions asked"
   },
   "sticky": {
     "add_to_cart": "Add to Cart →"
   },
   "exit": {
+    "headline": "Your kit is waiting.",
     "title_il": "Your kit is waiting.",
     "body_il": "Free shipping included.",
+    "sub": {
+      "israel": "Your kit is waiting. Free shipping included.",
+      "intl_under3": "Add one more — unlock free worldwide shipping.",
+      "intl_3plus": "Your order qualifies for free worldwide shipping."
+    },
     "title_intl_upgrade": "Almost there.",
     "body_intl_upgrade": "Add one more — unlock free worldwide shipping.",
     "title_intl_free": "You qualify.",
@@ -99,7 +126,7 @@
     "remove": "Remove",
     "subtotal": "Subtotal",
     "shipping": "Delivery",
-    "total": "You pay today",
+    "total": "Order total",
     "free": "Free 🎉"
   },
   "checkout": {
@@ -131,6 +158,7 @@
   },
   "wholesale": {
     "modal_title": "Wholesale Partner Portal",
+    "placeholder": "Full wholesale portal coming in Wave 4.",
     "tab_login": "Login",
     "tab_signup": "Create Account",
     "first_name": "First Name",
@@ -178,6 +206,7 @@
     "copyright": "© 2025 Slider Solution. All rights reserved.",
     "social_facebook": "Facebook",
     "social_instagram": "Instagram",
-    "social_linkedin": "LinkedIn"
+    "social_linkedin": "LinkedIn",
+    "wholesale_cta": "Looking for wholesale? Join us →"
   }
 }
