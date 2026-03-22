@@ -37,32 +37,33 @@ export interface Order {
   id: string
   email: string
   name: string
-  shippingAddress: ShippingAddress
+  shipping_address: ShippingAddress
   country: string
   items: CartItem[]
-  totalUsd: number
+  total_usd: number
   status: OrderStatus
-  hypePaymentId?: string
-  tapuzTrackingNumber?: string
+  hype_payment_id?: string
+  tapuz_tracking_number?: string
   type: OrderType
-  createdAt: string
+  created_at: string
 }
 
 export interface WholesaleAccount {
   id: string
-  userId: string
-  businessName: string
-  contactName: string
+  user_id: string
+  business_name: string
+  contact_name: string
+  email?: string
   phone: string
   username: string
-  storeName: string
+  store_name: string
   address: string
   city: string
   country: string
   zip: string
   status: WholesaleAccountStatus
-  approvedAt?: string
-  createdAt: string
+  approved_at?: string
+  created_at: string
 }
 
 export interface ShippingResult {

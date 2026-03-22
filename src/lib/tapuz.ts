@@ -1,82 +1,80 @@
 /**
  * lib/tapuz.ts
- * ALL Tapuz shipping/delivery logic lives here only.
- * Stubs for Wave 0 — full implementation in Wave 3 after API docs provided.
+ * Tapuz delivery integration — typed stub for Wave 3.
+ * Full implementation pending API docs from Tapuz.
+ * Mock fallback is used when TAPUZ_API_KEY is not set.
  */
-
-import type { ShippingAddress } from './types'
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
 export interface TapuzShipment {
-  shipmentId: string
   trackingNumber: string
-  trackingUrl: string
-  status: TapuzShipmentStatus
-  estimatedDelivery?: string
-  createdAt: string
+  labelUrl: string
+  carrier: string
+  estimatedDays: number
 }
 
-export type TapuzShipmentStatus =
-  | 'created'
-  | 'picked_up'
-  | 'in_transit'
-  | 'out_for_delivery'
-  | 'delivered'
-  | 'failed'
-  | 'returned'
+export interface TapuzAddress {
+  name: string
+  email: string
+  phone?: string
+  line1: string
+  city: string
+  country: string
+  zip: string
+}
 
-export interface TapuzCreateShipmentParams {
+export interface TapuzOrderPayload {
   orderId: string
-  recipientName: string
-  recipientEmail: string
-  recipientPhone: string
-  shippingAddress: ShippingAddress
-  weightKg: number
-  packageCount: number
+  recipient: TapuzAddress
+  weightKg?: number
+  packageCount?: number
 }
 
-export interface TapuzTrackingResult {
-  shipmentId: string
-  trackingNumber: string
-  status: TapuzShipmentStatus
-  events: TapuzTrackingEvent[]
-}
-
-export interface TapuzTrackingEvent {
-  timestamp: string
-  status: TapuzShipmentStatus
-  location?: string
-  description: string
-}
-
-// ─── Error ──────────────────────────────────────────────────────────────────
-
-export class NotImplementedError extends Error {
-  constructor(method: string) {
-    super(`Tapuz.${method} not yet implemented — pending API docs (Wave 3)`)
-    this.name = 'NotImplementedError'
-  }
-}
-
-// ─── Stubs ──────────────────────────────────────────────────────────────────
+// ─── Implementation ──────────────────────────────────────────────────────────
 
 /**
  * Create a shipment via Tapuz.
- * Full implementation in Wave 3 after API docs provided.
+ * Returns a mock shipment when TAPUZ_API_KEY is not set.
+ * Logs a warning if API key is present but Tapuz implementation is pending.
  */
 export async function createShipment(
-  _params: TapuzCreateShipmentParams,
+  payload: TapuzOrderPayload,
 ): Promise<TapuzShipment> {
-  throw new NotImplementedError('createShipment')
+  if (!process.env.TAPUZ_API_KEY) {
+    // Dev / staging mock — no external call
+    return {
+      trackingNumber: `MOCK-${payload.orderId.slice(0, 8).toUpperCase()}`,
+      labelUrl: '',
+      carrier: 'mock',
+      estimatedDays: 7,
+    }
+  }
+
+  // TODO: implement real Tapuz API call once docs are provided
+  console.warn('[tapuz] TAPUZ_API_KEY is set but API not yet implemented')
+  return {
+    trackingNumber: `MOCK-${payload.orderId.slice(0, 8).toUpperCase()}`,
+    labelUrl: '',
+    carrier: 'mock',
+    estimatedDays: 7,
+  }
 }
 
 /**
- * Get tracking status for a Tapuz shipment.
- * Full implementation in Wave 3 after API docs provided.
+ * Get tracking status for a shipment.
+ * Returns a human-readable status string.
  */
-export async function getTrackingStatus(
-  _trackingNumber: string,
-): Promise<TapuzTrackingResult> {
-  throw new NotImplementedError('getTrackingStatus')
+export async function getTrackingStatus(trackingNumber: string): Promise<string> {
+  if (trackingNumber.startsWith('MOCK-')) {
+    return 'In transit (mock)'
+  }
+
+  if (!process.env.TAPUZ_API_KEY) {
+    return 'Unknown'
+  }
+
+  // TODO: implement real Tapuz tracking call once docs are provided
+  console.warn('[tapuz] getTrackingStatus not yet implemented')
+  return 'Unknown'
 }

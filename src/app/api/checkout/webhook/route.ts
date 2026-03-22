@@ -61,7 +61,27 @@ export async function POST(request: Request): Promise<Response> {
       .eq('id', cartSessionId)
   }
 
-  // Delivery + email triggers come in Wave 3
+  // Fire delivery trigger (creates shipment + sends confirmation email)
+  try {
+    const { data: newOrder } = await supabase
+      .from('orders')
+      .select('id')
+      .eq('hype_payment_id', paymentId)
+      .single()
+
+    if (newOrder?.id) {
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+      fetch(`${appUrl}/api/delivery`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId: newOrder.id }),
+      }).catch((err: unknown) =>
+        console.error('[webhook] delivery trigger failed:', err),
+      )
+    }
+  } catch (err) {
+    console.error('[webhook] delivery lookup failed:', err)
+  }
 
   return Response.json({ received: true })
 }
