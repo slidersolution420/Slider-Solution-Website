@@ -45,16 +45,28 @@ interface StoreState {
   // Country selection (for shipping calc)
   selectedCountry: string
   setSelectedCountry: (country: string) => void
+
+  // Cart session (written to Supabase at checkout)
+  cartSessionId: string | null
+  setCartSessionId: (id: string | null) => void
+}
+
+// ─── sessionStorage sync helper ──────────────────────────────────────────────
+
+function syncCartToSession(cart: CartItem[]): void {
+  if (typeof window !== 'undefined') {
+    sessionStorage.setItem('slider_cart', JSON.stringify(cart))
+  }
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────
 
 export const useStore = create<StoreState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       // Cart
       cart: [],
-      addToCart: (item) =>
+      addToCart: (item) => {
         set((state) => {
           const existing = state.cart.find(
             (c) => c.productId === item.productId && c.color === item.color,
@@ -69,20 +81,27 @@ export const useStore = create<StoreState>()(
             }
           }
           return { cart: [...state.cart, item] }
-        }),
-      removeFromCart: (productId, color) =>
+        })
+        syncCartToSession(get().cart)
+      },
+      removeFromCart: (productId, color) => {
         set((state) => ({
           cart: state.cart.filter(
             (c) => !(c.productId === productId && c.color === color),
           ),
-        })),
+        }))
+        syncCartToSession(get().cart)
+      },
       updateQty: (productId, color, qty) =>
         set((state) => ({
           cart: state.cart.map((c) =>
             c.productId === productId && c.color === color ? { ...c, qty } : c,
           ),
         })),
-      clearCart: () => set({ cart: [] }),
+      clearCart: () => {
+        set({ cart: [] })
+        syncCartToSession([])
+      },
 
       // Product selection
       selectedColor: 'black',
@@ -114,10 +133,14 @@ export const useStore = create<StoreState>()(
       // Country
       selectedCountry: 'IL',
       setSelectedCountry: (country) => set({ selectedCountry: country }),
+
+      // Cart session
+      cartSessionId: null,
+      setCartSessionId: (id) => set({ cartSessionId: id }),
     }),
     {
       name: 'slider-solution-store',
-      // Only persist currency — cart/color are session-based by default
+      // Only persist currency and cart
       partialize: (state) => ({
         currency: state.currency,
         cart: state.cart,

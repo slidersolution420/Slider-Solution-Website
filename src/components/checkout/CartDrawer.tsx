@@ -3,10 +3,13 @@
 import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslations } from 'next-intl'
+import { useLocale } from 'next-intl'
+import { useRouter } from 'next/navigation'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useStore } from '@/store'
 import { formatPrice } from '@/lib/currency'
 import { getShippingCost, getShippingMessage } from '@/lib/shipping'
+import { trackBeginCheckout } from '@/lib/analytics'
 import TrustBar from '@/components/ui/TrustBar'
 import type { ProductColor } from '@/lib/types'
 
@@ -24,6 +27,8 @@ const COLOR_NAMES: Record<ProductColor, string> = {
 
 export default function CartDrawer() {
   const t = useTranslations('cart')
+  const locale = useLocale()
+  const router = useRouter()
   const cart = useStore((s) => s.cart)
   const currency = useStore((s) => s.currency)
   const selectedCountry = useStore((s) => s.selectedCountry)
@@ -32,6 +37,7 @@ export default function CartDrawer() {
   const removeFromCart = useStore((s) => s.removeFromCart)
 
   const isOpen = modals.cart
+  const hasCountry = selectedCountry !== ''
 
   // Escape key
   useEffect(() => {
@@ -55,9 +61,25 @@ export default function CartDrawer() {
     0,
   )
   const totalQty = cart.reduce((sum, item) => sum + item.qty, 0)
-  const shippingUsd = getShippingCost(selectedCountry || 'IL', totalQty, 'USD')
+
+  // Only calc shipping if country is known; default to IL for display
+  const effectiveCountry = hasCountry ? selectedCountry : 'IL'
+  const shippingUsd = getShippingCost(effectiveCountry, totalQty, 'USD')
+  const shippingMsg = hasCountry
+    ? getShippingMessage(effectiveCountry, totalQty)
+    : t('shipping_unknown')
   const totalUsd = subtotalUsd + shippingUsd
-  const shippingMsg = getShippingMessage(selectedCountry || 'IL', totalQty)
+
+  function handleCheckout() {
+    trackBeginCheckout({
+      items: cart,
+      totalUsd,
+      currency,
+      shippingCountry: effectiveCountry,
+    })
+    closeModal('cart')
+    router.push(`/${locale}/checkout`)
+  }
 
   return (
     <AnimatePresence>
@@ -146,21 +168,25 @@ export default function CartDrawer() {
                 {/* Shipping */}
                 <div className="flex items-center justify-between text-sm font-outfit">
                   <span className="text-gray-400">{t('shipping')}</span>
-                  <span className="text-gray-300">
-                    {shippingUsd === 0
-                      ? t('free')
-                      : formatPrice(shippingUsd, currency)}
+                  <span className={`${!hasCountry ? 'text-gray-500 text-xs' : 'text-gray-300'}`}>
+                    {!hasCountry
+                      ? t('shipping_unknown')
+                      : shippingUsd === 0
+                        ? t('free')
+                        : formatPrice(shippingUsd, currency)}
                   </span>
                 </div>
-                <div className="text-xs font-outfit text-gray-500 -mt-2">
-                  {shippingMsg}
-                </div>
+                {hasCountry && (
+                  <div className="text-xs font-outfit text-gray-500 -mt-2">
+                    {shippingMsg}
+                  </div>
+                )}
 
                 {/* Total */}
                 <div className="flex items-center justify-between font-syne font-bold">
                   <span className="text-white">{t('total')}</span>
                   <span className="text-white text-lg">
-                    {formatPrice(totalUsd, currency)}
+                    {formatPrice(hasCountry ? totalUsd : subtotalUsd, currency)}
                   </span>
                 </div>
 
@@ -168,7 +194,10 @@ export default function CartDrawer() {
                 <TrustBar className="py-2" />
 
                 {/* CTA */}
-                <button className="btn-purple w-full text-base py-3.5">
+                <button
+                  onClick={handleCheckout}
+                  className="btn-purple w-full text-base py-3.5"
+                >
                   {t('checkout')}
                 </button>
               </div>

@@ -126,6 +126,7 @@
     "remove": "Remove",
     "subtotal": "Subtotal",
     "shipping": "Delivery",
+    "shipping_unknown": "Calculated at checkout",
     "total": "Order total",
     "free": "Free 🎉"
   },
@@ -147,13 +148,43 @@
     "phone": "Phone Number",
     "address": "Street Address",
     "city": "City",
-    "state": "State / Province"
+    "state": "State / Province",
+    "section": {
+      "shipping": "Fast delivery to your door"
+    },
+    "field": {
+      "name": "Full name",
+      "email": "Email address",
+      "address": "Street address",
+      "city": "City",
+      "country": "Deliver to",
+      "zip": "Postal Code"
+    },
+    "addr": {
+      "placeholder": "Where should we send your Slider?"
+    },
+    "summary": {
+      "title": "Your Order",
+      "shipping": "Delivery",
+      "total": "You pay today"
+    },
+    "shipping": {
+      "free": "Free 🎉",
+      "paid": "$25 · 7–21 days",
+      "unknown": "Calculated at checkout"
+    },
+    "error": {
+      "generic": "Something went wrong. Please try again."
+    }
   },
   "success": {
     "title": "You're in. 🎉",
+    "sub": "Your Slider is on its way.",
     "subtitle": "Your Slider is on its way.",
     "order_number": "Order #{id}",
     "email_sent": "We've sent a confirmation to {email}.",
+    "email": "Confirmation sent to your inbox",
+    "back": "← Back to store",
     "continue_shopping": "Continue Shopping"
   },
   "wholesale": {

@@ -126,6 +126,7 @@
     "remove": "הסר",
     "subtotal": "סכום ביניים",
     "shipping": "משלוח",
+    "shipping_unknown": "יחושב בתשלום",
     "total": "סה\"כ להזמנה",
     "free": "חינם 🎉"
   },
@@ -147,13 +148,43 @@
     "phone": "מספר טלפון",
     "address": "כתובת רחוב",
     "city": "עיר",
-    "state": "מדינה / מחוז"
+    "state": "מדינה / מחוז",
+    "section": {
+      "shipping": "משלוח מהיר לדלתך"
+    },
+    "field": {
+      "name": "שם מלא",
+      "email": "כתובת אימייל",
+      "address": "כתובת רחוב",
+      "city": "עיר",
+      "country": "שלח ל",
+      "zip": "מיקוד"
+    },
+    "addr": {
+      "placeholder": "לאן לשלוח את הסליידר שלך?"
+    },
+    "summary": {
+      "title": "ההזמנה שלך",
+      "shipping": "משלוח",
+      "total": "אתה משלם היום"
+    },
+    "shipping": {
+      "free": "חינם 🎉",
+      "paid": "$25 · 7-21 יום",
+      "unknown": "יחושב בתשלום"
+    },
+    "error": {
+      "generic": "משהו השתבש. נסה שוב."
+    }
   },
   "success": {
     "title": "אתה בפנים. 🎉",
+    "sub": "הסליידר שלך בדרך אליך.",
     "subtitle": "הסליידר שלך בדרך אליך.",
     "order_number": "הזמנה #{id}",
     "email_sent": "שלחנו אישור ל{email}.",
+    "email": "אישור נשלח לתיבת הדואר שלך",
+    "back": "← חזרה לחנות",
     "continue_shopping": "המשך קניות"
   },
   "wholesale": {

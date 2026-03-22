@@ -126,6 +126,7 @@
     "remove": "Eliminar",
     "subtotal": "Subtotal",
     "shipping": "Entrega",
+    "shipping_unknown": "Calculado al pagar",
     "total": "Total del pedido",
     "free": "Gratis 🎉"
   },
@@ -147,13 +148,43 @@
     "phone": "Número de Teléfono",
     "address": "Dirección",
     "city": "Ciudad",
-    "state": "Estado / Provincia"
+    "state": "Estado / Provincia",
+    "section": {
+      "shipping": "Entrega rápida a tu puerta"
+    },
+    "field": {
+      "name": "Nombre completo",
+      "email": "Correo electrónico",
+      "address": "Dirección",
+      "city": "Ciudad",
+      "country": "Entregar a",
+      "zip": "Código Postal"
+    },
+    "addr": {
+      "placeholder": "¿Dónde enviamos tu Slider?"
+    },
+    "summary": {
+      "title": "Tu Pedido",
+      "shipping": "Entrega",
+      "total": "Pagas hoy"
+    },
+    "shipping": {
+      "free": "Gratis 🎉",
+      "paid": "$25 · 7-21 días",
+      "unknown": "Calculado al pagar"
+    },
+    "error": {
+      "generic": "Algo salió mal. Por favor inténtalo de nuevo."
+    }
   },
   "success": {
     "title": "Estás dentro. 🎉",
+    "sub": "Tu Slider está en camino.",
     "subtitle": "Tu Slider está en camino.",
     "order_number": "Pedido #{id}",
     "email_sent": "Enviamos una confirmación a {email}.",
+    "email": "Confirmación enviada a tu bandeja",
+    "back": "← Volver a la tienda",
     "continue_shopping": "Continuar Comprando"
   },
   "wholesale": {

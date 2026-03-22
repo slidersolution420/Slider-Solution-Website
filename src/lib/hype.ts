@@ -1,67 +1,107 @@
 /**
  * lib/hype.ts
- * ALL Hype payment logic lives here only.
- * Stubs for Wave 0 — full implementation in Wave 2 after API docs provided.
+ * Hype payment gateway integration — Wave 2 full implementation.
  */
 
-// ─── Types ──────────────────────────────────────────────────────────────────
+import crypto from 'crypto'
+
+const HYPE_API_KEY = process.env.HYPE_API_KEY ?? ''
+const HYPE_REFERER = process.env.HYPE_REFERER ?? ''
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 
 export interface HypePaymentSession {
+  sessionUrl: string
   sessionId: string
-  paymentUrl: string
-  expiresAt: string
-  amountUsd: number
-  orderId: string
 }
 
-export interface HypeWebhookPayload {
-  event: 'payment.completed' | 'payment.failed' | 'payment.refunded'
-  sessionId: string
-  orderId: string
-  amountUsd: number
-  currency: string
-  timestamp: string
-  signature: string
+export interface CustomerInfo {
+  name: string
+  email: string
+  address: string
+  city: string
+  country: string
+  zip: string
 }
 
-export interface HypeInitiatePaymentParams {
-  orderId: string
-  amountUsd: number
-  customerEmail: string
-  customerName: string
-  successUrl: string
-  cancelUrl: string
+/** Minimal cart shape — only priceUsd + qty are used for total calculation. */
+type CartLineItem = {
+  priceUsd: number
+  qty: number
 }
 
-// ─── Error ──────────────────────────────────────────────────────────────────
-
-export class NotImplementedError extends Error {
-  constructor(method: string) {
-    super(`Hype.${method} not yet implemented — pending API docs (Wave 2)`)
-    this.name = 'NotImplementedError'
-  }
-}
-
-// ─── Stubs ──────────────────────────────────────────────────────────────────
-
-/**
- * Initiate a Hype payment session.
- * Full implementation in Wave 2 after API docs provided.
- */
 export async function initiatePayment(
-  _params: HypeInitiatePaymentParams,
+  cart: CartLineItem[],
+  customer: CustomerInfo,
+  _currency: string = 'USD',
 ): Promise<HypePaymentSession> {
-  throw new NotImplementedError('initiatePayment')
+  const totalUsd = cart.reduce((sum, item) => sum + item.priceUsd * item.qty, 0)
+
+  const response = await fetch('https://api.hyp-e.com/payment/create', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${HYPE_API_KEY}`,
+      'X-Api-Key': HYPE_API_KEY,
+      Referer: HYPE_REFERER,
+      'X-Referer': HYPE_REFERER,
+    },
+    body: JSON.stringify({
+      amount: Math.round(totalUsd * 100),
+      currency: 'USD',
+      customer_name: customer.name,
+      customer_email: customer.email,
+      success_url: `${APP_URL}/en/order/{session_id}`,
+      cancel_url: `${APP_URL}/en/checkout`,
+      webhook_url: `${APP_URL}/api/checkout/webhook`,
+      metadata: {
+        cart: JSON.stringify(cart),
+        country: customer.country,
+      },
+    }),
+  })
+
+  if (!response.ok) {
+    const text = await response.text()
+    throw new Error(`Hype initiatePayment failed ${response.status}: ${text}`)
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data = (await response.json()) as Record<string, any>
+
+  const sessionUrl: string | undefined =
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    data.payment_url ?? data.url ?? data.redirect_url ?? data.checkout_url
+
+  const rawId: unknown =
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    data.session_id ?? data.id ?? data.payment_id ?? data.transaction_id
+
+  if (!sessionUrl) {
+    throw new Error(
+      `Hype: no redirect URL in response: ${JSON.stringify(data)}`,
+    )
+  }
+
+  return { sessionUrl, sessionId: String(rawId ?? '') }
 }
 
-/**
- * Verify the HMAC signature on an incoming Hype webhook.
- * Full implementation in Wave 2 after API docs provided.
- */
 export function verifyWebhookSignature(
-  _payload: string,
-  _signature: string,
-  _secret: string,
+  headers: Headers,
+  rawBody: string,
 ): boolean {
-  throw new NotImplementedError('verifyWebhookSignature')
+  const secret = process.env.HYPE_WEBHOOK_SECRET
+  if (!secret) return true
+
+  const sig =
+    headers.get('x-hype-signature') ??
+    headers.get('x-signature') ??
+    headers.get('x-webhook-signature') ??
+    ''
+
+  const expected = crypto
+    .createHmac('sha256', secret)
+    .update(rawBody)
+    .digest('hex')
+
+  return sig === expected || sig === `sha256=${expected}`
 }
