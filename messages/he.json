@@ -4,7 +4,8 @@
     "wholesale": "סיטונאות",
     "home": "דף הבית",
     "reviews": "ביקורות",
-    "contact": "צור קשר"
+    "contact": "צור קשר",
+    "my_orders": "ההזמנות שלי"
   },
   "ageGate": {
     "headline": "ברוכים הבאים לאתר Slider Solution",
@@ -192,30 +193,60 @@
     "placeholder": "פורטל הסיטונאות המלא יגיע בגל 4.",
     "tab_login": "כניסה",
     "tab_signup": "יצירת חשבון",
-    "first_name": "שם פרטי",
-    "last_name": "שם משפחה",
-    "phone": "מספר טלפון",
-    "email": "אימייל",
-    "username": "שם משתמש",
-    "password": "סיסמה",
-    "confirm_password": "אימות סיסמה",
-    "store_name": "שם החנות",
-    "address": "כתובת",
-    "city": "עיר",
-    "country": "מדינה",
-    "zip": "מיקוד",
-    "email_consent": "אני מסכים לקבל אימיילים, חדשות והנחות מסליידר",
-    "create_account": "צור את החשבון שלי",
-    "login_cta": "כניסה",
-    "forgot_password": "שכחת סיסמה?",
-    "join_cta": "הצטרף אלינו ←",
     "footer_cta": "מחפש סיטונאות?",
     "welcome_back": "ברוך שובך",
     "account_created": "החשבון נוצר! ברוך הבא לסליידר סיטונאות.",
     "login_success": "נכנסת בהצלחה.",
     "error_email_taken": "האימייל הזה כבר רשום.",
     "error_username_taken": "שם המשתמש הזה כבר תפוס.",
-    "error_invalid_credentials": "אימייל או סיסמה שגויים."
+    "error_invalid_credentials": "אימייל או סיסמה שגויים.",
+    "my_orders": "ההזמנות שלי",
+    "cta": "הזמן סיטונאי ←",
+    "logout": "לא אתה? התנתק",
+    "blocked": "החשבון שלך הושעה. צור קשר עם support@slidersolution.com",
+    "modal": {
+      "title": {
+        "login": "ברוך שובך",
+        "signup": "הצטרף לסיטונאות Slider"
+      },
+      "cta": {
+        "login": "כניסה",
+        "signup": "צור את החשבון שלי"
+      },
+      "login": {
+        "link": "כבר שותף? התחבר ←"
+      },
+      "signup": {
+        "link": "שותף חדש? צור חשבון ←"
+      }
+    },
+    "form": {
+      "firstName": "שם פרטי",
+      "lastName": "שם משפחה",
+      "phone": "מספר טלפון",
+      "email": "כתובת אימייל",
+      "username": "שם משתמש",
+      "password": "סיסמה",
+      "confirmPassword": "אימות סיסמה",
+      "storeName": "שם החנות",
+      "address": "כתובת",
+      "city": "עיר",
+      "country": "מדינה",
+      "zip": "מיקוד",
+      "consent": "אני מסכים לקבל אימיילים, חדשות והנחות מסליידר"
+    },
+    "product": {
+      "title": "חבילת תצוגה",
+      "contents": "6 ערכות סה\"כ — 2 שחור + 2 כחול + 2 סגול",
+      "perBox": "לקרטון",
+      "qtyLabel": "מספר קרטוני תצוגה"
+    },
+    "dashboard": {
+      "title": "ההזמנות שלך",
+      "empty": "אין הזמנות עדיין. בצע את ההזמנה הראשונה שלך ←",
+      "pending": "ממתין למשלוח",
+      "tracking": "עקוב אחר החבילה"
+    }
   },
   "email": {
     "order_confirmation_subject": "הסליידר שלך אושר ✓ (#{id})",

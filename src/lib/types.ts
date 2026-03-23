@@ -1,4 +1,4 @@
-export type ProductColor = 'black' | 'blue' | 'purple'
+export type ProductColor = 'black' | 'blue' | 'purple' | 'mixed'
 
 export type Currency = 'USD' | 'EUR' | 'ILS'
 

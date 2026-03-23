@@ -1,7 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { useLocale } from 'next-intl'
 import { useStore } from '@/store'
 import { trackOpenWholesale } from '@/lib/analytics'
 import CurrencySwitcher from './CurrencySwitcher'
@@ -9,7 +11,9 @@ import LanguageSwitcher from './LanguageSwitcher'
 
 export default function NavBar() {
   const t = useTranslations('nav')
+  const locale = useLocale()
   const openModal = useStore((s) => s.openModal)
+  const isWholesaleUser = useStore((s) => s.isWholesaleUser)
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
@@ -43,12 +47,22 @@ export default function NavBar() {
         <div className="flex items-center gap-3 flex-wrap justify-end">
           <CurrencySwitcher />
           <LanguageSwitcher />
-          <button
-            onClick={handleWholesale}
-            className="px-4 py-1.5 rounded-full border border-purple-600 text-purple-400 hover:bg-purple-600/10 font-outfit font-medium text-sm transition-colors duration-150 whitespace-nowrap"
-          >
-            {t('wholesale')}
-          </button>
+
+          {isWholesaleUser ? (
+            <Link
+              href={`/${locale}/wholesale`}
+              className="px-4 py-1.5 rounded-full border border-purple-600 text-purple-400 hover:bg-purple-600/10 font-outfit font-medium text-sm transition-colors duration-150 whitespace-nowrap"
+            >
+              {t('my_orders')}
+            </Link>
+          ) : (
+            <button
+              onClick={handleWholesale}
+              className="px-4 py-1.5 rounded-full border border-purple-600 text-purple-400 hover:bg-purple-600/10 font-outfit font-medium text-sm transition-colors duration-150 whitespace-nowrap"
+            >
+              {t('wholesale')}
+            </button>
+          )}
         </div>
       </div>
     </header>

@@ -3,6 +3,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { locales, isRtl, type Locale } from '@/i18n'
+import { WholesaleSessionRestorer } from '@/components/wholesale/WholesaleSessionRestorer'
 import '../globals.css'
 
 // ─── Metadata ────────────────────────────────────────────────────────────────
@@ -71,6 +72,7 @@ export default async function LocaleLayout({
       </head>
       <body className="bg-[#07080F] text-white font-outfit antialiased">
         <NextIntlClientProvider messages={messages}>
+          <WholesaleSessionRestorer />
           {children}
         </NextIntlClientProvider>
       </body>

@@ -13,6 +13,7 @@ const COLOR_GRADIENTS: Record<ProductColor, string> = {
   black: 'from-gray-900 to-gray-700',
   blue: 'from-blue-900 to-blue-600',
   purple: 'from-purple-900 to-purple-600',
+  mixed: 'from-gray-900 via-blue-900 to-purple-800',
 }
 
 // Subtle bg hue for the section
@@ -20,6 +21,7 @@ const BG_HUES: Record<ProductColor, string> = {
   black: 'bg-gray-950/30',
   blue: 'bg-blue-950/30',
   purple: 'bg-purple-950/30',
+  mixed: 'bg-purple-950/20',
 }
 
 export default function ProductHero() {

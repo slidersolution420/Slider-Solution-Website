@@ -19,12 +19,14 @@ const COLOR_DOTS: Record<ProductColor, string> = {
   black: 'bg-[#0F0F0F] border border-gray-600',
   blue: 'bg-[#1D4ED8]',
   purple: 'bg-[#7C3AED]',
+  mixed: 'bg-gradient-to-br from-[#0F0F0F] via-[#1D4ED8] to-[#7C3AED]',
 }
 
 const COLOR_NAMES: Record<ProductColor, string> = {
   black: 'Black Kit',
   blue: 'Blue Kit',
   purple: 'Purple Kit',
+  mixed: 'Display Package',
 }
 
 export default function CheckoutPage() {
