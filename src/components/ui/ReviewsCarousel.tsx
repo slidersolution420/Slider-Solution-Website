@@ -8,28 +8,19 @@ import Link from 'next/link'
 import { StarIcon } from '@heroicons/react/24/solid'
 import { useInView } from '@/hooks/useInView'
 
-const REVIEWS = [
-  {
-    name: 'Matan',
-    rating: 5,
-    body: 'Amazing product, ordered and arrived quickly. Useful and convenient. Been waiting a long time for something like this.',
-    date: 'Jan 2025',
-  },
-  {
-    name: 'Em',
-    rating: 4,
-    body: "Initially had trouble with the grinder. After watching the how-to videos it's crystal clear. Can't imagine rolling without it now.",
-    date: 'Feb 2025',
-  },
-  {
-    name: 'Dana',
-    rating: 5,
-    body: 'Perfect kit. Does exactly what it says. The tray is a game changer outdoors.',
-    date: 'Mar 2025',
-  },
-]
+export interface ReviewItem {
+  id: string
+  name: string
+  rating: number
+  body: string
+  created_at: string
+}
 
-export default function ReviewsCarousel() {
+interface Props {
+  reviews: ReviewItem[]
+}
+
+export default function ReviewsCarousel({ reviews }: Props) {
   const t = useTranslations('reviews')
   const locale = useLocale()
   const [current, setCurrent] = useState(0)
@@ -37,13 +28,15 @@ export default function ReviewsCarousel() {
   const [sectionRef, isInView] = useInView<HTMLDivElement>({ threshold: 0.1 })
   const dragStartX = useRef(0)
 
+  const count = reviews.length || 1
+
   const next = useCallback(() => {
-    setCurrent((c) => (c + 1) % REVIEWS.length)
-  }, [])
+    setCurrent((c) => (c + 1) % count)
+  }, [count])
 
   const prev = useCallback(() => {
-    setCurrent((c) => (c - 1 + REVIEWS.length) % REVIEWS.length)
-  }, [])
+    setCurrent((c) => (c - 1 + count) % count)
+  }, [count])
 
   // Auto-advance every 5s
   useEffect(() => {
@@ -65,7 +58,10 @@ export default function ReviewsCarousel() {
     setPaused(false)
   }
 
-  const review = REVIEWS[current]
+  const review = reviews[current]
+  const displayDate = review
+    ? new Date(review.created_at).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })
+    : ''
 
   return (
     <motion.section
@@ -122,7 +118,7 @@ export default function ReviewsCarousel() {
               <div className="space-y-0.5">
                 <p className="font-syne font-bold text-white">{review?.name}</p>
                 <p className="text-xs font-outfit text-gray-500">
-                  {t('verified')} · {review?.date}
+                  {t('verified')} · {displayDate}
                 </p>
               </div>
             </motion.div>
@@ -131,7 +127,7 @@ export default function ReviewsCarousel() {
 
         {/* Dot indicators */}
         <div className="flex justify-center gap-2 mt-6">
-          {REVIEWS.map((_, i) => (
+          {reviews.map((_, i) => (
             <button
               key={i}
               onClick={() => {

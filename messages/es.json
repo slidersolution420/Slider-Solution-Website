@@ -29,7 +29,8 @@
     "badge_patent": "Protegido por Patente",
     "badge_customers": "+1K Clientes Felices",
     "color_label": "Color",
-    "sub": "El kit todo-en-uno que hace el enrollado fácil, limpio y consistente."
+    "sub": "El kit todo-en-uno que hace el enrollado fácil, limpio y consistente.",
+    "imageAlt": "Kit de Cono Slider — accesorio cannabis todo-en-uno"
   },
   "features": {
     "title": "Todo lo que Necesitas",
@@ -89,6 +90,7 @@
     "kit_3": "3 Kits",
     "most_popular": "Más Popular",
     "saves": "ahorra {amount}",
+    "label": "Selecciona cantidad",
     "1": { "label": "1 Kit" },
     "2": { "label": "2 Kits" },
     "3": { "label": "3 Kits" }

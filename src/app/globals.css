@@ -69,6 +69,11 @@
   .ticker-track:hover {
     animation-play-state: paused;
   }
+
+  /* RTL: reverse ticker scroll direction */
+  [dir="rtl"] .ticker-track {
+    animation-direction: reverse;
+  }
 }
 
 @keyframes marquee {

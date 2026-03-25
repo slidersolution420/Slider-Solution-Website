@@ -22,20 +22,30 @@ export default function ColorSwatch({ className = '' }: ColorSwatchProps) {
 
   function handleSelect(color: ProductColor) {
     if (color === selectedColor) return
-    trackSelectColor({ color, previousColor: selectedColor })
+    trackSelectColor(color, selectedColor)
     setSelectedColor(color)
   }
 
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
+    <div
+      role="radiogroup"
+      className={`flex items-center gap-3 ${className}`}
+    >
       {SWATCHES.map(({ color, bg, border }) => {
         const isSelected = selectedColor === color
         return (
           <button
             key={color}
-            onClick={() => handleSelect(color)}
+            role="radio"
+            aria-checked={isSelected}
             aria-label={t(`label.${color}`)}
-            aria-pressed={isSelected}
+            onClick={() => handleSelect(color)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                handleSelect(color)
+              }
+            }}
             className={`relative w-8 h-8 rounded-full border-2 transition-all duration-200 ${bg} ${border} ${
               isSelected
                 ? 'ring-2 ring-white ring-offset-2 ring-offset-[#07080F] scale-110'

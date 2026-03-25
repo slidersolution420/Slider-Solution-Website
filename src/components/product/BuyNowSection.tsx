@@ -30,7 +30,7 @@ export default function BuyNowSection() {
   const openModal = useStore((s) => s.openModal)
 
   useEffect(() => {
-    trackViewProduct({ color: selectedColor, currency })
+    trackViewProduct(selectedColor, currency, B2C_PRICE_USD)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -53,13 +53,7 @@ export default function BuyNowSection() {
       type: 'b2c',
     })
     openModal('cart')
-    trackAddToCart({
-      color: selectedColor,
-      qty: selectedQty,
-      priceUsd: B2C_PRICE_USD,
-      currency,
-      shippingCountry: selectedCountry || 'IL',
-    })
+    trackAddToCart(selectedColor, selectedQty, 'b2c')
   }
 
   if (isWholesaleUser) {

@@ -38,13 +38,7 @@ export default function BuyNowB2B() {
       type: 'b2b',
     })
     openModal('cart')
-    trackAddToCart({
-      color: 'black', // analytics uses valid single color; item type distinguishes b2b
-      qty: totalKits,
-      priceUsd: pricePerKit,
-      currency,
-      shippingCountry: selectedCountry || 'IL',
-    })
+    trackAddToCart('black', totalKits, 'b2b')
   }
 
   async function handleLogout() {

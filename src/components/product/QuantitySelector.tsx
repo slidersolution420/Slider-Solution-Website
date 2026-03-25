@@ -19,7 +19,11 @@ export default function QuantitySelector() {
     isNonIL ? t('saves', { amount: formatPrice(25, currency) }) : null
 
   return (
-    <div className="flex gap-2 w-full">
+    <div
+      role="radiogroup"
+      aria-label={t('label')}
+      className="flex gap-2 w-full"
+    >
       {QUANTITIES.map((qty) => {
         const isSelected = selectedQty === qty
         const isPopular = qty === 3
@@ -31,8 +35,15 @@ export default function QuantitySelector() {
         return (
           <button
             key={qty}
+            role="radio"
+            aria-checked={isSelected}
             onClick={() => setSelectedQty(qty)}
-            aria-pressed={isSelected}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault()
+                setSelectedQty(qty)
+              }
+            }}
             className={`relative flex-1 flex flex-col items-start justify-center px-3 py-3 rounded-xl border transition-all duration-200 text-left ${
               isSelected
                 ? 'border-purple-500 scale-[1.02] bg-purple-600/10'

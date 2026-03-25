@@ -91,12 +91,7 @@ export default function CheckoutPage() {
       if (session?.id) setCartSessionId(session.id as string)
 
       // 2. Analytics
-      trackBeginCheckout({
-        items: cart,
-        totalUsd: grandTotalUsd,
-        currency,
-        shippingCountry: data.customer.country,
-      })
+      trackBeginCheckout(grandTotalUsd, totalQty, 'b2c')
 
       // 3. Build payload — map productId → id for schema
       const payload: CheckoutInput = {

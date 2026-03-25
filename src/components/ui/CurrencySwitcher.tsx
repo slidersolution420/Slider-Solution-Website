@@ -3,10 +3,10 @@
 import { useStore } from '@/store'
 import type { Currency } from '@/lib/types'
 
-const CURRENCIES: { value: Currency; label: string }[] = [
-  { value: 'USD', label: '$' },
-  { value: 'EUR', label: '€' },
-  { value: 'ILS', label: '₪' },
+const CURRENCIES: { value: Currency; label: string; ariaLabel: string }[] = [
+  { value: 'USD', label: '$', ariaLabel: 'Switch to USD' },
+  { value: 'EUR', label: '€', ariaLabel: 'Switch to EUR' },
+  { value: 'ILS', label: '₪', ariaLabel: 'Switch to ILS' },
 ]
 
 export default function CurrencySwitcher() {
@@ -15,11 +15,12 @@ export default function CurrencySwitcher() {
 
   return (
     <div className="flex items-center gap-1" role="group" aria-label="Currency">
-      {CURRENCIES.map(({ value, label }) => (
+      {CURRENCIES.map(({ value, label, ariaLabel }) => (
         <button
           key={value}
           onClick={() => setCurrency(value)}
           aria-pressed={currency === value}
+          aria-label={ariaLabel}
           className={`px-2 py-1 rounded-full text-sm font-outfit font-medium transition-colors duration-150 ${
             currency === value
               ? 'bg-purple-600 text-white'
