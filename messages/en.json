@@ -65,7 +65,9 @@
     "page_subtitle": "Real reviews from real Slider fans.",
     "stars": "{count} stars",
     "verified": "Verified Purchase",
-    "empty": "No reviews yet. Be the first!"
+    "empty": "No reviews yet. Be the first!",
+    "hero_banner": "+1K Happy Customers \u2b50",
+    "back_to_shop": "\u2190 Back to shop"
   },
   "buy": {
     "title": "Get Your Slider Kit",
@@ -187,7 +189,10 @@
     "order_number": "Order #{id}",
     "email_sent": "We've sent a confirmation to {email}.",
     "email": "Confirmation sent to your inbox",
-    "back": "← Back to store",
+    "order_ref": "Order ref",
+    "email_label": "Email",
+    "total_label": "Total",
+    "back": "\u2190 Back to store",
     "continue_shopping": "Continue Shopping"
   },
   "wholesale": {

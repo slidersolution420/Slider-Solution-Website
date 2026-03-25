@@ -57,7 +57,7 @@ export default async function ReviewsPage() {
         <div className="bg-[#0F1629] border-b border-white/5 pt-24 pb-12">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center space-y-3">
             <div className="text-4xl font-syne font-bold text-white">
-              +1K Happy Customers ⭐
+              {t('hero_banner')}
             </div>
             <div className="flex items-center justify-center gap-2">
               <Stars rating={Math.round(avgRating)} />
@@ -111,7 +111,7 @@ export default async function ReviewsPage() {
               href={`/${locale}`}
               className="text-purple-400 hover:text-purple-300 font-outfit text-sm transition-colors"
             >
-              ← Back to shop
+              {t('back_to_shop')}
             </Link>
           </div>
         </div>
