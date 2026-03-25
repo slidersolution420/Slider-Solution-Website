@@ -1,33 +1,23 @@
 import { getTranslations } from 'next-intl/server'
-import Link from 'next/link'
 import { getLocale } from 'next-intl/server'
+import Link from 'next/link'
+import { createClient } from '@/lib/supabase-server'
 
-// ISR — revalidate every hour. Full Supabase wiring in Wave 3.
+// ISR — revalidate every hour
 export const revalidate = 3600
 
-const REVIEWS = [
-  {
-    id: '1',
-    name: 'Matan',
-    rating: 5,
-    body: 'Amazing product, ordered and arrived quickly. Useful and convenient. Been waiting a long time for something like this.',
-    date: 'January 2025',
-  },
-  {
-    id: '2',
-    name: 'Em',
-    rating: 4,
-    body: "Initially had trouble with the grinder. After watching the how-to videos it's crystal clear. Can't imagine rolling without it now.",
-    date: 'February 2025',
-  },
-  {
-    id: '3',
-    name: 'Dana',
-    rating: 5,
-    body: 'Perfect kit. Does exactly what it says. The tray is a game changer outdoors.',
-    date: 'March 2025',
-  },
-]
+interface ReviewRow {
+  id: string
+  name: string
+  rating: number
+  body: string
+  created_at: string
+}
+
+function formatDate(iso: string): string {
+  const d = new Date(iso)
+  return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
+}
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -48,8 +38,20 @@ export default async function ReviewsPage() {
   const t = await getTranslations('reviews')
   const locale = await getLocale()
 
+  // Fetch approved reviews from Supabase
+  const supabase = await createClient()
+  const { data: rows } = await supabase
+    .from('reviews')
+    .select('id, name, rating, body, created_at')
+    .eq('approved', true)
+    .order('created_at', { ascending: false })
+
+  const reviews: ReviewRow[] = (rows ?? []) as ReviewRow[]
+
   const avgRating =
-    REVIEWS.reduce((sum, r) => sum + r.rating, 0) / REVIEWS.length
+    reviews.length > 0
+      ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+      : 0
 
   return (
     <div className="min-h-screen bg-[#07080F]">
@@ -59,12 +61,14 @@ export default async function ReviewsPage() {
           <div className="text-4xl font-syne font-bold text-white">
             +1K Happy Customers ⭐
           </div>
-          <div className="flex items-center justify-center gap-2">
-            <Stars rating={Math.round(avgRating)} />
-            <span className="text-gray-400 font-outfit text-sm">
-              {avgRating.toFixed(1)} / 5.0
-            </span>
-          </div>
+          {reviews.length > 0 && (
+            <div className="flex items-center justify-center gap-2">
+              <Stars rating={Math.round(avgRating)} />
+              <span className="text-gray-400 font-outfit text-sm">
+                {avgRating.toFixed(1)} / 5.0
+              </span>
+            </div>
+          )}
           <h1 className="text-2xl font-syne font-bold text-white">
             {t('page_title')}
           </h1>
@@ -74,26 +78,34 @@ export default async function ReviewsPage() {
 
       {/* Review grid */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {REVIEWS.map((review) => (
-            <div
-              key={review.id}
-              className="bg-[#0F1629] rounded-2xl border border-white/5 p-6 space-y-3"
-            >
-              <div className="flex items-center justify-between gap-2">
-                <p className="font-syne font-bold text-white">{review.name}</p>
-                <Stars rating={review.rating} />
+        {reviews.length === 0 ? (
+          <p className="text-center text-gray-400 font-outfit py-12">
+            {t('empty')}
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {reviews.map((review) => (
+              <div
+                key={review.id}
+                className="bg-[#0F1629] rounded-2xl border border-white/5 p-6 space-y-3"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <p className="font-syne font-bold text-white">
+                    {review.name}
+                  </p>
+                  <Stars rating={review.rating} />
+                </div>
+                <blockquote className="text-gray-300 font-outfit text-sm leading-relaxed">
+                  &ldquo;{review.body}&rdquo;
+                </blockquote>
+                <div className="flex items-center justify-between text-xs font-outfit text-gray-500">
+                  <span>{t('verified')}</span>
+                  <span>{formatDate(review.created_at)}</span>
+                </div>
               </div>
-              <blockquote className="text-gray-300 font-outfit text-sm leading-relaxed">
-                &ldquo;{review.body}&rdquo;
-              </blockquote>
-              <div className="flex items-center justify-between text-xs font-outfit text-gray-500">
-                <span>{t('verified')}</span>
-                <span>{review.date}</span>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* Back link */}
         <div className="mt-10 text-center">

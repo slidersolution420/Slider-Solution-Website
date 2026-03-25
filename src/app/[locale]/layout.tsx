@@ -9,6 +9,9 @@ import '../globals.css'
 // ─── Metadata ────────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000',
+  ),
   title: {
     default: 'Slider Solution — The Original All-in-One Cone Kit',
     template: '%s | Slider Solution',
@@ -26,6 +29,14 @@ export const metadata: Metadata = {
     siteName: 'Slider Solution',
     type: 'website',
     locale: 'en_US',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Slider Solution — The Original All-in-One Cone Kit',
+      },
+    ],
   },
   robots: {
     index: true,

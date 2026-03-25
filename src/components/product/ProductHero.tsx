@@ -1,20 +1,14 @@
 'use client'
 
 import { useEffect } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useStore } from '@/store'
 import { trackViewProduct } from '@/lib/analytics'
+import { getProductImageUrl, getProductFallbackGradient } from '@/lib/cloudinary'
 import ColorSwatch from './ColorSwatch'
 import type { ProductColor } from '@/lib/types'
-
-// Gradient placeholder per color until Cloudinary assets provided
-const COLOR_GRADIENTS: Record<ProductColor, string> = {
-  black: 'from-gray-900 to-gray-700',
-  blue: 'from-blue-900 to-blue-600',
-  purple: 'from-purple-900 to-purple-600',
-  mixed: 'from-gray-900 via-blue-900 to-purple-800',
-}
 
 // Subtle bg hue for the section
 const BG_HUES: Record<ProductColor, string> = {
@@ -64,17 +58,27 @@ export default function ProductHero() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.2 }}
-                  className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${COLOR_GRADIENTS[selectedColor]} flex items-center justify-center`}
+                  className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${getProductFallbackGradient(selectedColor)} flex items-center justify-center overflow-hidden`}
                 >
-                  {/* Placeholder until real product images are provided */}
-                  <div className="text-center space-y-2 opacity-60">
-                    <div className="tracking-[0.3em] text-2xl font-syne font-bold text-white uppercase">
-                      S L I D E R
+                  {getProductImageUrl(`kit-${selectedColor}`) ? (
+                    <Image
+                      src={getProductImageUrl(`kit-${selectedColor}`)}
+                      alt={`Slider Cone Kit — ${selectedColor}`}
+                      fill
+                      sizes="(max-width: 768px) 320px, 420px"
+                      className="object-cover"
+                      priority
+                    />
+                  ) : (
+                    <div className="text-center space-y-2 opacity-60">
+                      <div className="tracking-[0.3em] text-2xl font-syne font-bold text-white uppercase">
+                        S L I D E R
+                      </div>
+                      <p className="text-white/60 text-sm font-outfit capitalize">
+                        {selectedColor} kit
+                      </p>
                     </div>
-                    <p className="text-white/60 text-sm font-outfit capitalize">
-                      {selectedColor} kit
-                    </p>
-                  </div>
+                  )}
                 </motion.div>
               </AnimatePresence>
             </div>
