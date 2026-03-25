@@ -50,10 +50,14 @@ export async function POST(request: Request): Promise<Response> {
       packageCount: 1,
     })
 
-    // Update order with tracking number
+    // Update order with tracking number and URL
     const { error: updateError } = await supabase
       .from('orders')
-      .update({ tapuz_tracking_number: shipment.trackingNumber, status: 'shipped' })
+      .update({
+        tapuz_tracking_number: shipment.trackingNumber,
+        tapuz_tracking_url: shipment.trackingUrl,
+        status: 'shipped',
+      })
       .eq('id', orderId)
 
     if (updateError) {

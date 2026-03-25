@@ -13,6 +13,8 @@ import CartDrawer from '@/components/checkout/CartDrawer'
 import StickyCartBar from '@/components/ui/StickyCartBar'
 import ExitIntentPopup from '@/components/ui/ExitIntentPopup'
 import WholesaleModal from '@/components/wholesale/WholesaleModal'
+import { createClient } from '@/lib/supabase-server'
+import type { ReviewItem } from '@/components/ui/ReviewsCarousel'
 
 // ─── Per-locale SEO metadata ──────────────────────────────────────────────────
 
@@ -105,7 +107,26 @@ const jsonLd = {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function HomePage() {
+async function getReviews(): Promise<ReviewItem[]> {
+  try {
+    const supabase = await createClient()
+    const { data, error } = await supabase
+      .from('reviews')
+      .select('id, name, rating, body, created_at')
+      .eq('approved', true)
+      .order('created_at', { ascending: false })
+      .limit(8)
+
+    if (error || !data) return []
+    return data as ReviewItem[]
+  } catch {
+    return []
+  }
+}
+
+export default async function HomePage() {
+  const reviews = await getReviews()
+
   return (
     <>
       {/* JSON-LD product schema */}
@@ -127,7 +148,7 @@ export default function HomePage() {
         <TickerBar />
         <KitFeatures />
         <HowItWorks />
-        <ReviewsCarousel />
+        <ReviewsCarousel reviews={reviews} />
         <BuyNowSection />
       </main>
 

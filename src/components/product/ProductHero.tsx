@@ -1,20 +1,21 @@
 'use client'
 
 import { useEffect } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useStore } from '@/store'
 import { trackViewProduct } from '@/lib/analytics'
 import { B2C_PRICE_USD } from '@/lib/currency'
+import { cloudinaryUrl, PRODUCT_IMAGES, COLOR_GRADIENTS } from '@/lib/cloudinary'
 import ColorSwatch from './ColorSwatch'
 import type { ProductColor } from '@/lib/types'
 
-// Gradient placeholder per color until Cloudinary assets provided
-const COLOR_GRADIENTS: Record<ProductColor, string> = {
-  black: 'from-gray-900 to-gray-700',
-  blue: 'from-blue-900 to-blue-600',
-  purple: 'from-purple-900 to-purple-600',
-  mixed: 'from-gray-900 via-blue-900 to-purple-800',
+const COLOR_IMAGE_KEYS: Record<ProductColor, keyof typeof PRODUCT_IMAGES> = {
+  black: 'kit-black',
+  blue: 'kit-blue',
+  purple: 'kit-purple',
+  mixed: 'display-front',
 }
 
 // Subtle bg hue for the section
@@ -36,12 +37,15 @@ export default function ProductHero() {
   }, [])
 
   function handleCTA() {
-    // Scroll to buy section
     const buySection = document.getElementById('buy-now')
     if (buySection) {
       buySection.scrollIntoView({ behavior: 'smooth' })
     }
   }
+
+  const imageKey = COLOR_IMAGE_KEYS[selectedColor]
+  const imageUrl = cloudinaryUrl(PRODUCT_IMAGES[imageKey], { width: 840 })
+  const fallbackGradient = COLOR_GRADIENTS[imageKey] ?? 'from-gray-900 to-gray-700'
 
   return (
     <section
@@ -50,7 +54,7 @@ export default function ProductHero() {
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6 w-full">
         <div className="flex flex-col md:flex-row items-center gap-10 md:gap-16 py-12 md:py-20">
-          {/* Product image — LCP element, priority */}
+          {/* Product image — LCP element */}
           <motion.div
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -65,17 +69,32 @@ export default function ProductHero() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.2 }}
-                  className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${COLOR_GRADIENTS[selectedColor]} flex items-center justify-center`}
+                  className="absolute inset-0 rounded-3xl overflow-hidden"
                 >
-                  {/* Placeholder until real product images are provided */}
-                  <div className="text-center space-y-2 opacity-60">
-                    <div className="tracking-[0.3em] text-2xl font-syne font-bold text-white uppercase">
-                      S L I D E R
+                  {imageUrl ? (
+                    <Image
+                      src={imageUrl}
+                      alt={t('imageAlt')}
+                      fill
+                      priority
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover"
+                    />
+                  ) : (
+                    // Gradient fallback until Cloudinary images are uploaded
+                    <div
+                      className={`w-full h-full bg-gradient-to-br ${fallbackGradient} flex items-center justify-center`}
+                    >
+                      <div className="text-center space-y-2 opacity-60">
+                        <div className="tracking-[0.3em] text-2xl font-syne font-bold text-white uppercase">
+                          S L I D E R
+                        </div>
+                        <p className="text-white/60 text-sm font-outfit capitalize">
+                          {selectedColor} kit
+                        </p>
+                      </div>
                     </div>
-                    <p className="text-white/60 text-sm font-outfit capitalize">
-                      {selectedColor} kit
-                    </p>
-                  </div>
+                  )}
                 </motion.div>
               </AnimatePresence>
             </div>
