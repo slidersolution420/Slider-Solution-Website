@@ -68,7 +68,7 @@ export default async function OrderSuccessPage({ params }: Props) {
         <div className="card-surface p-6 space-y-3 text-left">
           <div className="flex items-center justify-between">
             <span className="text-gray-400 font-outfit text-sm">
-              Order ref
+              {t('order_ref')}
             </span>
             <span className="font-syne font-bold text-white text-sm">
               #{shortRef}
@@ -77,7 +77,7 @@ export default async function OrderSuccessPage({ params }: Props) {
 
           {orderEmail && (
             <div className="flex items-center justify-between">
-              <span className="text-gray-400 font-outfit text-sm">Email</span>
+              <span className="text-gray-400 font-outfit text-sm">{t('email_label')}</span>
               <span className="text-gray-300 font-outfit text-sm truncate max-w-[200px]">
                 {orderEmail}
               </span>
@@ -86,7 +86,7 @@ export default async function OrderSuccessPage({ params }: Props) {
 
           {totalUsd > 0 && (
             <div className="flex items-center justify-between">
-              <span className="text-gray-400 font-outfit text-sm">Total</span>
+              <span className="text-gray-400 font-outfit text-sm">{t('total_label')}</span>
               <span className="text-white font-syne font-bold">
                 ${totalUsd.toFixed(2)}
               </span>

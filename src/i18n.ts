@@ -12,7 +12,9 @@ export function isRtl(locale: string): boolean {
   return rtlLocales.includes(locale as Locale)
 }
 
-export default getRequestConfig(async ({ locale }) => {
+export default getRequestConfig(async ({ requestLocale }) => {
+  const locale = (await requestLocale) ?? defaultLocale
+
   if (!locales.includes(locale as Locale)) {
     notFound()
   }
@@ -22,7 +24,7 @@ export default getRequestConfig(async ({ locale }) => {
   ).default as Record<string, unknown>
 
   return {
-    locale: locale as string,
+    locale,
     messages,
     timeZone: 'Asia/Jerusalem',
   }

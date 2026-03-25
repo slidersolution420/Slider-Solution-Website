@@ -65,7 +65,9 @@
     "page_subtitle": "Reseñas reales de verdaderos fans de Slider.",
     "stars": "{count} estrellas",
     "verified": "Compra Verificada",
-    "empty": "Aún no hay reseñas. ¡Sé el primero!"
+    "empty": "Aún no hay reseñas. ¡Sé el primero!",
+    "hero_banner": "+1K Clientes Felices \u2b50",
+    "back_to_shop": "\u2190 Volver a la tienda"
   },
   "buy": {
     "title": "Obtén Tu Kit Slider",
@@ -187,7 +189,10 @@
     "order_number": "Pedido #{id}",
     "email_sent": "Enviamos una confirmación a {email}.",
     "email": "Confirmación enviada a tu bandeja",
-    "back": "← Volver a la tienda",
+    "order_ref": "Ref. pedido",
+    "email_label": "Correo",
+    "total_label": "Total",
+    "back": "\u2190 Volver a la tienda",
     "continue_shopping": "Continuar Comprando"
   },
   "wholesale": {
