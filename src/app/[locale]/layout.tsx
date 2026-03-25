@@ -4,11 +4,13 @@ import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { locales, isRtl, type Locale } from '@/i18n'
 import { WholesaleSessionRestorer } from '@/components/wholesale/WholesaleSessionRestorer'
+import { PostHogProvider } from '@/components/analytics/PostHogProvider'
 import '../globals.css'
 
 // ─── Metadata ────────────────────────────────────────────────────────────────
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://slidersolution.com'),
   title: {
     default: 'Slider Solution — The Original All-in-One Cone Kit',
     template: '%s | Slider Solution',
@@ -71,10 +73,12 @@ export default async function LocaleLayout({
         />
       </head>
       <body className="bg-[#07080F] text-white font-outfit antialiased">
-        <NextIntlClientProvider messages={messages}>
-          <WholesaleSessionRestorer />
-          {children}
-        </NextIntlClientProvider>
+        <PostHogProvider>
+          <NextIntlClientProvider messages={messages}>
+            <WholesaleSessionRestorer />
+            {children}
+          </NextIntlClientProvider>
+        </PostHogProvider>
       </body>
     </html>
   )

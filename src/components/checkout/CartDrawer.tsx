@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useLocale } from 'next-intl'
 import { useRouter } from 'next/navigation'
+import { isRtl } from '@/i18n'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useStore } from '@/store'
 import { formatPrice } from '@/lib/currency'
@@ -40,8 +41,10 @@ export default function CartDrawer() {
 
   const isOpen = modals.cart
   const hasCountry = selectedCountry !== ''
+  const isRTL = isRtl(locale)
+  const drawerRef = useRef<HTMLDivElement>(null)
 
-  // Escape key
+  // Escape key + focus management
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') closeModal('cart')
@@ -49,6 +52,8 @@ export default function CartDrawer() {
     if (isOpen) {
       document.addEventListener('keydown', onKey)
       document.body.style.overflow = 'hidden'
+      // Move focus into drawer
+      setTimeout(() => drawerRef.current?.focus(), 50)
     } else {
       document.body.style.overflow = ''
     }
@@ -73,12 +78,7 @@ export default function CartDrawer() {
   const totalUsd = subtotalUsd + shippingUsd
 
   function handleCheckout() {
-    trackBeginCheckout({
-      items: cart,
-      totalUsd,
-      currency,
-      shippingCountry: effectiveCountry,
-    })
+    trackBeginCheckout(totalUsd, totalQty, 'b2c')
     closeModal('cart')
     router.push(`/${locale}/checkout`)
   }
@@ -97,14 +97,19 @@ export default function CartDrawer() {
             className="fixed inset-0 bg-black/50 z-40"
           />
 
-          {/* Drawer */}
+          {/* Drawer — slides from end (right LTR / left RTL) */}
           <motion.div
             key="drawer"
-            initial={{ x: '100%' }}
+            ref={drawerRef}
+            initial={{ x: isRTL ? '-100%' : '100%' }}
             animate={{ x: 0 }}
-            exit={{ x: '100%' }}
+            exit={{ x: isRTL ? '-100%' : '100%' }}
             transition={{ type: 'spring', stiffness: 400, damping: 40 }}
-            className="fixed right-0 top-0 bottom-0 z-50 w-full max-w-md bg-[#0F1629] border-l border-white/5 flex flex-col"
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('title')}
+            tabIndex={-1}
+            className="fixed end-0 top-0 bottom-0 z-50 w-full max-w-md bg-[#0F1629] border-s border-white/5 flex flex-col focus:outline-none"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-white/5">
@@ -143,7 +148,7 @@ export default function CartDrawer() {
                         {COLOR_NAMES[item.color]}
                       </p>
                       <p className="text-xs font-outfit text-gray-400">
-                        Qty: {item.qty}
+                        ×{item.qty}
                       </p>
                     </div>
                     <div className="text-right shrink-0">

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -84,7 +84,7 @@ function LoginForm({ onSwitchToSignup, onSuccess }: LoginFormProps) {
       </div>
 
       {error && (
-        <p className="text-sm text-red-400 font-outfit bg-red-400/10 rounded-lg px-3 py-2">
+        <p role="alert" className="text-sm text-red-400 font-outfit bg-red-400/10 rounded-lg px-3 py-2">
           {error}
         </p>
       )}
@@ -167,7 +167,7 @@ function SignupForm({ onSwitchToLogin, onSuccess }: SignupFormProps) {
     }
 
     setIsWholesaleUser(true)
-    trackSignupWholesale({ country: data.country })
+    trackSignupWholesale(data.country)
     onSuccess(data.country)
   }
 
@@ -374,7 +374,7 @@ function SignupForm({ onSwitchToLogin, onSuccess }: SignupFormProps) {
       </div>
 
       {serverError && (
-        <p className="text-sm text-red-400 font-outfit bg-red-400/10 rounded-lg px-3 py-2">
+        <p role="alert" className="text-sm text-red-400 font-outfit bg-red-400/10 rounded-lg px-3 py-2">
           {serverError}
         </p>
       )}
@@ -399,8 +399,9 @@ export default function WholesaleModal() {
   const [activeTab, setActiveTab] = useState<Tab>('login')
 
   const isOpen = modals.wholesale
+  const modalRef = useRef<HTMLDivElement>(null)
 
-  // Escape key + scroll lock
+  // Escape key + scroll lock + focus management
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === 'Escape') closeModal('wholesale')
@@ -408,6 +409,7 @@ export default function WholesaleModal() {
     if (isOpen) {
       document.addEventListener('keydown', onKey)
       document.body.style.overflow = 'hidden'
+      setTimeout(() => modalRef.current?.focus(), 50)
     } else {
       document.body.style.overflow = ''
     }
@@ -439,11 +441,20 @@ export default function WholesaleModal() {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div
               key="wholesale-modal"
+              ref={modalRef}
+              tabIndex={-1}
+              role="dialog"
+              aria-modal="true"
+              aria-label={
+                activeTab === 'login'
+                  ? t('modal.title.login')
+                  : t('modal.title.signup')
+              }
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
-              className="w-full max-w-md bg-[#0F1629] rounded-2xl border border-white/10 flex flex-col max-h-[90vh]"
+              className="w-full max-w-md bg-[#0F1629] rounded-2xl border border-white/10 flex flex-col max-h-[90vh] focus:outline-none"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}

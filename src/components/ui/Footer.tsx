@@ -14,7 +14,7 @@ export default function Footer() {
 
   function handleWholesale() {
     openModal('wholesale')
-    trackOpenWholesale({ source: 'footer' })
+    trackOpenWholesale('footer')
   }
 
   return (

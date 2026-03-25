@@ -4,9 +4,9 @@ import { useLocale } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
 
 const LOCALES = [
-  { value: 'en', label: 'EN' },
-  { value: 'he', label: 'HE' },
-  { value: 'es', label: 'ES' },
+  { value: 'en', label: 'EN', ariaLabel: 'Switch to English' },
+  { value: 'he', label: 'HE', ariaLabel: 'Switch to Hebrew' },
+  { value: 'es', label: 'ES', ariaLabel: 'Switch to Spanish' },
 ]
 
 export default function LanguageSwitcher() {
@@ -24,11 +24,12 @@ export default function LanguageSwitcher() {
 
   return (
     <div className="flex items-center gap-1" role="group" aria-label="Language">
-      {LOCALES.map(({ value, label }) => (
+      {LOCALES.map(({ value, label, ariaLabel }) => (
         <button
           key={value}
           onClick={() => switchLocale(value)}
           aria-pressed={locale === value}
+          aria-label={ariaLabel}
           className={`px-2 py-1 rounded-full text-xs font-outfit font-medium transition-colors duration-150 ${
             locale === value
               ? 'bg-purple-600 text-white'

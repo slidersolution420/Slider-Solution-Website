@@ -54,13 +54,7 @@ export default function StickyCartBar() {
       type: 'b2c',
     })
     openModal('cart')
-    trackAddToCart({
-      color: selectedColor,
-      qty: selectedQty,
-      priceUsd: B2C_PRICE_USD,
-      currency,
-      shippingCountry: selectedCountry || 'IL',
-    })
+    trackAddToCart(selectedColor, selectedQty, 'b2c')
   }
 
   const shippingLine = getShippingMessage(selectedCountry || 'IL', selectedQty)

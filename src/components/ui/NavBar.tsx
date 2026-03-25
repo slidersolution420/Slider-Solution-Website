@@ -26,7 +26,7 @@ export default function NavBar() {
 
   function handleWholesale() {
     openModal('wholesale')
-    trackOpenWholesale({ source: 'navbar' })
+    trackOpenWholesale('nav')
   }
 
   return (

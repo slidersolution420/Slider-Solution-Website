@@ -29,7 +29,8 @@
     "badge_patent": "Patent Protected",
     "badge_customers": "+1K Happy Customers",
     "color_label": "Color",
-    "sub": "The all-in-one kit that makes rolling easy, clean and consistent."
+    "sub": "The all-in-one kit that makes rolling easy, clean and consistent.",
+    "imageAlt": "Slider Cone Kit — all-in-one cannabis accessory"
   },
   "features": {
     "title": "Everything You Need",
@@ -89,6 +90,7 @@
     "kit_3": "3 Kits",
     "most_popular": "Most Popular",
     "saves": "saves {amount}",
+    "label": "Select quantity",
     "1": { "label": "1 Kit" },
     "2": { "label": "2 Kits" },
     "3": { "label": "3 Kits" }

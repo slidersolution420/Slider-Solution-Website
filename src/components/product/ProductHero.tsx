@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import { useStore } from '@/store'
 import { trackViewProduct } from '@/lib/analytics'
+import { B2C_PRICE_USD } from '@/lib/currency'
 import ColorSwatch from './ColorSwatch'
 import type { ProductColor } from '@/lib/types'
 
@@ -30,7 +31,7 @@ export default function ProductHero() {
   const currency = useStore((s) => s.currency)
 
   useEffect(() => {
-    trackViewProduct({ color: selectedColor, currency })
+    trackViewProduct(selectedColor, currency, B2C_PRICE_USD)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

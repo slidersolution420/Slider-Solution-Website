@@ -9,16 +9,14 @@ interface Props {
   orderId: string
   totalUsd: number
   currency: Currency
-  shippingCountry: string
+  shippingCountry?: string
 }
 
 export default function PurchaseTracker({
   orderId,
   totalUsd,
   currency,
-  shippingCountry,
 }: Props) {
-  const cart = useStore((s) => s.cart)
   const clearCart = useStore((s) => s.clearCart)
 
   useEffect(() => {
@@ -28,13 +26,7 @@ export default function PurchaseTracker({
     // 2. Fire trackPurchase only once per session per order
     const key = `purchase_tracked_${orderId}`
     if (!sessionStorage.getItem(key)) {
-      trackPurchase({
-        orderId,
-        totalUsd,
-        currency,
-        shippingCountry,
-        items: cart,
-      })
+      trackPurchase(orderId, totalUsd, currency)
       sessionStorage.setItem(key, 'true')
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
