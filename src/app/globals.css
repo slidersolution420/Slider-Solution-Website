@@ -1,82 +1,95 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    --background: #07080F;
-    --surface: #0F1629;
-    --accent: #7C3AED;
-    --foreground: #F9FAFB;
-    --muted: #6B7280;
-    /* Font stacks — Google Fonts loaded via <link>; system fonts as fallback */
-    --font-syne: 'Syne', system-ui, sans-serif;
-    --font-outfit: 'Outfit', system-ui, sans-serif;
-  }
+@theme {
+  /* Brand colors — purple gradient identity */
+  --color-brand-50: oklch(0.97 0.05 300);
+  --color-brand-100: oklch(0.93 0.08 300);
+  --color-brand-200: oklch(0.87 0.12 300);
+  --color-brand-300: oklch(0.77 0.18 300);
+  --color-brand-400: oklch(0.65 0.22 300);
+  --color-brand-500: oklch(0.55 0.25 300);
+  --color-brand-600: oklch(0.47 0.25 300);
+  --color-brand-700: oklch(0.40 0.22 300);
+  --color-brand-800: oklch(0.33 0.18 300);
+  --color-brand-900: oklch(0.27 0.14 300);
 
-  html {
-    scroll-behavior: smooth;
-  }
+  /* Surface colors — dark theme */
+  --color-surface: oklch(0.09 0 0);
+  --color-surface-2: oklch(0.13 0 0);
+  --color-surface-3: oklch(0.16 0 0);
 
-  body {
-    background-color: var(--background);
-    color: var(--foreground);
-  }
+  /* Typography */
+  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
 
-  /* RTL support */
-  [dir='rtl'] {
-    text-align: right;
-  }
-}
-
-@layer components {
-  /* Purple gradient pill button */
-  .btn-purple {
-    @apply inline-flex items-center justify-center gap-2
-           text-white font-semibold
-           px-6 py-3 rounded-full
-           transition-all duration-200
-           focus:outline-none focus:ring-2 focus:ring-offset-2;
-    background: linear-gradient(135deg, #7C3AED 0%, #6D28D9 100%);
-  }
-
-  .btn-purple:hover {
-    opacity: 0.9;
-  }
-
-  .btn-purple:active {
-    transform: scale(0.97);
-  }
-
-  /* Surface card */
-  .card-surface {
-    @apply rounded-2xl border border-white/5;
-    background-color: #0F1629;
-  }
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-
-  /* Ticker marquee — CSS only, zero JS */
-  .ticker-track {
-    animation: marquee 30s linear infinite;
-    will-change: transform;
-  }
-
-  .ticker-track:hover {
-    animation-play-state: paused;
-  }
-
-  /* RTL: reverse ticker scroll direction */
-  [dir="rtl"] .ticker-track {
-    animation-direction: reverse;
-  }
+  /* Animation */
+  --animate-marquee: marquee 25s linear infinite;
+  --animate-marquee-rtl: marquee-rtl 25s linear infinite;
 }
 
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-rtl {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(50%); }
+}
+
+/* Base styles */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-surface);
+  color: white;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Focus visible ring */
+:focus-visible {
+  outline: 2px solid var(--color-brand-500);
+  outline-offset: 2px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface-2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-brand-700);
+  border-radius: 3px;
+}
+
+/* Form input utility */
+.input-field {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  background-color: rgb(255 255 255 / 0.05);
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  color: white;
+  outline: none;
+  transition: border-color 150ms;
+}
+
+.input-field:focus {
+  border-color: var(--color-brand-500);
+}
+
+.input-field option {
+  background-color: #111;
+  color: white;
+}
+
+.input-field::placeholder {
+  color: rgb(107 114 128);
 }

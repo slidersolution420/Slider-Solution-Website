@@ -1,87 +1,86 @@
+import { NextResponse } from 'next/server'
 import { verifyWebhookSignature } from '@/lib/hype'
 import { createServiceClient } from '@/lib/supabase-server'
+import { sendOrderConfirmation } from '@/lib/resend'
 
-export async function POST(request: Request): Promise<Response> {
-  const rawBody = await request.text()
+export async function POST(request: Request) {
+  const payload = await request.text()
+  const signature = request.headers.get('x-hype-signature') ?? ''
 
-  if (process.env.HYPE_WEBHOOK_SECRET) {
-    const valid = verifyWebhookSignature(request.headers, rawBody)
-    if (!valid) {
-      console.warn('[webhook] Invalid Hype signature')
-      return Response.json({ error: 'Invalid signature' }, { status: 403 })
+  if (!verifyWebhookSignature(payload, signature)) {
+    return NextResponse.json({ error: 'Invalid signature' }, { status: 401 })
+  }
+
+  let event: {
+    type: string
+    payment_id: string
+    metadata?: {
+      items?: string
+      shipping_address?: string
     }
+    amount?: number
+    currency?: string
+    customer_email?: string
   }
 
-  let payload: Record<string, unknown>
   try {
-    payload = JSON.parse(rawBody) as Record<string, unknown>
+    event = JSON.parse(payload) as typeof event
   } catch {
-    return Response.json({ error: 'Invalid JSON' }, { status: 400 })
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
-  const supabase = createServiceClient()
-  const paymentId = String(
-    payload.session_id ??
-      payload.id ??
-      payload.payment_id ??
-      'unknown',
-  )
+  if (event.type !== 'payment.success') {
+    return NextResponse.json({ received: true })
+  }
 
   try {
-    const cartRaw =
-      typeof payload.cart === 'string' ? JSON.parse(payload.cart) : []
+    const supabase = createServiceClient()
 
-    const { error: orderError } = await supabase.from('orders').upsert(
-      {
-        email: String(payload.customer_email ?? payload.email ?? ''),
-        name: String(payload.customer_name ?? payload.name ?? ''),
-        shipping_address:
-          (payload.customer as Record<string, unknown> | undefined) ?? {},
-        country: String(payload.country ?? ''),
-        items: cartRaw,
-        total_usd: Number(payload.amount ?? 0) / 100,
-        status: 'paid',
-        hype_payment_id: paymentId,
-        type: String(payload.order_type ?? 'b2c'),
-      },
-      { onConflict: 'hype_payment_id' },
-    )
+    const items = event.metadata?.items ? (JSON.parse(event.metadata.items) as unknown[]) : []
+    const shippingAddress = event.metadata?.shipping_address
+      ? (JSON.parse(event.metadata.shipping_address) as Record<string, string>)
+      : {}
 
-    if (orderError) console.error('[webhook] Order write error:', orderError)
-  } catch (err) {
-    console.error('[webhook] DB error:', err)
-    // Never let a DB error break the webhook response
-  }
+    const totalUsd = (event.amount ?? 0) / (event.currency === 'ILS' ? 3.7 : 1)
 
-  const cartSessionId = payload.cart_session_id as string | undefined
-  if (cartSessionId) {
-    await supabase
-      .from('cart_sessions')
-      .update({ status: 'completed' })
-      .eq('id', cartSessionId)
-  }
-
-  // Fire delivery trigger (creates shipment + sends confirmation email)
-  try {
-    const { data: newOrder } = await supabase
+    const { data: order, error } = await supabase
       .from('orders')
-      .select('id')
-      .eq('hype_payment_id', paymentId)
+      .insert({
+        email: shippingAddress['email'] ?? event.customer_email ?? '',
+        name: shippingAddress['name'] ?? '',
+        shipping_address: shippingAddress,
+        country: (shippingAddress['country'] as string | undefined) ?? 'IL',
+        items,
+        total_usd: Math.round(totalUsd * 100) / 100,
+        status: 'paid',
+        hype_payment_id: event.payment_id,
+        type: 'b2c',
+      })
+      .select()
       .single()
 
-    if (newOrder?.id) {
-      const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
-      fetch(`${appUrl}/api/delivery`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ orderId: newOrder.id }),
-      }).catch((err: unknown) =>
-        console.error('[webhook] delivery trigger failed:', err),
-      )
+    if (error) {
+      console.error('Order insert error:', error)
+      return NextResponse.json({ error: 'DB error' }, { status: 500 })
     }
-  } catch (err) {
-    console.error('[webhook] delivery lookup failed:', err)
-  }
 
-  return Response.json({ received: true })
+    // Mark cart session as completed
+    if (shippingAddress['email']) {
+      await supabase
+        .from('cart_sessions')
+        .update({ status: 'completed' })
+        .eq('email', shippingAddress['email'])
+        .eq('status', 'active')
+    }
+
+    // Send confirmation email (non-blocking)
+    if (order) {
+      void sendOrderConfirmation(order).catch(console.error)
+    }
+
+    return NextResponse.json({ success: true, order_id: order?.id })
+  } catch (err) {
+    console.error('Webhook processing error:', err)
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 })
+  }
 }

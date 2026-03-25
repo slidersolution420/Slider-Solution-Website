@@ -1,9 +1,12 @@
-// Root layout — minimal wrapper required by Next.js App Router.
-// Locale-specific layout lives at [locale]/layout.tsx.
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+import type { Metadata } from 'next'
+import './globals.css'
+
+export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL ?? 'https://slidersolution.com'
+  ),
+}
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return children
 }

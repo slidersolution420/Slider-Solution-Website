@@ -1,0 +1,162 @@
+import { config, fields, collection, singleton } from '@keystatic/core'
+
+export default config({
+  storage: process.env.KEYSTATIC_GITHUB_CLIENT_ID
+    ? {
+        kind: 'github' as const,
+        repo: {
+          owner: 'slidersolution420',
+          name: 'Slider-Solution-Website',
+        },
+      }
+    : { kind: 'local' as const },
+
+  ui: {
+    brand: { name: 'Slider Solution CMS' },
+  },
+
+  singletons: {
+    siteSettings: singleton({
+      label: 'Site Settings',
+      path: 'content/singletons/site-settings',
+      schema: {
+        phone: fields.text({ label: 'Phone', defaultValue: '052-455-3311' }),
+        email: fields.text({ label: 'Contact Email', defaultValue: 'support@slidersolution.com' }),
+        address: fields.text({ label: 'Address' }),
+        instagram: fields.url({ label: 'Instagram URL' }),
+        facebook: fields.url({ label: 'Facebook URL' }),
+        ticker_he: fields.text({
+          label: 'Ticker Bar Text (Hebrew)',
+          defaultValue: '✦ משלוח חינם בכל הארץ ✦ ערבות שביעות רצון ✦ ממציאי הסלייד המקוריים ✦',
+        }),
+        ticker_en: fields.text({
+          label: 'Ticker Bar Text (English)',
+          defaultValue: '✦ Free Shipping Nationwide ✦ Satisfaction Guarantee ✦ The Original Slider Kit ✦',
+        }),
+        age_gate_enabled: fields.checkbox({ label: 'Enable Age Gate (21+)', defaultValue: true }),
+      },
+    }),
+
+    product: singleton({
+      label: 'Product',
+      path: 'content/singletons/product',
+      schema: {
+        name: fields.text({ label: 'Product Name', defaultValue: 'SLIDER' }),
+        tagline_he: fields.text({
+          label: 'Tagline (Hebrew)',
+          defaultValue: 'קיט הגלגול המושלם',
+        }),
+        tagline_en: fields.text({
+          label: 'Tagline (English)',
+          defaultValue: 'The Original All-in-One Cone Kit',
+        }),
+        description_he: fields.text({
+          label: 'Hero Description (Hebrew)',
+          multiline: true,
+          defaultValue:
+            'קיט ה-ALL IN ONE הראשון בעולם שמותאם גם לאלו שלא יודעים לגלגל',
+        }),
+        description_en: fields.text({
+          label: 'Hero Description (English)',
+          multiline: true,
+          defaultValue:
+            "The world's first ALL IN ONE kit adapted even for those who don't know how to roll",
+        }),
+        price_b2c_usd: fields.number({ label: 'B2C Price (USD)', defaultValue: 25 }),
+        price_b2b_usd: fields.number({ label: 'B2B Box Price (USD)', defaultValue: 82 }),
+        image_b2c: fields.text({
+          label: 'B2C Product Image Filename (in Supabase Storage)',
+          defaultValue: 'kit-main.jpg',
+        }),
+        image_b2b: fields.text({
+          label: 'B2B Display Box Image Filename',
+          defaultValue: 'display-box.jpg',
+        }),
+        colors: fields.array(
+          fields.object({
+            name_he: fields.text({ label: 'Color Name (Hebrew)' }),
+            name_en: fields.text({ label: 'Color Name (English)' }),
+            slug: fields.text({ label: 'Slug (e.g. black, blue, purple)' }),
+            image: fields.text({ label: 'Image Filename' }),
+            gradient: fields.text({
+              label: 'Tailwind Gradient (fallback)',
+              defaultValue: 'from-gray-800 to-gray-900',
+            }),
+          }),
+          {
+            label: 'Colors',
+            itemLabel: (props) => props.fields.name_en.value ?? 'Color',
+          }
+        ),
+        features: fields.array(
+          fields.object({
+            title_he: fields.text({ label: 'Title (Hebrew)' }),
+            title_en: fields.text({ label: 'Title (English)' }),
+            desc_he: fields.text({ label: 'Description (Hebrew)', multiline: true }),
+            desc_en: fields.text({ label: 'Description (English)', multiline: true }),
+            icon: fields.select({
+              label: 'Icon',
+              options: [
+                { label: 'Cog', value: 'cog' },
+                { label: 'Funnel', value: 'funnel' },
+                { label: 'Archive Box', value: 'archive-box' },
+                { label: 'Shield', value: 'shield' },
+              ],
+              defaultValue: 'cog',
+            }),
+          }),
+          {
+            label: 'Features (4)',
+            itemLabel: (props) => props.fields.title_en.value ?? 'Feature',
+          }
+        ),
+        steps: fields.array(
+          fields.object({
+            title_he: fields.text({ label: 'Step Title (Hebrew)' }),
+            title_en: fields.text({ label: 'Step Title (English)' }),
+            desc_he: fields.text({ label: 'Step Description (Hebrew)', multiline: true }),
+            desc_en: fields.text({ label: 'Step Description (English)', multiline: true }),
+          }),
+          {
+            label: 'How It Works Steps (3)',
+            itemLabel: (props) => props.fields.title_en.value ?? 'Step',
+          }
+        ),
+        kit_contents_he: fields.array(fields.text({ label: 'Item (Hebrew)' }), {
+          label: 'Kit Contents (Hebrew)',
+        }),
+        kit_contents_en: fields.array(fields.text({ label: 'Item (English)' }), {
+          label: 'Kit Contents (English)',
+        }),
+      },
+    }),
+  },
+
+  collections: {
+    faq: collection({
+      label: 'FAQ',
+      path: 'content/faq/*',
+      slugField: 'question_en',
+      schema: {
+        question_he: fields.text({ label: 'Question (Hebrew)' }),
+        question_en: fields.text({ label: 'Question (English)' }),
+        answer_he: fields.text({ label: 'Answer (Hebrew)', multiline: true }),
+        answer_en: fields.text({ label: 'Answer (English)', multiline: true }),
+        order: fields.number({ label: 'Sort Order', defaultValue: 0 }),
+      },
+    }),
+
+    pages: collection({
+      label: 'Pages',
+      path: 'content/pages/*',
+      slugField: 'slug',
+      format: { contentField: 'body' },
+      schema: {
+        title_he: fields.text({ label: 'Title (Hebrew)' }),
+        title_en: fields.text({ label: 'Title (English)' }),
+        slug: fields.text({ label: 'URL Slug (e.g. terms, refund, cookies)' }),
+        body: fields.mdx({ label: 'Content' }),
+      },
+    }),
+  },
+})

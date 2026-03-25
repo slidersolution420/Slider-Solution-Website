@@ -1,0 +1,98 @@
+{
+  "name": "SLIDER",
+  "tagline_he": "קיט הגלגול המושלם",
+  "tagline_en": "The Original All-in-One Cone Kit",
+  "description_he": "קיט ה-ALL IN ONE הראשון בעולם שמותאם גם לאלו שלא יודעים לגלגל. מטחנה מרובעת, משפך מובנה, תא אחסון גדול ו-5 קונוסים.",
+  "description_en": "The world's first ALL IN ONE kit adapted even for those who don't know how to roll. Square grinder, built-in funnel, large storage, and 5 cones included.",
+  "price_b2c_usd": 25,
+  "price_b2b_usd": 82,
+  "image_b2c": "kit-main.jpg",
+  "image_b2b": "display-box.jpg",
+  "colors": [
+    {
+      "name_he": "שחור",
+      "name_en": "Black",
+      "slug": "black",
+      "image": "kit-black.jpg",
+      "gradient": "from-gray-800 to-gray-950"
+    },
+    {
+      "name_he": "כחול",
+      "name_en": "Blue",
+      "slug": "blue",
+      "image": "kit-blue.jpg",
+      "gradient": "from-blue-800 to-blue-950"
+    },
+    {
+      "name_he": "סגול",
+      "name_en": "Purple",
+      "slug": "purple",
+      "image": "kit-purple.jpg",
+      "gradient": "from-purple-800 to-purple-950"
+    }
+  ],
+  "features": [
+    {
+      "title_he": "המטחנה המרובעת הראשונה בעולם",
+      "title_en": "World's First Rectangular Grinder",
+      "desc_he": "צירים נפרדים שמונעים חסימה — לעולם לא יתקע",
+      "desc_en": "Separated axes prevent jamming — never gets stuck",
+      "icon": "cog"
+    },
+    {
+      "title_he": "משפך מובנה למילוי קל",
+      "title_en": "Built-in Funnel for Easy Filling",
+      "desc_he": "ללא בזבוז, תהליך מילוי חלק ומדויק",
+      "desc_en": "No waste, smooth and precise filling process",
+      "icon": "funnel"
+    },
+    {
+      "title_he": "5 קונוסים ואחסון ל-5 גרם",
+      "title_en": "5 Cones & Storage for 5 Grams",
+      "desc_he": "קונוסים גלולים ביד, קיבולת אחסון 5-15 גרם",
+      "desc_en": "Hand-rolled cones, storage capacity 5-15g",
+      "icon": "archive-box"
+    },
+    {
+      "title_he": "מגש עמיד בפני רוח",
+      "title_en": "Wind-Resistant Tray",
+      "desc_he": "שומר על החומר בשימוש בדרכים",
+      "desc_en": "Secures your material for on-the-go use",
+      "icon": "shield"
+    }
+  ],
+  "steps": [
+    {
+      "title_he": "טחן",
+      "title_en": "Grind",
+      "desc_he": "שים את החומר במטחנה המרובעת וסובב — לעולם לא יתקע",
+      "desc_en": "Place material in the square grinder and turn — it never jams"
+    },
+    {
+      "title_he": "מלא",
+      "title_en": "Fill",
+      "desc_he": "המשפך המובנה מכוון את החומר ישירות לקונוס",
+      "desc_en": "The built-in funnel guides material directly into the cone"
+    },
+    {
+      "title_he": "עשן",
+      "title_en": "Smoke",
+      "desc_he": "הכל מוכן. תהנה!",
+      "desc_en": "All set. Enjoy!"
+    }
+  ],
+  "kit_contents_he": [
+    "מטחנה מרובעת (לא נתקעת)",
+    "משפך מובנה",
+    "תא אחסון גדול",
+    "5 קונוסים ריקים",
+    "מגש עמיד בפני רוח"
+  ],
+  "kit_contents_en": [
+    "Square grinder (never jams)",
+    "Built-in funnel",
+    "Large storage compartment",
+    "5 empty cones",
+    "Wind-resistant tray"
+  ]
+}

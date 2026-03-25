@@ -1,16 +1,38 @@
 import type { MetadataRoute } from 'next'
+import { getAllPageSlugs } from '@/lib/keystatic'
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const locales = ['en', 'he', 'es']
-  const baseUrl = 'https://slidersolution.com'
-  const pages = ['', '/reviews']
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://slidersolution.com'
+const LOCALES = ['he', 'en'] as const
 
-  return locales.flatMap((locale) =>
-    pages.map((page) => ({
-      url: `${baseUrl}/${locale}${page}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: page === '' ? 1 : 0.8,
-    })),
-  )
+function url(path: string, locale: string) {
+  if (locale === 'he') return `${APP_URL}${path}`
+  return `${APP_URL}/en${path}`
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const pageSlugs = await getAllPageSlugs()
+
+  const staticRoutes = ['', '/contact', '/wholesale']
+  const entries: MetadataRoute.Sitemap = []
+
+  for (const locale of LOCALES) {
+    for (const route of staticRoutes) {
+      entries.push({
+        url: url(route || '/', locale),
+        lastModified: new Date(),
+        changeFrequency: route === '' ? 'weekly' : 'monthly',
+        priority: route === '' ? 1 : 0.7,
+      })
+    }
+    for (const slug of pageSlugs) {
+      entries.push({
+        url: url(`/${slug}`, locale),
+        lastModified: new Date(),
+        changeFrequency: 'yearly',
+        priority: 0.3,
+      })
+    }
+  }
+
+  return entries
 }

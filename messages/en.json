@@ -1,281 +1,138 @@
 {
   "nav": {
-    "logo": "Slider Solution",
-    "wholesale": "Wholesale",
     "home": "Home",
-    "reviews": "Reviews",
     "contact": "Contact",
+    "wholesale": "Wholesale",
     "my_orders": "My Orders"
   },
   "ageGate": {
-    "headline": "Welcome To Slider Solution Website",
-    "sub": "Are you 21 or older?",
+    "headline": "Please verify your age",
+    "sub": "This site is intended for adults 21 and older",
     "yes": "Yes, I'm 21+",
-    "no": "No, take me out"
-  },
-  "swatch": {
-    "label": {
-      "black": "Black kit",
-      "blue": "Blue kit",
-      "purple": "Purple kit"
-    }
+    "no": "No, I'm under 21"
   },
   "hero": {
-    "headline": "The Original All-in-One Cone Kit",
-    "subheadline": "Grind. Fill. Smoke. Perfected.",
-    "cta": "Get my Slider →",
-    "badge_shipping_il": "Free Shipping in Israel",
-    "badge_shipping_intl": "Free on 3+ Units Worldwide",
+    "badge_shipping": "Free Shipping Nationwide",
+    "badge_customers": "1,000+ Happy Customers",
     "badge_patent": "Patent Protected",
-    "badge_customers": "+1K Happy Customers",
-    "color_label": "Color",
-    "sub": "The all-in-one kit that makes rolling easy, clean and consistent.",
-    "imageAlt": "Slider Cone Kit — all-in-one cannabis accessory"
-  },
-  "features": {
-    "title": "Everything You Need",
-    "subtitle": "One kit. Four tools. Zero hassle.",
-    "grinder_title": "Square Grinder",
-    "grinder_desc": "Precision-ground for a consistent, even fill every time.",
-    "tray_title": "Wind-Protected Tray",
-    "tray_desc": "No more lost product. Works in any weather.",
-    "funnel_title": "Funnel Attachment",
-    "funnel_desc": "Direct, mess-free filling. Clean every time.",
-    "storage_title": "Cones & Storage",
-    "storage_desc": "Pre-rolled cones included with an airtight storage case."
-  },
-  "ticker": {
-    "text": "Grind ~ Fill ~ Smoke  •  WORLDWIDE SHIPPING  •  Patent Protected  •  +1K Happy Customers"
-  },
-  "howto": {
-    "title": "How It Works",
-    "subtitle": "Three steps to your perfect cone.",
-    "step1_title": "Grind",
-    "step1_desc": "Load your product into the square grinder for a perfectly even consistency.",
-    "step2_title": "Fill",
-    "step2_desc": "Use the funnel to fill your cone cleanly. No mess, no waste.",
-    "step3_title": "Smoke",
-    "step3_desc": "Enjoy a perfectly filled cone every time. Repeat."
-  },
-  "reviews": {
-    "title": "What Our Customers Say",
-    "subtitle": "Over 1,000 happy customers worldwide.",
-    "see_all": "See all reviews →",
-    "page_title": "Customer Reviews",
-    "page_subtitle": "Real reviews from real Slider fans.",
-    "stars": "{count} stars",
-    "verified": "Verified Purchase",
-    "empty": "No reviews yet. Be the first!",
-    "hero_banner": "+1K Happy Customers \u2b50",
-    "back_to_shop": "\u2190 Back to shop"
-  },
-  "buy": {
-    "title": "Get Your Slider Kit",
-    "color_label": "Choose Your Color",
-    "color_black": "Black",
-    "color_blue": "Blue",
-    "color_purple": "Purple",
-    "add_to_cart": "Add to Cart →",
-    "urgency_today": "🚀 Shipping today",
-    "urgency_tomorrow": "📦 Ships tomorrow",
-    "urgency_stock": "⚡ Limited stock available",
-    "b2b_composition": "6 Kits Total — 2 Black + 2 Blue + 2 Purple",
-    "b2b_cta": "Order Wholesale →",
-    "b2b_qty_label": "Number of Boxes",
-    "price_label": "Price",
-    "b2b_wave4": "Coming in Wave 4"
+    "badge_guarantee": "Satisfaction Guarantee",
+    "add_to_cart": "Add to Cart",
+    "order_now": "Order Now"
   },
   "qty": {
-    "title": "How many kits?",
+    "label": "Quantity",
     "kit_1": "1 Kit",
     "kit_2": "2 Kits",
     "kit_3": "3 Kits",
     "most_popular": "Most Popular",
-    "saves": "saves {amount}",
-    "label": "Select quantity",
-    "1": { "label": "1 Kit" },
-    "2": { "label": "2 Kits" },
-    "3": { "label": "3 Kits" }
+    "free_shipping": "Free Shipping"
   },
   "trust": {
-    "shipping": "Free shipping in Israel",
-    "shipping_sub": "Free on 3+ worldwide",
-    "secure": "Secure checkout",
-    "secure_sub": "Encrypted payment",
-    "guarantee": "30-day money-back guarantee",
-    "guarantee_sub": "No questions asked"
-  },
-  "sticky": {
-    "add_to_cart": "Add to Cart →"
-  },
-  "exit": {
-    "headline": "Your kit is waiting.",
-    "title_il": "Your kit is waiting.",
-    "body_il": "Free shipping included.",
-    "sub": {
-      "israel": "Your kit is waiting. Free shipping included.",
-      "intl_under3": "Add one more — unlock free worldwide shipping.",
-      "intl_3plus": "Your order qualifies for free worldwide shipping."
-    },
-    "title_intl_upgrade": "Almost there.",
-    "body_intl_upgrade": "Add one more — unlock free worldwide shipping.",
-    "title_intl_free": "You qualify.",
-    "body_intl_free": "Your order qualifies for free worldwide shipping.",
-    "cta": "Complete my order →",
-    "dismiss": "Maybe later"
+    "shipping_title": "Free Shipping",
+    "shipping_sub": "Nationwide Delivery",
+    "secure_title": "Secure Payment",
+    "secure_sub": "SSL Encrypted",
+    "guarantee_title": "Satisfaction Guarantee",
+    "guarantee_sub": "Full Money Back"
   },
   "cart": {
-    "title": "Your Slider",
-    "empty": "Nothing here yet — let's fix that.",
-    "checkout": "Checkout securely →",
+    "title": "Your Cart",
+    "empty": "Your cart is empty",
+    "checkout": "Checkout",
     "remove": "Remove",
     "subtotal": "Subtotal",
-    "shipping": "Delivery",
-    "shipping_unknown": "Calculated at checkout",
-    "total": "Order total",
-    "free": "Free 🎉"
-  },
-  "checkout": {
-    "title": "Fast delivery to your door",
-    "address_placeholder": "Where should we send your Slider?",
-    "country_label": "Deliver to",
-    "zip_label": "Postal Code",
-    "order_summary": "Your Order",
-    "shipping_row": "Delivery",
-    "free": "Free 🎉",
-    "paid_shipping": "$25 · 7–21 days",
-    "total": "You pay today",
-    "cta": "Get my Slider →",
-    "processing": "Securing your order...",
-    "first_name": "First Name",
-    "last_name": "Last Name",
-    "email": "Email",
-    "phone": "Phone Number",
-    "address": "Street Address",
-    "city": "City",
-    "state": "State / Province",
-    "section": {
-      "shipping": "Fast delivery to your door"
-    },
-    "field": {
-      "name": "Full name",
-      "email": "Email address",
-      "address": "Street address",
-      "city": "City",
-      "country": "Deliver to",
-      "zip": "Postal Code"
-    },
-    "addr": {
-      "placeholder": "Where should we send your Slider?"
-    },
-    "summary": {
-      "title": "Your Order",
-      "shipping": "Delivery",
-      "total": "You pay today"
-    },
-    "shipping": {
-      "free": "Free 🎉",
-      "paid": "$25 · 7–21 days",
-      "unknown": "Calculated at checkout"
-    },
-    "error": {
-      "generic": "Something went wrong. Please try again."
-    }
-  },
-  "success": {
-    "title": "You're in. 🎉",
-    "sub": "Your Slider is on its way.",
-    "subtitle": "Your Slider is on its way.",
-    "order_number": "Order #{id}",
-    "email_sent": "We've sent a confirmation to {email}.",
-    "email": "Confirmation sent to your inbox",
-    "order_ref": "Order ref",
-    "email_label": "Email",
-    "total_label": "Total",
-    "back": "\u2190 Back to store",
+    "shipping": "Shipping",
+    "shipping_free": "Free",
+    "shipping_calculated": "Calculated at checkout",
+    "total": "Total",
     "continue_shopping": "Continue Shopping"
   },
-  "wholesale": {
-    "modal_title": "Wholesale Partner Portal",
-    "placeholder": "Full wholesale portal coming in Wave 4.",
-    "tab_login": "Login",
-    "tab_signup": "Create Account",
-    "footer_cta": "Looking for wholesale?",
-    "welcome_back": "Welcome back",
-    "account_created": "Account created! Welcome to Slider Wholesale.",
-    "login_success": "Logged in successfully.",
-    "error_email_taken": "This email is already registered.",
-    "error_username_taken": "This username is already taken.",
-    "error_invalid_credentials": "Invalid email or password.",
-    "my_orders": "My Orders",
-    "cta": "Order Wholesale →",
-    "logout": "Not you? Sign out",
-    "blocked": "Your account has been suspended. Contact support@slidersolution.com",
-    "modal": {
-      "title": {
-        "login": "Welcome back",
-        "signup": "Join Slider Wholesale"
-      },
-      "cta": {
-        "login": "Log in",
-        "signup": "Create my account"
-      },
-      "login": {
-        "link": "Already a partner? Log in →"
-      },
-      "signup": {
-        "link": "New partner? Create account →"
-      }
-    },
-    "form": {
-      "firstName": "First name",
-      "lastName": "Last name",
-      "phone": "Phone number",
-      "email": "Email address",
-      "username": "Username",
-      "password": "Password",
-      "confirmPassword": "Confirm password",
-      "storeName": "Store name",
-      "address": "Address",
-      "city": "City",
-      "country": "Country",
-      "zip": "Postal code",
-      "consent": "I accept to receive emails, news and discounts from Slider"
-    },
-    "product": {
-      "title": "Display Package",
-      "contents": "6 Kits Total — 2 Black + 2 Blue + 2 Purple",
-      "perBox": "per box",
-      "qtyLabel": "Number of display boxes"
-    },
-    "dashboard": {
-      "title": "Your Orders",
-      "empty": "No orders yet. Place your first order →",
-      "pending": "Awaiting dispatch",
-      "tracking": "Track package"
-    }
+  "checkout": {
+    "title": "Order Details",
+    "section_contact": "Contact Information",
+    "section_shipping": "Shipping Address",
+    "name": "Full Name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "city": "City",
+    "country": "Country",
+    "zip": "ZIP / Postal Code",
+    "order_summary": "Order Summary",
+    "shipping_cost": "Shipping",
+    "shipping_free": "Free",
+    "total": "Total",
+    "submit": "Continue to Payment",
+    "submitting": "Processing...",
+    "error": "An error occurred. Please try again."
   },
-  "email": {
-    "order_confirmation_subject": "Your Slider is confirmed ✓ (#{id})",
-    "how_to_use_subject": "Get the most from your Slider 🌿",
-    "leave_review_subject": "How's your Slider? Tell us 💬",
-    "abandoned_cart_subject": "Your kit is still here.",
-    "wholesale_welcome_subject": "Welcome to Slider Wholesale {name} 🎯",
-    "wholesale_reorder_subject": "Time to restock? Your wholesale portal is ready.",
-    "owner_alert_subject": "New partner: {storeName} just joined"
+  "success": {
+    "title": "Order Received!",
+    "sub": "Thank you for your purchase",
+    "order_number": "Order Number",
+    "email_sent": "Confirmation sent to your email",
+    "back": "Back to Shop",
+    "tracking_title": "Track Your Shipment",
+    "tracking_sub": "We'll update you as soon as your package ships"
+  },
+  "wholesale": {
+    "title": "Wholesale Portal",
+    "subtitle": "Special pricing for distributors",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "dashboard_title": "My Orders",
+    "no_orders": "No orders yet",
+    "business_name": "Business Name",
+    "contact_name": "Contact Name",
+    "phone": "Phone",
+    "username": "Username",
+    "store_name": "Store Name",
+    "address": "Address",
+    "city": "City",
+    "country": "Country",
+    "zip": "ZIP Code",
+    "password": "Password",
+    "submit_login": "Login",
+    "submit_register": "Register",
+    "error_invalid": "Invalid credentials",
+    "error_exists": "User already exists",
+    "pending": "Your account is under review",
+    "blocked": "Account blocked. Please contact us.",
+    "cta_title": "Join Our Distributor Network",
+    "cta_sub": "Wholesale price: $82 per display box (6 kits)",
+    "cta_button": "Wholesale Login"
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We're happy to answer any question",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "submit": "Send",
+    "submitting": "Sending...",
+    "success": "Your message was sent successfully!",
+    "error": "Failed to send. Please try again."
   },
   "footer": {
-    "tagline": "The Original All-in-One Cone Kit",
+    "tagline": "The Original Cone Kit",
     "home": "Home",
-    "reviews": "Reviews",
-    "wholesale": "Wholesale",
     "contact": "Contact",
-    "privacy": "Privacy Policy",
-    "terms": "Terms of Service",
-    "copyright": "© 2025 Slider Solution. All rights reserved.",
-    "social_facebook": "Facebook",
-    "social_instagram": "Instagram",
-    "social_linkedin": "LinkedIn",
-    "wholesale_cta": "Looking for wholesale? Join us →"
+    "wholesale": "Wholesale",
+    "terms": "Terms of Use",
+    "refund": "Return Policy",
+    "cookies": "Cookies",
+    "copyright": "All rights reserved"
+  },
+  "currency": {
+    "label": "Currency",
+    "ils": "₪ ILS",
+    "usd": "$ USD"
+  },
+  "errors": {
+    "required": "Required",
+    "email_invalid": "Invalid email address",
+    "min_length": "Minimum {count} characters",
+    "generic": "An error occurred. Please try again."
   }
 }
