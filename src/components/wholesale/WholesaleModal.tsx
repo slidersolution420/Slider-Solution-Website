@@ -9,6 +9,7 @@ import { wholesaleSignupSchema, wholesaleLoginSchema } from '@/lib/schemas'
 import { signInWholesale } from '@/lib/auth'
 import type { WholesaleSignupInput, WholesaleLoginInput } from '@/lib/schemas'
 import { SUPPORTED_COUNTRIES } from '@/lib/countries'
+import { Link } from '@/i18n/navigation'
 
 interface WholesaleModalProps {
   onClose: () => void
@@ -17,9 +18,11 @@ interface WholesaleModalProps {
 
 export default function WholesaleModal({ onClose, onSuccess }: WholesaleModalProps) {
   const t = useTranslations('wholesale')
+  const tf = useTranslations('forms')
   const [tab, setTab] = useState<'login' | 'register'>('login')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [consented, setConsented] = useState(false)
   const closeRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -96,7 +99,7 @@ export default function WholesaleModal({ onClose, onSuccess }: WholesaleModalPro
           {(['login', 'register'] as const).map((tabId) => (
             <button
               key={tabId}
-              onClick={() => { setTab(tabId); setError(null) }}
+              onClick={() => { setTab(tabId); setError(null); setConsented(false) }}
               className={`flex-1 py-3 text-sm font-medium transition-colors ${
                 tab === tabId
                   ? 'border-b-2 border-brand-500 text-white'
@@ -170,9 +173,24 @@ export default function WholesaleModal({ onClose, onSuccess }: WholesaleModalPro
                   </select>
                 </Field>
               </div>
+              <label className="flex cursor-pointer items-start gap-3">
+                <input
+                  type="checkbox"
+                  checked={consented}
+                  onChange={(e) => setConsented(e.target.checked)}
+                  className="mt-0.5 size-4 shrink-0 accent-brand-500"
+                />
+                <span className="text-sm text-gray-400">
+                  {tf('consent_pre')}
+                  <Link href="/terms" className="text-white underline hover:text-brand-400">{tf('terms_link')}</Link>
+                  {tf('consent_mid')}
+                  <Link href="/cookies" className="text-white underline hover:text-brand-400">{tf('privacy_link')}</Link>
+                </span>
+              </label>
+
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !consented}
                 className="w-full rounded-xl bg-gradient-to-r from-brand-500 to-brand-700 py-3 font-bold text-white disabled:opacity-50"
               >
                 {loading ? '...' : t('submit_register')}

@@ -11,13 +11,17 @@ import { checkoutSchema, type CheckoutInput } from '@/lib/schemas'
 import { SUPPORTED_COUNTRIES } from '@/lib/countries'
 import NavBar from '@/components/ui/NavBar'
 import { useLocale } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 
 export default function CheckoutPage() {
   const t = useTranslations('checkout')
+  const tf = useTranslations('forms')
   const locale = useLocale()
   const { items, currency, clearCart } = useStore()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [consented, setConsented] = useState(false)
+  const [consentError, setConsentError] = useState(false)
 
   const {
     register,
@@ -151,9 +155,27 @@ export default function CheckoutPage() {
                 <p className="rounded-xl bg-red-950/50 px-4 py-3 text-sm text-red-400">{error}</p>
               )}
 
+              <div className="space-y-1">
+                <label className="flex cursor-pointer items-start gap-3">
+                  <input
+                    type="checkbox"
+                    checked={consented}
+                    onChange={(e) => { setConsented(e.target.checked); setConsentError(false) }}
+                    className="mt-0.5 size-4 shrink-0 accent-brand-500"
+                  />
+                  <span className="text-sm text-gray-400">
+                    {tf('consent_pre')}
+                    <Link href="/terms" className="text-white underline hover:text-brand-400">{tf('terms_link')}</Link>
+                    {tf('consent_mid')}
+                    <Link href="/cookies" className="text-white underline hover:text-brand-400">{tf('privacy_link')}</Link>
+                  </span>
+                </label>
+                {consentError && <p className="ps-7 text-xs text-red-400">{tf('consent_required')}</p>}
+              </div>
+
               <button
                 type="submit"
-                disabled={loading || items.length === 0}
+                disabled={loading || items.length === 0 || !consented}
                 className="w-full rounded-xl bg-gradient-to-r from-brand-500 to-brand-700 py-4 text-base font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
               >
                 {loading ? t('submitting') : `${t('submit')} — ${formatPrice(grandTotalUsd, currency)}`}

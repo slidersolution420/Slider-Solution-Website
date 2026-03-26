@@ -2,15 +2,16 @@
 
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
-import { useLocale } from 'next-intl'
 import NavBar from '@/components/ui/NavBar'
 import Footer from '@/components/ui/Footer'
+import { Link } from '@/i18n/navigation'
 
 export default function ContactPage() {
   const t = useTranslations('contact')
-  const locale = useLocale()
+  const tf = useTranslations('forms')
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
   const [form, setForm] = useState({ name: '', email: '', message: '' })
+  const [consented, setConsented] = useState(false)
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -80,9 +81,24 @@ export default function ContactPage() {
                 <p className="text-sm text-red-400">{t('error')}</p>
               )}
 
+              <label className="flex cursor-pointer items-start gap-3">
+                <input
+                  type="checkbox"
+                  checked={consented}
+                  onChange={(e) => setConsented(e.target.checked)}
+                  className="mt-0.5 size-4 shrink-0 accent-brand-500"
+                />
+                <span className="text-sm text-gray-400">
+                  {tf('consent_pre')}
+                  <Link href="/terms" className="text-white underline hover:text-brand-400">{tf('terms_link')}</Link>
+                  {tf('consent_mid')}
+                  <Link href="/cookies" className="text-white underline hover:text-brand-400">{tf('privacy_link')}</Link>
+                </span>
+              </label>
+
               <button
                 type="submit"
-                disabled={status === 'sending'}
+                disabled={status === 'sending' || !consented}
                 className="w-full rounded-xl bg-gradient-to-r from-brand-500 to-brand-700 py-3.5 font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
               >
                 {status === 'sending' ? t('submitting') : t('submit')}

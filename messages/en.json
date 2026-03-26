@@ -133,6 +133,13 @@
     "ils": "₪ ILS",
     "usd": "$ USD"
   },
+  "forms": {
+    "consent_pre": "I have read and agree to the ",
+    "terms_link": "Terms of Use",
+    "consent_mid": " and the ",
+    "privacy_link": "Privacy Policy",
+    "consent_required": "You must agree to the terms to continue"
+  },
   "errors": {
     "required": "Required",
     "email_invalid": "Invalid email address",

@@ -133,6 +133,13 @@
     "ils": "₪ שקל",
     "usd": "$ דולר"
   },
+  "forms": {
+    "consent_pre": "קראתי ואני מסכים/ה ל",
+    "terms_link": "תנאי השימוש",
+    "consent_mid": " ול",
+    "privacy_link": "מדיניות הפרטיות",
+    "consent_required": "יש לאשר את תנאי השימוש ומדיניות הפרטיות"
+  },
   "errors": {
     "required": "שדה חובה",
     "email_invalid": "כתובת דוא\"ל לא תקינה",

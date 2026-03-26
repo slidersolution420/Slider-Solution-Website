@@ -21,9 +21,9 @@ export default function NavBar() {
   }, [])
 
   const navLinks = [
-    { href: '/', label: t('home') },
-    { href: '/contact', label: t('contact') },
-    { href: '/wholesale', label: t('wholesale') },
+    { href: '/', label: t('home'), cta: false },
+    { href: '/contact', label: t('contact'), cta: false },
+    { href: '/wholesale', label: t('wholesale'), cta: true },
   ]
 
   return (
@@ -47,7 +47,11 @@ export default function NavBar() {
             <Link
               key={link.href}
               href={link.href}
-              className="text-sm text-gray-300 transition-colors hover:text-white"
+              className={
+                link.cta
+                  ? 'rounded-full border border-purple-500 px-3.5 py-1 text-sm font-semibold text-purple-400 transition-colors hover:bg-purple-500/10 hover:text-purple-300'
+                  : 'text-sm text-gray-300 transition-colors hover:text-white'
+              }
             >
               {link.label}
             </Link>
@@ -90,7 +94,11 @@ export default function NavBar() {
             <Link
               key={link.href}
               href={link.href}
-              className="block py-3 text-base text-gray-200 hover:text-white"
+              className={
+                link.cta
+                  ? 'block py-3 text-base font-semibold text-purple-400 hover:text-purple-300'
+                  : 'block py-3 text-base text-gray-200 hover:text-white'
+              }
               onClick={() => setMobileOpen(false)}
             >
               {link.label}

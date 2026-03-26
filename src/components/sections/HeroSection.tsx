@@ -8,7 +8,7 @@ import { formatPrice } from '@/lib/currency'
 import {
   TruckIcon,
   UserGroupIcon,
-  StarIcon,
+  ShieldCheckIcon,
 } from '@heroicons/react/24/solid'
 import type { ProductContent } from '@/lib/keystatic'
 
@@ -19,8 +19,6 @@ interface HeroSectionProps {
 
 const SUPABASE_STORAGE = `https://ecuhecmfxfavjdxuctkg.supabase.co/storage/v1/object/public/product-images`
 
-const BADGE_ICONS = [TruckIcon, UserGroupIcon, StarIcon]
-
 export default function HeroSection({ product, locale }: HeroSectionProps) {
   const t = useTranslations('hero')
   const { addItem, openCart, selectedColor, setSelectedColor, selectedQty, setSelectedQty, currency } =
@@ -30,9 +28,9 @@ export default function HeroSection({ product, locale }: HeroSectionProps) {
   const description = locale === 'he' ? product.description_he : product.description_en
 
   const badges = [
-    t('badge_shipping'),
-    t('badge_customers'),
-    t('badge_patent'),
+    { text: t('badge_shipping'), icon: TruckIcon, gold: false },
+    { text: t('badge_customers'), icon: UserGroupIcon, gold: false },
+    { text: t('badge_patent'), icon: ShieldCheckIcon, gold: true },
   ]
 
   const selectedColorData = product.colors?.find((c) => c.slug === selectedColor) ?? product.colors?.[0]
@@ -81,19 +79,19 @@ export default function HeroSection({ product, locale }: HeroSectionProps) {
 
             {/* Badges */}
             <div className="mb-8 flex flex-wrap gap-2">
-              {badges.map((badge, i) => {
-                const Icon = BADGE_ICONS[i]
-                if (!Icon) return null
-                return (
-                  <span
-                    key={badge}
-                    className="flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-4 py-2 text-sm font-medium text-gray-200 transition-colors hover:border-white/25 hover:bg-white/12"
-                  >
-                    <Icon className="size-3.5 text-brand-400" />
-                    {badge}
-                  </span>
-                )
-              })}
+              {badges.map((badge) => (
+                <span
+                  key={badge.text}
+                  className={
+                    badge.gold
+                      ? 'flex items-center gap-2 rounded-full border border-amber-500/50 bg-amber-900/20 px-4 py-2 text-sm font-bold text-amber-300 transition-colors hover:border-amber-400/60 hover:bg-amber-900/30'
+                      : 'flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-4 py-2 text-sm font-medium text-gray-200 transition-colors hover:border-white/25 hover:bg-white/12'
+                  }
+                >
+                  <badge.icon className={`size-3.5 ${badge.gold ? 'text-amber-400' : 'text-brand-400'}`} />
+                  {badge.text}
+                </span>
+              ))}
             </div>
 
             {/* Color selector */}
