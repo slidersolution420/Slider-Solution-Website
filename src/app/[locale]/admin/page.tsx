@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { createServiceClient } from '@/lib/supabase-server'
+import { getConfig } from '@/lib/config'
 import type { WholesaleAccount } from '@/lib/types'
 import AdminDashboard from './AdminDashboard'
 
@@ -24,10 +25,10 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
   }
 
   const supabase = createServiceClient()
-  const { data, error } = await supabase
-    .from('wholesale_accounts')
-    .select('*')
-    .order('created_at', { ascending: false })
+  const [{ data, error }, config] = await Promise.all([
+    supabase.from('wholesale_accounts').select('*').order('created_at', { ascending: false }),
+    getConfig(),
+  ])
 
   if (error) {
     return (
@@ -37,5 +38,11 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
     )
   }
 
-  return <AdminDashboard accounts={(data ?? []) as WholesaleAccount[]} secret={secret} />
+  return (
+    <AdminDashboard
+      accounts={(data ?? []) as WholesaleAccount[]}
+      config={config}
+      secret={secret}
+    />
+  )
 }

@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import { getTranslations } from 'next-intl/server'
-import { getSiteSettings } from '@/lib/keystatic'
+import { getConfig } from '@/lib/config'
 
 export default async function Footer() {
   const [t, settings] = await Promise.all([
     getTranslations('footer'),
-    getSiteSettings(),
+    getConfig(),
   ])
   const year = new Date().getFullYear()
 

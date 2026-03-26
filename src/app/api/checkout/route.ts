@@ -4,7 +4,7 @@ import { initiatePayment } from '@/lib/hype'
 import { createServiceClient } from '@/lib/supabase-server'
 import { convertPrice } from '@/lib/currency'
 import { getShippingCost } from '@/lib/shipping'
-import { getShippingSettings } from '@/lib/keystatic'
+import { getConfig } from '@/lib/config'
 
 export async function POST(request: Request) {
   try {
@@ -23,11 +23,11 @@ export async function POST(request: Request) {
     // Calculate totals
     const totalQty = items.reduce((sum, i) => sum + i.quantity, 0)
     const subtotalUsd = items.reduce((sum, i) => sum + i.priceUsd * i.quantity, 0)
-    const shippingCfg = await getShippingSettings()
+    const cfg = await getConfig()
     const shippingUsd = getShippingCost(country, totalQty, {
-      freeCountries: shippingCfg.free_shipping_countries,
-      minQty: shippingCfg.free_shipping_min_qty,
-      intlCost: shippingCfg.intl_paid_shipping_usd,
+      freeCountries: cfg.free_shipping_countries,
+      minQty: cfg.free_shipping_min_qty,
+      intlCost: cfg.intl_paid_shipping_usd,
     })
     const totalUsd = subtotalUsd + shippingUsd
     const totalIls = currency === 'ILS' ? convertPrice(totalUsd, 'ILS') : totalUsd * 3.7

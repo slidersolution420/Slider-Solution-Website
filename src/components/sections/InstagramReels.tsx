@@ -1,4 +1,4 @@
-import { getSiteSettings } from '@/lib/keystatic'
+import { getConfig } from '@/lib/config'
 import ReelVideo from './ReelVideo'
 
 interface InstagramReelsProps {
@@ -6,14 +6,14 @@ interface InstagramReelsProps {
 }
 
 export default async function InstagramReels({ locale }: InstagramReelsProps) {
-  const settings = await getSiteSettings()
-  const reels = settings.instagram_reels ?? []
+  const config = await getConfig()
+  const reels = config.instagram_reels
 
   if (reels.length === 0) return null
 
   const isHe = locale === 'he'
   const title = isHe ? 'עקבו אחרינו' : 'Follow Us'
-  const instagramUrl = settings.instagram_url ?? 'https://www.instagram.com/slider.solution'
+  const instagramUrl = config.instagram_url
 
   return (
     <section className="bg-surface py-16">

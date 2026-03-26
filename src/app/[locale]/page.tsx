@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { getProduct, getSiteSettings, getFaq } from '@/lib/keystatic'
+import { getProduct, getFaq } from '@/lib/keystatic'
+import { getConfig } from '@/lib/config'
 import { createServiceClient } from '@/lib/supabase-server'
 import type { Review } from '@/lib/types'
 import NavBar from '@/components/ui/NavBar'
@@ -40,9 +41,9 @@ export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params
 
   // Fetch all data in parallel
-  const [product, siteSettings, faqItems] = await Promise.all([
+  const [product, siteConfig, faqItems] = await Promise.all([
     getProduct(),
-    getSiteSettings(),
+    getConfig(),
     getFaq(),
   ])
 
@@ -60,7 +61,7 @@ export default async function HomePage({ params }: HomePageProps) {
     // Service client unavailable (e.g. missing env var in preview) — show no reviews
   }
 
-  const tickerText = locale === 'he' ? siteSettings.ticker_he : siteSettings.ticker_en
+  const tickerText = locale === 'he' ? siteConfig.ticker_he : siteConfig.ticker_en
 
   return (
     <>
