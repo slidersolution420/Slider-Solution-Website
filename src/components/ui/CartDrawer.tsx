@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useTranslations } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { useStore } from '@/store'
 import { usePathname } from '@/i18n/navigation'
 import { Link } from '@/i18n/navigation'
@@ -14,11 +14,12 @@ export default function CartDrawer() {
   const { items, cartOpen, closeCart, removeItem, currency, totalUsd } = useStore()
   const closeRef = useRef<HTMLButtonElement>(null)
   const pathname = usePathname()
+  const locale = useLocale()
 
-  // Close cart on any route change (prevents stuck-open state across navigations)
+  // Close cart on any route or locale change (prevents stuck-open state across navigations/locale switches)
   useEffect(() => {
     closeCart()
-  }, [pathname]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [pathname, locale]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Focus close button on open
   useEffect(() => {
