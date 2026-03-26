@@ -28,7 +28,7 @@ export default async function ContentPage({ params }: PageProps) {
 
   return (
     <>
-      <NavBar locale={locale} />
+      <NavBar />
       <main className="min-h-screen bg-surface pt-24 pb-16">
         <div className="mx-auto max-w-3xl px-4">
           <h1 className="mb-8 text-3xl font-bold text-white">{title}</h1>

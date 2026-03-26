@@ -74,7 +74,7 @@ export default function CheckoutPage() {
 
   return (
     <>
-      <NavBar locale={locale} />
+      <NavBar />
       <main className="min-h-screen bg-surface pt-24 pb-16">
         <div className="mx-auto max-w-4xl px-4">
           <h1 className="mb-8 text-2xl font-bold text-white">{t('title')}</h1>
