@@ -137,6 +137,7 @@ export default config({
       label: 'FAQ',
       path: 'content/faq/*',
       slugField: 'question_en',
+      format: { data: 'json' },
       schema: {
         question_he: fields.text({ label: 'Question (Hebrew)' }),
         question_en: fields.text({ label: 'Question (English)' }),
