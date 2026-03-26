@@ -34,7 +34,7 @@ export interface CustomerInfo {
 export async function initiatePayment(customer: CustomerInfo): Promise<HypePaymentSession> {
   const apiKey = process.env.HYPE_API_KEY
   // HYPE_PASSP is the "PassP" from Hype settings page (previously stored as HYPE_REFERER)
-  const passP = process.env.HYPE_PASSP ?? process.env.HYPE_REFERER
+  const passP = process.env.HYPE_PASSP
   const masof = process.env.HYPE_TERMINAL
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://slidersolution.com'
 
@@ -115,7 +115,7 @@ export async function verifyPayment(params: Record<string, string>): Promise<boo
   if (params['mock'] === '1') return true
 
   const apiKey = process.env.HYPE_API_KEY
-  const passP = process.env.HYPE_PASSP ?? process.env.HYPE_REFERER
+  const passP = process.env.HYPE_PASSP
   const masof = process.env.HYPE_TERMINAL
 
   // Dev mode — skip verification
