@@ -1,10 +1,8 @@
-import { useTranslations } from 'next-intl'
-import { getLocale } from 'next-intl/server'
+import { getTranslations, getLocale } from 'next-intl/server'
 import Link from 'next/link'
 
 export default async function ProblemPage() {
-  const t = useTranslations('errors')
-  const locale = await getLocale()
+  const [t, locale] = await Promise.all([getTranslations('errors'), getLocale()])
   const homeHref = locale === 'he' ? '/' : `/${locale}`
   const checkoutHref = locale === 'he' ? '/checkout' : `/${locale}/checkout`
 
