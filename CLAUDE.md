@@ -14,9 +14,9 @@ npm run type-check # TypeScript (noEmit)
 
 ## Stack
 
-- **Next.js 16.2.1** — App Router, uses `proxy.ts` (not `middleware.ts`)
+- **Next.js 16.2.1** — App Router, i18n middleware in `src/middleware.ts`
 - **Tailwind CSS v4.2.2** — CSS-only config via `@theme {}` in `globals.css`, no `tailwind.config.ts`
-- **next-intl v4** — `src/i18n/routing.ts` + `src/proxy.ts`. Locales: `he` (default, RTL), `en`
+- **next-intl v4** — `src/i18n/routing.ts` + `src/middleware.ts`. Locales: `he` (default, RTL), `en`
 - **Keystatic CMS** — open-source, git-based, at `/keystatic`. Config: `keystatic.config.ts`
 - **Zustand v5** — cart + UI state with persist middleware
 - **Zod v4** + **react-hook-form v7** — form validation
