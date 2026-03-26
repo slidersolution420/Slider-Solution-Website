@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { updateConfig } from '@/lib/config'
-import type { SiteConfig } from '@/lib/config'
+import type { SiteConfig } from '@/lib/types'
 
 export async function PATCH(request: Request) {
   const auth = request.headers.get('Authorization')

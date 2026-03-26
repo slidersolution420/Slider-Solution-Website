@@ -7,7 +7,6 @@
  * Falls back to hardcoded defaults if Supabase is unreachable.
  * Server-only — never import in Client Components.
  */
-import 'server-only'
 import { createServiceClient } from '@/lib/supabase-server'
 import type { ReelItem, SiteConfig } from '@/lib/types'
 
