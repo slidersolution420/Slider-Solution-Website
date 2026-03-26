@@ -1,166 +1,109 @@
 import type { Metadata } from 'next'
-import ClientOnly from '@/components/ui/ClientOnly'
-import AgeGate from '@/components/ui/AgeGate'
+import { getProduct, getSiteSettings, getFaq } from '@/lib/keystatic'
+import { createServiceClient } from '@/lib/supabase-server'
+import type { Review } from '@/lib/types'
 import NavBar from '@/components/ui/NavBar'
-import ProductHero from '@/components/product/ProductHero'
-import TickerBar from '@/components/ui/TickerBar'
-import KitFeatures from '@/components/product/KitFeatures'
-import HowItWorks from '@/components/product/HowItWorks'
-import ReviewsCarousel from '@/components/ui/ReviewsCarousel'
-import BuyNowSection from '@/components/product/BuyNowSection'
+import AgeGate from '@/components/ui/AgeGate'
+import CartDrawer from '@/components/ui/CartDrawer'
 import Footer from '@/components/ui/Footer'
-import CartDrawer from '@/components/checkout/CartDrawer'
 import StickyCartBar from '@/components/ui/StickyCartBar'
-import ExitIntentPopup from '@/components/ui/ExitIntentPopup'
-import WholesaleModal from '@/components/wholesale/WholesaleModal'
-import { createClient } from '@/lib/supabase-server'
-import type { ReviewItem } from '@/components/ui/ReviewsCarousel'
+import HeroSection from '@/components/sections/HeroSection'
+import TickerBar from '@/components/sections/TickerBar'
+import FeaturesGrid from '@/components/sections/FeaturesGrid'
+import HowItWorks from '@/components/sections/HowItWorks'
+import ReviewsCarousel from '@/components/sections/ReviewsCarousel'
+import FaqAccordion from '@/components/sections/FaqAccordion'
+import TrustBar from '@/components/sections/TrustBar'
+import { isRtl } from '@/i18n/routing'
 
-// ─── Per-locale SEO metadata ──────────────────────────────────────────────────
-
-const titles: Record<string, string> = {
-  en: 'Slider Cone Kit — The Original All-in-One | Slider Solution',
-  he: 'ערכת הקונוס של Slider — הכל-באחד המקורי | Slider Solution',
-  es: 'Kit de Cono Slider — El Todo-en-Uno Original | Slider Solution',
+interface HomePageProps {
+  params: Promise<{ locale: string }>
 }
 
-const descriptions: Record<string, string> = {
-  en: 'The premium all-in-one cone kit. Square grinder, wind-protected tray, funnel, and cones. Patent protected. Ships worldwide. $25.',
-  he: 'ערכת הקונוס הפרימיום הכל-באחד. מטחנה מרובעת, מגש מוגן מרוח, משפך וקונוסים. מוגן בפטנט. משלוח לכל העולם.',
-  es: 'El kit de cono premium todo-en-uno. Molinillo cuadrado, bandeja protegida del viento, embudo y conos. Protección de patente. Envío mundial. $25.',
-}
-
-const ogLocales: Record<string, string> = {
-  en: 'en_US',
-  he: 'he_IL',
-  es: 'es_ES',
-}
-
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: string }
-}): Promise<Metadata> {
-  const locale = params.locale
-  const title = titles[locale] ?? titles['en']
-  const description = descriptions[locale] ?? descriptions['en']
-  const ogLocale = ogLocales[locale] ?? 'en_US'
+export async function generateMetadata({ params }: HomePageProps): Promise<Metadata> {
+  const { locale } = await params
+  const isHe = locale === 'he'
 
   return {
-    title,
-    description,
-    alternates: {
-      canonical: `https://slidersolution.com/${locale}`,
-      languages: {
-        en: 'https://slidersolution.com/en',
-        he: 'https://slidersolution.com/he',
-        es: 'https://slidersolution.com/es',
-      },
-    },
+    title: isHe ? 'SLIDER — קיט הגלגול המושלם' : 'SLIDER — The Original All-in-One Cone Kit',
+    description: isHe
+      ? 'קיט ה-ALL IN ONE הראשון בעולם. מטחנה מרובעת, משפך מובנה, 5 קונוסים. משלוח חינם בכל הארץ.'
+      : "The world's first ALL IN ONE cone kit. Square grinder, built-in funnel, 5 cones. Free shipping.",
     openGraph: {
-      title,
-      description,
-      url: `https://slidersolution.com/${locale}`,
-      siteName: 'Slider Solution',
-      images: [
-        {
-          url: 'https://slidersolution.com/og-image.jpg',
-          width: 1200,
-          height: 630,
-          alt: 'Slider Cone Kit',
-        },
-      ],
-      locale: ogLocale,
-      type: 'website',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      images: ['https://slidersolution.com/og-image.jpg'],
+      images: ['/og-image.jpg'],
     },
   }
 }
 
-// ─── JSON-LD product schema ───────────────────────────────────────────────────
+export default async function HomePage({ params }: HomePageProps) {
+  const { locale } = await params
 
-const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Product',
-  name: 'Slider Cone Kit',
-  description:
-    'Premium all-in-one cone kit — square grinder, wind-protected tray, funnel, and cones.',
-  brand: { '@type': 'Brand', name: 'Slider Solution' },
-  offers: {
-    '@type': 'Offer',
-    price: '25.00',
-    priceCurrency: 'USD',
-    availability: 'https://schema.org/InStock',
-    url: 'https://slidersolution.com/en',
-  },
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.8',
-    reviewCount: '1000',
-  },
-}
+  // Fetch all data in parallel
+  const [product, siteSettings, faqItems, supabase] = await Promise.all([
+    getProduct(),
+    getSiteSettings(),
+    getFaq(),
+    createServiceClient(),
+  ])
 
-// ─── Page ─────────────────────────────────────────────────────────────────────
+  const { data: reviews } = await supabase
+    .from('reviews')
+    .select('*')
+    .eq('approved', true)
+    .order('created_at', { ascending: false })
+    .limit(10)
 
-async function getReviews(): Promise<ReviewItem[]> {
-  try {
-    const supabase = await createClient()
-    const { data, error } = await supabase
-      .from('reviews')
-      .select('id, name, rating, body, created_at')
-      .eq('approved', true)
-      .order('created_at', { ascending: false })
-      .limit(8)
-
-    if (error || !data) return []
-    return data as ReviewItem[]
-  } catch {
-    return []
-  }
-}
-
-export default async function HomePage() {
-  const reviews = await getReviews()
+  const tickerText = locale === 'he' ? siteSettings.ticker_he : siteSettings.ticker_en
 
   return (
     <>
-      {/* JSON-LD product schema */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-
-      {/* Age gate — checks localStorage, only shows on first visit */}
-      <ClientOnly>
-        <AgeGate />
-      </ClientOnly>
-
-      {/* Main layout */}
-      <NavBar />
+      <AgeGate />
+      <NavBar locale={locale} />
+      <CartDrawer />
 
       <main>
-        <ProductHero />
-        <TickerBar />
-        <KitFeatures />
-        <HowItWorks />
-        <ReviewsCarousel reviews={reviews} />
-        <BuyNowSection />
+        {/* JSON-LD Product Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'Product',
+              name: 'SLIDER Cone Kit',
+              description: locale === 'he' ? product.description_he : product.description_en,
+              brand: { '@type': 'Brand', name: 'Slider Solution' },
+              offers: {
+                '@type': 'Offer',
+                price: product.price_b2c_usd,
+                priceCurrency: 'USD',
+                availability: 'https://schema.org/InStock',
+                url: process.env.NEXT_PUBLIC_APP_URL,
+              },
+            }),
+          }}
+        />
+
+        <HeroSection product={product} locale={locale} />
+
+        {tickerText && <TickerBar text={tickerText} rtl={isRtl(locale)} />}
+
+        <TrustBar />
+
+        <FeaturesGrid product={product} locale={locale} />
+
+        <HowItWorks product={product} locale={locale} />
+
+        {reviews && reviews.length > 0 && (
+          <ReviewsCarousel reviews={reviews as Review[]} locale={locale} />
+        )}
+
+        <FaqAccordion items={faqItems} locale={locale} />
       </main>
 
       <Footer />
-
-      {/* Overlays */}
-      <ClientOnly>
-        <CartDrawer />
-        <StickyCartBar />
-        <ExitIntentPopup />
-        <WholesaleModal />
-      </ClientOnly>
+      <StickyCartBar />
     </>
   )
 }
+
+export const revalidate = 3600 // Revalidate reviews every hour

@@ -1,150 +1,103 @@
-/**
- * store/index.ts
- * Zustand global store with localStorage persistence for currency and cart.
- */
-
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type {
-  CartItem,
-  Currency,
-  ModalState,
-  ProductColor,
-} from '@/lib/types'
+import type { CartItem, Currency } from '@/lib/types'
 
-// ─── State interface ─────────────────────────────────────────────────────────
-
-interface StoreState {
-  // Cart
-  cart: CartItem[]
-  addToCart: (item: CartItem) => void
-  removeFromCart: (productId: string, color: ProductColor) => void
-  updateQty: (productId: string, color: ProductColor, qty: number) => void
-  clearCart: () => void
-
-  // Product selection
-  selectedColor: ProductColor
-  setSelectedColor: (color: ProductColor) => void
-
-  selectedQty: number
-  setSelectedQty: (qty: number) => void
-
-  // Currency (persisted)
+interface CartState {
+  items: CartItem[]
   currency: Currency
+  selectedColor: string
+  selectedQty: number
+  cartOpen: boolean
+  ageVerified: boolean
+
+  addItem: (item: CartItem) => void
+  removeItem: (productId: string, color: string) => void
+  updateQty: (productId: string, color: string, qty: number) => void
+  clearCart: () => void
   setCurrency: (currency: Currency) => void
-
-  // Wholesale
-  isWholesaleUser: boolean
-  setIsWholesaleUser: (value: boolean) => void
-
-  // Modals
-  modals: ModalState
-  openModal: (modal: keyof ModalState) => void
-  closeModal: (modal: keyof ModalState) => void
-
-  // Country selection (for shipping calc)
-  selectedCountry: string
-  setSelectedCountry: (country: string) => void
-
-  // Cart session (written to Supabase at checkout)
-  cartSessionId: string | null
-  setCartSessionId: (id: string | null) => void
+  setSelectedColor: (color: string) => void
+  setSelectedQty: (qty: number) => void
+  openCart: () => void
+  closeCart: () => void
+  setAgeVerified: (verified: boolean) => void
+  totalItems: () => number
+  totalUsd: () => number
 }
 
-// ─── sessionStorage sync helper ──────────────────────────────────────────────
-
-function syncCartToSession(cart: CartItem[]): void {
-  if (typeof window !== 'undefined') {
-    sessionStorage.setItem('slider_cart', JSON.stringify(cart))
-  }
-}
-
-// ─── Store ────────────────────────────────────────────────────────────────────
-
-export const useStore = create<StoreState>()(
+export const useStore = create<CartState>()(
   persist(
     (set, get) => ({
-      // Cart
-      cart: [],
-      addToCart: (item) => {
+      items: [],
+      currency: 'ILS',
+      selectedColor: 'black',
+      selectedQty: 1,
+      cartOpen: false,
+      ageVerified: false,
+
+      addItem: (item) =>
         set((state) => {
-          const existing = state.cart.find(
-            (c) => c.productId === item.productId && c.color === item.color,
+          const existing = state.items.find(
+            (i) => i.productId === item.productId && i.color === item.color
           )
           if (existing) {
             return {
-              cart: state.cart.map((c) =>
-                c.productId === item.productId && c.color === item.color
-                  ? { ...c, qty: c.qty + item.qty }
-                  : c,
+              items: state.items.map((i) =>
+                i.productId === item.productId && i.color === item.color
+                  ? { ...i, quantity: i.quantity + item.quantity }
+                  : i
               ),
             }
           }
-          return { cart: [...state.cart, item] }
-        })
-        syncCartToSession(get().cart)
-      },
-      removeFromCart: (productId, color) => {
+          return { items: [...state.items, item] }
+        }),
+
+      removeItem: (productId, color) =>
         set((state) => ({
-          cart: state.cart.filter(
-            (c) => !(c.productId === productId && c.color === color),
-          ),
-        }))
-        syncCartToSession(get().cart)
-      },
-      updateQty: (productId, color, qty) =>
-        set((state) => ({
-          cart: state.cart.map((c) =>
-            c.productId === productId && c.color === color ? { ...c, qty } : c,
+          items: state.items.filter(
+            (i) => !(i.productId === productId && i.color === color)
           ),
         })),
-      clearCart: () => {
-        set({ cart: [] })
-        syncCartToSession([])
-      },
 
-      // Product selection
-      selectedColor: 'black',
-      setSelectedColor: (color) => set({ selectedColor: color }),
+      updateQty: (productId, color, qty) =>
+        set((state) => ({
+          items:
+            qty <= 0
+              ? state.items.filter(
+                  (i) => !(i.productId === productId && i.color === color)
+                )
+              : state.items.map((i) =>
+                  i.productId === productId && i.color === color
+                    ? { ...i, quantity: qty }
+                    : i
+                ),
+        })),
 
-      selectedQty: 1,
-      setSelectedQty: (qty) => set({ selectedQty: qty }),
+      clearCart: () => set({ items: [] }),
 
-      // Currency — persisted
-      currency: 'USD',
       setCurrency: (currency) => set({ currency }),
 
-      // Wholesale
-      isWholesaleUser: false,
-      setIsWholesaleUser: (value) => set({ isWholesaleUser: value }),
+      setSelectedColor: (color) => set({ selectedColor: color }),
 
-      // Modals
-      modals: {
-        cart: false,
-        wholesale: false,
-        ageGate: false,
-        exitIntent: false,
-      },
-      openModal: (modal) =>
-        set((state) => ({ modals: { ...state.modals, [modal]: true } })),
-      closeModal: (modal) =>
-        set((state) => ({ modals: { ...state.modals, [modal]: false } })),
+      setSelectedQty: (qty) => set({ selectedQty: qty }),
 
-      // Country
-      selectedCountry: 'IL',
-      setSelectedCountry: (country) => set({ selectedCountry: country }),
+      openCart: () => set({ cartOpen: true }),
 
-      // Cart session
-      cartSessionId: null,
-      setCartSessionId: (id) => set({ cartSessionId: id }),
+      closeCart: () => set({ cartOpen: false }),
+
+      setAgeVerified: (verified) => set({ ageVerified: verified }),
+
+      totalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
+
+      totalUsd: () =>
+        get().items.reduce((sum, i) => sum + i.priceUsd * i.quantity, 0),
     }),
     {
-      name: 'slider-solution-store',
-      // Only persist currency and cart
+      name: 'slider-cart',
       partialize: (state) => ({
+        items: state.items,
         currency: state.currency,
-        cart: state.cart,
+        ageVerified: state.ageVerified,
       }),
-    },
-  ),
+    }
+  )
 )

@@ -1,15 +1,9 @@
-/**
- * lib/supabase-server.ts
- * Server-side Supabase client for RSC / Server Actions / Route Handlers.
- * Uses @supabase/ssr createServerClient with Next.js cookie handling.
- */
-
 import { createServerClient } from '@supabase/ssr'
+import { createClient as createServiceClient_raw } from '@supabase/supabase-js'
 import { cookies } from 'next/headers'
 
 export async function createClient() {
   const cookieStore = await cookies()
-
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
@@ -21,30 +15,20 @@ export async function createClient() {
         setAll(cookiesToSet) {
           try {
             cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options),
+              cookieStore.set(name, value, options)
             )
           } catch {
-            // Server Component — cookie mutation ignored
+            // Called from Server Component — cookies will be set on next response
           }
         },
       },
-    },
+    }
   )
 }
 
-/**
- * Service-role client for server-only operations (webhooks, cron jobs).
- * Never expose to the browser.
- */
 export function createServiceClient() {
-  return createServerClient(
+  return createServiceClient_raw(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    {
-      cookies: {
-        getAll: () => [],
-        setAll: () => {},
-      },
-    },
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
   )
 }

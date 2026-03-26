@@ -1,44 +1,47 @@
 'use client'
 
-import { useLocale } from 'next-intl'
 import { useRouter, usePathname } from 'next/navigation'
+import { useLocale } from 'next-intl'
 
-const LOCALES = [
-  { value: 'en', label: 'EN', ariaLabel: 'Switch to English' },
-  { value: 'he', label: 'HE', ariaLabel: 'Switch to Hebrew' },
-  { value: 'es', label: 'ES', ariaLabel: 'Switch to Spanish' },
-]
+interface LanguageSwitcherProps {
+  locale: string
+}
 
-export default function LanguageSwitcher() {
-  const locale = useLocale()
+export default function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
   const router = useRouter()
   const pathname = usePathname()
 
   function switchLocale(newLocale: string) {
-    // pathname is like /en/... or /he/...
-    // Replace the first segment with the new locale
-    const segments = pathname.split('/')
-    segments[1] = newLocale
-    router.push(segments.join('/'))
+    if (newLocale === locale) return
+
+    if (locale === 'he') {
+      // Hebrew is default (no prefix) → switching to English adds /en
+      router.push(`/en${pathname}`)
+    } else {
+      // English has /en prefix → switching to Hebrew removes it
+      const withoutPrefix = pathname.replace(/^\/en/, '') || '/'
+      router.push(withoutPrefix)
+    }
   }
 
   return (
-    <div className="flex items-center gap-1" role="group" aria-label="Language">
-      {LOCALES.map(({ value, label, ariaLabel }) => (
-        <button
-          key={value}
-          onClick={() => switchLocale(value)}
-          aria-pressed={locale === value}
-          aria-label={ariaLabel}
-          className={`px-2 py-1 rounded-full text-xs font-outfit font-medium transition-colors duration-150 ${
-            locale === value
-              ? 'bg-purple-600 text-white'
-              : 'border border-gray-700 text-gray-400 hover:border-gray-500 hover:text-gray-300'
-          }`}
-        >
-          {label}
-        </button>
-      ))}
+    <div className="flex items-center gap-1 rounded-lg bg-white/10 p-1">
+      <button
+        onClick={() => switchLocale('he')}
+        className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${
+          locale === 'he' ? 'bg-brand-500 text-white' : 'text-gray-300 hover:text-white'
+        }`}
+      >
+        עב
+      </button>
+      <button
+        onClick={() => switchLocale('en')}
+        className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${
+          locale === 'en' ? 'bg-brand-500 text-white' : 'text-gray-300 hover:text-white'
+        }`}
+      >
+        EN
+      </button>
     </div>
   )
 }

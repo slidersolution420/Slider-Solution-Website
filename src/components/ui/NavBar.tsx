@@ -3,68 +3,105 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
-import { useLocale } from 'next-intl'
 import { useStore } from '@/store'
-import { trackOpenWholesale } from '@/lib/analytics'
-import CurrencySwitcher from './CurrencySwitcher'
+import { ShoppingBagIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import LanguageSwitcher from './LanguageSwitcher'
 
-export default function NavBar() {
+interface NavBarProps {
+  locale: string
+}
+
+export default function NavBar({ locale }: NavBarProps) {
   const t = useTranslations('nav')
-  const locale = useLocale()
-  const openModal = useStore((s) => s.openModal)
-  const isWholesaleUser = useStore((s) => s.isWholesaleUser)
+  const { totalItems, openCart } = useStore()
   const [scrolled, setScrolled] = useState(false)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const count = totalItems()
 
   useEffect(() => {
-    function onScroll() {
-      setScrolled(window.scrollY > 50)
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const handleScroll = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  function handleWholesale() {
-    openModal('wholesale')
-    trackOpenWholesale('nav')
-  }
+  const navLinks = [
+    { href: '/', label: t('home') },
+    { href: '/contact', label: t('contact') },
+    { href: '/wholesale', label: t('wholesale') },
+  ]
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-        scrolled
-          ? 'backdrop-blur-md bg-[#07080F]/80 border-b border-white/5'
-          : 'bg-transparent'
+      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
+        scrolled ? 'bg-gray-950/95 backdrop-blur-md shadow-lg' : 'bg-transparent'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
         {/* Logo */}
-        <div className="tracking-[0.3em] text-lg font-syne font-bold text-white uppercase select-none shrink-0">
-          S L I D E R
-        </div>
+        <Link href="/" className="flex items-center gap-2">
+          <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700">
+            <span className="text-sm font-bold text-white">S</span>
+          </div>
+          <span className="text-lg font-bold tracking-tight text-white">SLIDER</span>
+        </Link>
 
-        {/* Right side */}
-        <div className="flex items-center gap-3 flex-wrap justify-end">
-          <CurrencySwitcher />
-          <LanguageSwitcher />
-
-          {isWholesaleUser ? (
+        {/* Desktop nav */}
+        <div className="hidden items-center gap-6 md:flex">
+          {navLinks.map((link) => (
             <Link
-              href={`/${locale}/wholesale`}
-              className="px-4 py-1.5 rounded-full border border-purple-600 text-purple-400 hover:bg-purple-600/10 font-outfit font-medium text-sm transition-colors duration-150 whitespace-nowrap"
+              key={link.href}
+              href={link.href}
+              className="text-sm text-gray-300 transition-colors hover:text-white"
             >
-              {t('my_orders')}
+              {link.label}
             </Link>
-          ) : (
-            <button
-              onClick={handleWholesale}
-              className="px-4 py-1.5 rounded-full border border-purple-600 text-purple-400 hover:bg-purple-600/10 font-outfit font-medium text-sm transition-colors duration-150 whitespace-nowrap"
-            >
-              {t('wholesale')}
-            </button>
-          )}
+          ))}
         </div>
-      </div>
+
+        {/* Right controls */}
+        <div className="flex items-center gap-3">
+          <LanguageSwitcher locale={locale} />
+
+          {/* Cart button */}
+          <button
+            onClick={openCart}
+            className="relative flex size-9 items-center justify-center rounded-lg text-gray-300 transition-colors hover:bg-white/10 hover:text-white"
+            aria-label="Open cart"
+          >
+            <ShoppingBagIcon className="size-5" />
+            {count > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 flex size-4 items-center justify-center rounded-full bg-brand-500 text-[10px] font-bold text-white">
+                {count}
+              </span>
+            )}
+          </button>
+
+          {/* Mobile menu toggle */}
+          <button
+            className="flex size-9 items-center justify-center rounded-lg text-gray-300 hover:bg-white/10 hover:text-white md:hidden"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <XMarkIcon className="size-5" /> : <Bars3Icon className="size-5" />}
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div className="border-t border-white/10 bg-gray-950 px-4 py-4 md:hidden">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="block py-3 text-base text-gray-200 hover:text-white"
+              onClick={() => setMobileOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      )}
     </header>
   )
 }

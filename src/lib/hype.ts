@@ -1,107 +1,94 @@
-/**
- * lib/hype.ts
- * Hype payment gateway integration — Wave 2 full implementation.
- */
-
 import crypto from 'crypto'
-
-const HYPE_API_KEY = process.env.HYPE_API_KEY ?? ''
-const HYPE_REFERER = process.env.HYPE_REFERER ?? ''
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
+import type { CartItem, ShippingAddress } from './types'
+import { getShippingCost } from './shipping'
+import { convertPrice } from './currency'
 
 export interface HypePaymentSession {
-  sessionUrl: string
-  sessionId: string
+  payment_url: string
+  payment_id: string
 }
 
-export interface CustomerInfo {
-  name: string
-  email: string
-  address: string
-  city: string
-  country: string
-  zip: string
+export interface CustomerInfo extends ShippingAddress {
+  items: CartItem[]
+  currency: 'ILS' | 'USD'
 }
 
-/** Minimal cart shape — only priceUsd + qty are used for total calculation. */
-type CartLineItem = {
-  priceUsd: number
-  qty: number
-}
+export async function initiatePayment(customer: CustomerInfo): Promise<HypePaymentSession> {
+  const apiKey = process.env.HYPE_API_KEY
+  const referer = process.env.HYPE_REFERER ?? 'https://slidersolution.com'
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://slidersolution.com'
 
-export async function initiatePayment(
-  cart: CartLineItem[],
-  customer: CustomerInfo,
-  _currency: string = 'USD',
-): Promise<HypePaymentSession> {
-  const totalUsd = cart.reduce((sum, item) => sum + item.priceUsd * item.qty, 0)
+  if (!apiKey) {
+    // Mock mode for development
+    const mockId = `mock_${Date.now()}`
+    return {
+      payment_url: `${appUrl}/order/${mockId}?mock=1`,
+      payment_id: mockId,
+    }
+  }
 
-  const response = await fetch('https://api.hyp-e.com/payment/create', {
+  const totalQty = customer.items.reduce((sum, item) => sum + item.quantity, 0)
+  const subtotalUsd = customer.items.reduce((sum, item) => sum + item.priceUsd * item.quantity, 0)
+  const shippingUsd = getShippingCost(customer.country, totalQty)
+  const totalUsd = subtotalUsd + shippingUsd
+
+  const amount =
+    customer.currency === 'ILS'
+      ? convertPrice(totalUsd, 'ILS')
+      : totalUsd
+
+  const payload = {
+    amount,
+    currency: customer.currency,
+    customer_name: customer.name,
+    customer_email: customer.email,
+    customer_phone: customer.phone,
+    success_url: `${appUrl}/api/checkout/webhook`,
+    cancel_url: `${appUrl}/checkout`,
+    metadata: {
+      items: JSON.stringify(customer.items),
+      shipping_address: JSON.stringify({
+        name: customer.name,
+        email: customer.email,
+        phone: customer.phone,
+        address: customer.address,
+        city: customer.city,
+        country: customer.country,
+        zip: customer.zip,
+      }),
+    },
+  }
+
+  const res = await fetch('https://api.hyp-e.com/v1/payments', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${HYPE_API_KEY}`,
-      'X-Api-Key': HYPE_API_KEY,
-      Referer: HYPE_REFERER,
-      'X-Referer': HYPE_REFERER,
+      Authorization: `Bearer ${apiKey}`,
+      Referer: referer,
     },
-    body: JSON.stringify({
-      amount: Math.round(totalUsd * 100),
-      currency: 'USD',
-      customer_name: customer.name,
-      customer_email: customer.email,
-      success_url: `${APP_URL}/en/order/{session_id}`,
-      cancel_url: `${APP_URL}/en/checkout`,
-      webhook_url: `${APP_URL}/api/checkout/webhook`,
-      metadata: {
-        cart: JSON.stringify(cart),
-        country: customer.country,
-      },
-    }),
+    body: JSON.stringify(payload),
   })
 
-  if (!response.ok) {
-    const text = await response.text()
-    throw new Error(`Hype initiatePayment failed ${response.status}: ${text}`)
+  if (!res.ok) {
+    const error = await res.text()
+    throw new Error(`Hype API error: ${error}`)
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const data = (await response.json()) as Record<string, any>
-
-  const sessionUrl: string | undefined =
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    data.payment_url ?? data.url ?? data.redirect_url ?? data.checkout_url
-
-  const rawId: unknown =
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    data.session_id ?? data.id ?? data.payment_id ?? data.transaction_id
-
-  if (!sessionUrl) {
-    throw new Error(
-      `Hype: no redirect URL in response: ${JSON.stringify(data)}`,
-    )
+  const data = (await res.json()) as { payment_url: string; id: string }
+  return {
+    payment_url: data.payment_url,
+    payment_id: data.id,
   }
-
-  return { sessionUrl, sessionId: String(rawId ?? '') }
 }
 
-export function verifyWebhookSignature(
-  headers: Headers,
-  rawBody: string,
-): boolean {
+export function verifyWebhookSignature(payload: string, signature: string): boolean {
   const secret = process.env.HYPE_WEBHOOK_SECRET
-  if (!secret) return true
-
-  const sig =
-    headers.get('x-hype-signature') ??
-    headers.get('x-signature') ??
-    headers.get('x-webhook-signature') ??
-    ''
+  if (!secret) return true // Dev mode — skip verification
 
   const expected = crypto
     .createHmac('sha256', secret)
-    .update(rawBody)
+    .update(payload)
     .digest('hex')
 
-  return sig === expected || sig === `sha256=${expected}`
+  return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expected))
 }

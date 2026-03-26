@@ -1,70 +1,36 @@
-import { initiatePayment } from '@/lib/hype'
+import { NextResponse } from 'next/server'
 import { checkoutSchema } from '@/lib/schemas'
-import { getShippingCost } from '@/lib/shipping'
-import type { CustomerInfo } from '@/lib/hype'
+import { initiatePayment } from '@/lib/hype'
 
-export async function POST(request: Request): Promise<Response> {
+export async function POST(request: Request) {
   try {
-    const body = await request.json()
+    const body = (await request.json()) as unknown
     const parsed = checkoutSchema.safeParse(body)
 
     if (!parsed.success) {
-      return Response.json(
-        {
-          success: false,
-          error: 'Invalid input',
-          details: parsed.error.flatten(),
-        },
-        { status: 400 },
+      return NextResponse.json(
+        { error: 'Invalid request', details: parsed.error.flatten() },
+        { status: 400 }
       )
     }
 
-    const { cart, customer, currency } = parsed.data
-    const totalQty = cart.reduce((sum, i) => sum + i.qty, 0)
-    const shippingUsd = getShippingCost(customer.country, totalQty, 'USD')
-    const itemTotalUsd = cart.reduce((sum, i) => sum + i.priceUsd * i.qty, 0)
-    const grandTotalUsd = itemTotalUsd + shippingUsd
+    const { name, email, phone, address, city, country, zip, currency, items } = parsed.data
 
-    // Dev fallback — no Hype key configured
-    if (!process.env.HYPE_API_KEY) {
-      const mockId = `mock-${Date.now()}`
-      return Response.json({
-        success: true,
-        data: {
-          sessionUrl: `${process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'}/en/order/${mockId}`,
-          sessionId: mockId,
-        },
-      })
-    }
-
-    const customerInfo: CustomerInfo = {
-      name: customer.name,
-      email: customer.email,
-      address: customer.address,
-      city: customer.city,
-      country: customer.country,
-      zip: customer.zip,
-    }
-
-    // cart items are compatible with CartLineItem (have priceUsd + qty)
-    const session = await initiatePayment(
-      cart.map((i) => ({ priceUsd: i.priceUsd, qty: i.qty })),
-      customerInfo,
+    const session = await initiatePayment({
+      name,
+      email,
+      phone,
+      address,
+      city,
+      country,
+      zip,
+      items,
       currency,
-    )
+    })
 
-    // Suppress unused variable warning — grandTotalUsd used for logging
-    void grandTotalUsd
-
-    return Response.json({ success: true, data: session })
+    return NextResponse.json({ payment_url: session.payment_url, payment_id: session.payment_id })
   } catch (err) {
-    console.error('[/api/checkout]', err)
-    return Response.json(
-      {
-        success: false,
-        error: 'Payment initiation failed. Please try again.',
-      },
-      { status: 500 },
-    )
+    console.error('Checkout error:', err)
+    return NextResponse.json({ error: 'Failed to initiate payment' }, { status: 500 })
   }
 }
