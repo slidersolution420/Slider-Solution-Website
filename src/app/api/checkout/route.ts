@@ -42,11 +42,13 @@ export async function POST(request: Request) {
       totalIls: Math.round(totalIls),
     }
 
-    const { data: existing } = await supabase
+    const { data: existing, error: selectError } = await supabase
       .from('cart_sessions')
       .select('id')
       .eq('email', email)
       .maybeSingle()
+
+    console.error('[checkout] cart_sessions select — existing:', existing, 'selectError:', selectError)
 
     let sessionId: string
 
@@ -55,6 +57,7 @@ export async function POST(request: Request) {
         .from('cart_sessions')
         .update({ cart: cartPayload, status: 'active', updated_at: new Date().toISOString() })
         .eq('email', email)
+      console.error('[checkout] cart_sessions update — updateError:', updateError)
       if (updateError) throw new Error(`Cart session update error: ${updateError.message} (${updateError.code})`)
       sessionId = existing.id
     } else {
@@ -63,6 +66,7 @@ export async function POST(request: Request) {
         .insert({ email, cart: cartPayload, status: 'active' })
         .select('id')
         .single()
+      console.error('[checkout] cart_sessions insert — newSession:', newSession, 'insertError:', insertError)
       if (insertError) throw new Error(`Cart session insert error: ${insertError.message} (${insertError.code})`)
       sessionId = newSession.id
     }
