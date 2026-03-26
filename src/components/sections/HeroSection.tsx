@@ -2,6 +2,7 @@
 
 import { useRef, useEffect } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { useStore } from '@/store'
 import { B2C_PRICE_USD } from '@/lib/currency'
@@ -146,7 +147,7 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
                 <p className="text-2xl font-black text-brand-400">
                   {formatPrice(B2C_PRICE_USD * selectedQty, currency)}
                 </p>
-                {selectedQty === 3 ? (
+                {(isHe || selectedQty >= 3) ? (
                   <p className="text-xs text-green-400">{isHe ? 'משלוח חינם' : 'Free Shipping'}</p>
                 ) : (
                   <p className="text-xs text-gray-500">{isHe ? 'יחידות' : 'units'}</p>
@@ -163,20 +164,26 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
                 </button>
                 <span className="w-8 text-center text-lg font-bold text-white">{selectedQty}</span>
                 <button
-                  onClick={() => setSelectedQty(Math.min(3, selectedQty + 1))}
-                  disabled={selectedQty === 3}
+                  onClick={() => setSelectedQty(Math.min(10, selectedQty + 1))}
+                  disabled={selectedQty >= 10}
                   className="flex size-9 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-xl font-bold text-white transition-colors hover:border-white/30 hover:bg-white/10 disabled:opacity-30"
                   aria-label={isHe ? 'הוסף כמות' : 'increase quantity'}
                 >
                   +
                 </button>
               </div>
-              {selectedQty === 3 && (
-                <span className="text-xs font-semibold text-brand-400">
-                  {isHe ? 'הכי פופולרי' : 'Most Popular'}
-                </span>
-              )}
             </div>
+            {selectedQty === 10 && (
+              <p className="-mt-4 mb-4 text-xs text-gray-400">
+                {isHe ? 'צריך יותר מ-10? ' : 'Need more than 10? '}
+                <Link
+                  href={isHe ? '/wholesale' : '/en/wholesale'}
+                  className="text-brand-400 underline hover:text-brand-300"
+                >
+                  {isHe ? 'הצטרף כמשווק' : 'Join as a wholesaler'}
+                </Link>
+              </p>
+            )}
 
             {/* CTA */}
             <button

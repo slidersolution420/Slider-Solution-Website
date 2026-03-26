@@ -45,6 +45,10 @@ export default config({
           }),
           { label: 'Instagram Reels' }
         ),
+        ils_exchange_rate: fields.number({
+          label: 'ILS Exchange Rate (1 USD = ? ILS)',
+          defaultValue: 3.7,
+        }),
       },
     }),
 

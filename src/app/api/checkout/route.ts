@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       intlCost: cfg.intl_paid_shipping_usd,
     })
     const totalUsd = subtotalUsd + shippingUsd
-    const totalIls = currency === 'ILS' ? convertPrice(totalUsd, 'ILS') : totalUsd * 3.7
+    const totalIls = convertPrice(totalUsd, 'ILS')
 
     // Save full order data to cart_sessions.
     // The session UUID becomes the Hype Order reference so we can look it up after payment.

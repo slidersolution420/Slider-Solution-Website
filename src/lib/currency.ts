@@ -1,11 +1,12 @@
 import type { Currency } from './types'
+import siteSettingsData from '../../content/singletons/site-settings.json'
 
 export const B2C_PRICE_USD = 25
 export const B2B_BOX_PRICE_USD = 82
 
 export const EXCHANGE_RATES: Record<Currency, number> = {
   USD: 1,
-  ILS: 3.7,
+  ILS: siteSettingsData.ils_exchange_rate,
 }
 
 export const CURRENCY_SYMBOLS: Record<Currency, string> = {
