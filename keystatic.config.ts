@@ -26,6 +26,7 @@ export default config({
         address: fields.text({ label: 'Address' }),
         instagram: fields.url({ label: 'Instagram URL' }),
         facebook: fields.url({ label: 'Facebook URL' }),
+        whatsapp: fields.text({ label: 'WhatsApp Number (e.g. +972521234567)', defaultValue: '' }),
         ticker_he: fields.text({
           label: 'Ticker Bar Text (Hebrew)',
           defaultValue: '✦ משלוח חינם בכל הארץ ✦ ממציאי הסלייד המקוריים ✦',
@@ -35,6 +36,10 @@ export default config({
           defaultValue: '✦ Free Shipping Nationwide ✦ The Original Slider Kit ✦',
         }),
         age_gate_enabled: fields.checkbox({ label: 'Enable Age Gate (21+)', defaultValue: true }),
+        instagram_reel_ids: fields.array(
+          fields.text({ label: 'Reel ID (the code from the Instagram URL)' }),
+          { label: 'Instagram Reel IDs' }
+        ),
       },
     }),
 
@@ -175,12 +180,31 @@ export default config({
       label: 'Pages',
       path: 'content/pages/*',
       slugField: 'slug',
-      format: { contentField: 'body' },
+      format: { data: 'json' },
       schema: {
         title_he: fields.text({ label: 'Title (Hebrew)' }),
         title_en: fields.text({ label: 'Title (English)' }),
         slug: fields.text({ label: 'URL Slug (e.g. terms, refund, cookies)' }),
-        body: fields.mdx({ label: 'Content' }),
+        sections_he: fields.array(
+          fields.object({
+            heading: fields.text({ label: 'Heading (leave empty to hide)', defaultValue: '' }),
+            text: fields.text({ label: 'Text', multiline: true }),
+          }),
+          {
+            label: 'Sections (Hebrew)',
+            itemLabel: (props) => props.fields.heading.value || 'Section',
+          }
+        ),
+        sections_en: fields.array(
+          fields.object({
+            heading: fields.text({ label: 'Heading (leave empty to hide)', defaultValue: '' }),
+            text: fields.text({ label: 'Text', multiline: true }),
+          }),
+          {
+            label: 'Sections (English)',
+            itemLabel: (props) => props.fields.heading.value || 'Section',
+          }
+        ),
       },
     }),
   },

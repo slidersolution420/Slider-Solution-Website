@@ -104,7 +104,7 @@ export default async function HomePage({ params }: HomePageProps) {
           <ReviewsCarousel reviews={reviews} locale={locale} />
         )}
 
-        <InstagramReels locale={locale} />
+        <InstagramReels locale={locale} reelIds={siteSettings.instagram_reel_ids} />
 
         <FaqAccordion items={faqItems} locale={locale} />
       </main>

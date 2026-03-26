@@ -1,17 +1,9 @@
-const REEL_IDS = [
-  'DVYr6w7iIug',
-  'DUgFUfbiN5W',
-  'DOByE4hCKow',
-  'DShyv2eiNFq',
-  'DOQiGgtCGSN',
-  'DOOER7UiFCf',
-]
-
 interface InstagramReelsProps {
   locale: string
+  reelIds: string[]
 }
 
-export default function InstagramReels({ locale }: InstagramReelsProps) {
+export default function InstagramReels({ locale, reelIds }: InstagramReelsProps) {
   const isHe = locale === 'he'
   const title = isHe ? 'עקבו אחרינו' : 'Follow Us'
 
@@ -33,7 +25,7 @@ export default function InstagramReels({ locale }: InstagramReelsProps) {
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {REEL_IDS.map((id) => (
+          {reelIds.map((id) => (
             <a
               key={id}
               href={`https://www.instagram.com/reel/${id}/`}
