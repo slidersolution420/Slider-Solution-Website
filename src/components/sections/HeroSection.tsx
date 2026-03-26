@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef, useEffect } from 'react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { useStore } from '@/store'
@@ -18,6 +19,7 @@ interface HeroSectionProps {
 }
 
 const SUPABASE_STORAGE = `https://ecuhecmfxfavjdxuctkg.supabase.co/storage/v1/object/public/product-images`
+const PURPLE_VIDEO_URL = `${SUPABASE_STORAGE}/kit-purple-animation.mp4`
 
 export default function HeroSection({ product, locale }: HeroSectionProps) {
   const t = useTranslations('hero')
@@ -38,6 +40,24 @@ export default function HeroSection({ product, locale }: HeroSectionProps) {
   const imageUrl = selectedColorData?.image
     ? `${SUPABASE_STORAGE}/${selectedColorData.image}`
     : null
+
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video || selectedColor !== 'purple') return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !video.src) {
+          video.src = PURPLE_VIDEO_URL
+          video.load()
+        }
+      },
+      { rootMargin: '200px' }
+    )
+    observer.observe(video)
+    return () => observer.disconnect()
+  }, [selectedColor])
 
   function handleAddToCart() {
     if (!selectedColorData) return
@@ -169,14 +189,25 @@ export default function HeroSection({ product, locale }: HeroSectionProps) {
                 selectedColorData?.gradient ?? 'from-gray-800 to-gray-950'
               }`}
             >
-              {imageUrl && (
-                <Image
-                  src={imageUrl}
-                  alt={`SLIDER Kit — ${locale === 'he' ? selectedColorData?.name_he : selectedColorData?.name_en}`}
-                  fill
-                  className="object-contain p-6"
-                  priority
+              {selectedColor === 'purple' ? (
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="absolute inset-0 h-full w-full object-contain p-6"
                 />
+              ) : (
+                imageUrl && (
+                  <Image
+                    src={imageUrl}
+                    alt={`SLIDER Kit — ${locale === 'he' ? selectedColorData?.name_he : selectedColorData?.name_en}`}
+                    fill
+                    className="object-contain p-6"
+                    priority
+                  />
+                )
               )}
             </div>
           </div>
