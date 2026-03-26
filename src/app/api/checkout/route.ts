@@ -42,18 +42,29 @@ export async function POST(request: Request) {
       totalIls: Math.round(totalIls),
     }
 
-    const { data: session, error: sessionError } = await supabase
+    const { data: existing } = await supabase
       .from('cart_sessions')
-      .upsert(
-        { email, cart: cartPayload, status: 'active' },
-        { onConflict: 'email' }
-      )
       .select('id')
-      .single()
+      .eq('email', email)
+      .maybeSingle()
 
-    if (sessionError ?? !session) {
-      console.error('Cart session error:', sessionError)
-      return NextResponse.json({ error: 'Session error' }, { status: 500 })
+    let sessionId: string
+
+    if (existing) {
+      const { error: updateError } = await supabase
+        .from('cart_sessions')
+        .update({ cart: cartPayload, status: 'active', updated_at: new Date().toISOString() })
+        .eq('email', email)
+      if (updateError) throw new Error(`Cart session update error: ${updateError.message} (${updateError.code})`)
+      sessionId = existing.id
+    } else {
+      const { data: newSession, error: insertError } = await supabase
+        .from('cart_sessions')
+        .insert({ email, cart: cartPayload, status: 'active' })
+        .select('id')
+        .single()
+      if (insertError) throw new Error(`Cart session insert error: ${insertError.message} (${insertError.code})`)
+      sessionId = newSession.id
     }
 
     // Build Hype item list for the receipt — use server-known per-item ILS price
@@ -74,7 +85,7 @@ export async function POST(request: Request) {
       zip,
       items: hypeItems,
       totalIls: Math.round(totalIls),
-      orderRef: session.id,
+      orderRef: sessionId,
     })
 
     return NextResponse.json({
