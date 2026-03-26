@@ -57,8 +57,8 @@ export default function CartDrawer() {
         role="dialog"
         aria-modal="true"
         aria-label={t('title')}
-        className={`fixed inset-y-0 z-50 flex w-full max-w-sm flex-col bg-gray-950 shadow-2xl transition-transform duration-300 ease-in-out inset-inline-end-0 ${
-          cartOpen ? 'translate-x-0' : 'ltr:translate-x-full rtl:-translate-x-full'
+        className={`fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col bg-gray-950 shadow-2xl transition-transform duration-300 ease-in-out ${
+          cartOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
         {/* Header */}
