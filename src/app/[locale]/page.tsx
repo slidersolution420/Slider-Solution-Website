@@ -39,19 +39,25 @@ export default async function HomePage({ params }: HomePageProps) {
   const { locale } = await params
 
   // Fetch all data in parallel
-  const [product, siteSettings, faqItems, supabase] = await Promise.all([
+  const [product, siteSettings, faqItems] = await Promise.all([
     getProduct(),
     getSiteSettings(),
     getFaq(),
-    createServiceClient(),
   ])
 
-  const { data: reviews } = await supabase
-    .from('reviews')
-    .select('*')
-    .eq('approved', true)
-    .order('created_at', { ascending: false })
-    .limit(10)
+  let reviews: Review[] = []
+  try {
+    const supabase = createServiceClient()
+    const { data } = await supabase
+      .from('reviews')
+      .select('*')
+      .eq('approved', true)
+      .order('created_at', { ascending: false })
+      .limit(10)
+    reviews = (data ?? []) as Review[]
+  } catch {
+    // Service client unavailable (e.g. missing env var in preview) — show no reviews
+  }
 
   const tickerText = locale === 'he' ? siteSettings.ticker_he : siteSettings.ticker_en
 
@@ -93,8 +99,8 @@ export default async function HomePage({ params }: HomePageProps) {
 
         <HowItWorks product={product} locale={locale} />
 
-        {reviews && reviews.length > 0 && (
-          <ReviewsCarousel reviews={reviews as Review[]} locale={locale} />
+        {reviews.length > 0 && (
+          <ReviewsCarousel reviews={reviews} locale={locale} />
         )}
 
         <FaqAccordion items={faqItems} locale={locale} />
