@@ -27,6 +27,7 @@ const DEFAULTS: SiteConfig = {
   intl_paid_shipping_usd: 25,
   age_gate_enabled: true,
   visible_colors: ['purple'],
+  ticker_enabled: true,
 }
 
 export async function getConfig(): Promise<SiteConfig> {
@@ -55,6 +56,7 @@ export async function getConfig(): Promise<SiteConfig> {
       intl_paid_shipping_usd:  (map.intl_paid_shipping_usd  as number)    ?? DEFAULTS.intl_paid_shipping_usd,
       age_gate_enabled:        (map.age_gate_enabled        as boolean)   ?? DEFAULTS.age_gate_enabled,
       visible_colors:          (map.visible_colors          as string[])  ?? DEFAULTS.visible_colors,
+      ticker_enabled:          (map.ticker_enabled          as boolean)   ?? DEFAULTS.ticker_enabled,
     }
   } catch {
     return DEFAULTS

@@ -18,6 +18,7 @@ export interface SiteConfig {
   intl_paid_shipping_usd: number
   age_gate_enabled: boolean
   visible_colors: string[]
+  ticker_enabled: boolean
 }
 
 export type Locale = 'he' | 'en'

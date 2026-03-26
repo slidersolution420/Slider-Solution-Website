@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
 import { createServiceClient } from '@/lib/supabase-server'
 import { getConfig } from '@/lib/config'
-import type { WholesaleAccount } from '@/lib/types'
+import type { WholesaleAccount, Review } from '@/lib/types'
 import AdminDashboard from './AdminDashboard'
 import LoginForm from './LoginForm'
 
@@ -20,24 +20,26 @@ export default async function AdminPage() {
   }
 
   const supabase = createServiceClient()
-  const [{ data, error }, config] = await Promise.all([
+  const [{ data: accounts, error }, config, { data: reviews }] = await Promise.all([
     supabase.from('wholesale_accounts').select('*').order('created_at', { ascending: false }),
     getConfig(),
+    supabase.from('reviews').select('*').order('created_at', { ascending: false }),
   ])
 
   if (error) {
     return (
       <main className="flex min-h-screen items-center justify-center bg-gray-950">
-        <p className="text-red-400">Failed to load: {error.message}</p>
+        <p className="text-red-400">שגיאה בטעינה: {error.message}</p>
       </main>
     )
   }
 
   return (
     <AdminDashboard
-      accounts={(data ?? []) as WholesaleAccount[]}
+      accounts={(accounts ?? []) as WholesaleAccount[]}
       config={config}
       secret={session}
+      reviews={(reviews ?? []) as Review[]}
     />
   )
 }
