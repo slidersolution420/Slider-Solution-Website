@@ -24,8 +24,9 @@ export default config({
         phone: fields.text({ label: 'Phone', defaultValue: '052-455-3311' }),
         email: fields.text({ label: 'Contact Email', defaultValue: 'support@slidersolution.com' }),
         address: fields.text({ label: 'Address' }),
-        instagram: fields.url({ label: 'Instagram URL' }),
-        facebook: fields.url({ label: 'Facebook URL' }),
+        instagram_url: fields.url({ label: 'Instagram URL' }),
+        facebook_url: fields.url({ label: 'Facebook URL' }),
+        whatsapp_number: fields.text({ label: 'WhatsApp Number (with country code, e.g. +972501234567)' }),
         ticker_he: fields.text({
           label: 'Ticker Bar Text (Hebrew)',
           defaultValue: '✦ משלוח חינם בכל הארץ ✦ ממציאי הסלייד המקוריים ✦',
@@ -35,6 +36,13 @@ export default config({
           defaultValue: '✦ Free Shipping Nationwide ✦ The Original Slider Kit ✦',
         }),
         age_gate_enabled: fields.checkbox({ label: 'Enable Age Gate (21+)', defaultValue: true }),
+        instagram_reels: fields.array(
+          fields.object({
+            video_url: fields.text({ label: 'Video URL (e.g. Supabase Storage MP4)' }),
+            link_url: fields.url({ label: 'Instagram Reel Link (optional)' }),
+          }),
+          { label: 'Instagram Reels' }
+        ),
       },
     }),
 

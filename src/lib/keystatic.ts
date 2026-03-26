@@ -22,8 +22,16 @@ import refundPage  from '../../content/pages/refund.json'
 import cookiesPage from '../../content/pages/cookies.json'
 
 export type ProductContent   = typeof productData
-export type SiteSettings     = typeof siteSettingsData
 export type ShippingSettings = typeof shippingSettingsData
+
+export interface ReelItem {
+  video_url: string
+  link_url: string | null
+}
+
+export type SiteSettings = Omit<typeof siteSettingsData, 'instagram_reels'> & {
+  instagram_reels: ReelItem[]
+}
 export type FaqItem          = typeof faqWhatIsIncluded & { slug: string }
 
 export interface PageSection {
@@ -43,7 +51,7 @@ export async function getProduct(): Promise<ProductContent> {
 }
 
 export async function getSiteSettings(): Promise<SiteSettings> {
-  return siteSettingsData
+  return siteSettingsData as SiteSettings
 }
 
 export async function getShippingSettings(): Promise<ShippingSettings> {
