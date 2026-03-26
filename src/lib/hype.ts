@@ -123,17 +123,15 @@ export async function verifyPayment(params: Record<string, string>): Promise<boo
 
   if (params['CCode'] !== '0') return false
 
+  // Forward ALL redirect params (including Sign, Fild1-3, Bank, etc.) so Hype can
+  // validate the cryptographic signature. Auth params are set last to prevent spoofing.
   const verifyParams = new URLSearchParams({
+    ...params,
     action: 'APISign',
     What: 'VERIFY',
     KEY: apiKey,
     PassP: passP,
     Masof: masof,
-    Id: params['Id'] ?? '',
-    CCode: params['CCode'] ?? '',
-    Amount: params['Amount'] ?? '',
-    ACode: params['ACode'] ?? '',
-    Order: params['Order'] ?? '',
     UTF8: 'True',
     UTF8out: 'True',
   })

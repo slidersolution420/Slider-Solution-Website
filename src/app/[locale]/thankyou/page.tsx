@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { useTranslations, useLocale } from 'next-intl'
 import Link from 'next/link'
+import { useStore } from '@/store'
 
 function ThankYouContent() {
   const t = useTranslations('success')
@@ -11,6 +12,7 @@ function ThankYouContent() {
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
   const [orderId, setOrderId] = useState<string | null>(null)
+  const { clearCart } = useStore()
 
   useEffect(() => {
     const params: Record<string, string> = {}
@@ -31,6 +33,7 @@ function ThankYouContent() {
       .then(r => r.json() as Promise<{ success?: boolean; order_id?: string; error?: string }>)
       .then(data => {
         if (data.success) {
+          clearCart()
           setOrderId(data.order_id ?? null)
           setStatus('success')
         } else {

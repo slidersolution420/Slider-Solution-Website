@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { verifyPayment } from '@/lib/hype'
 import { createServiceClient } from '@/lib/supabase-server'
-import { sendOrderConfirmation } from '@/lib/resend'
+import { sendOrderConfirmation, sendAdminOrderAlert } from '@/lib/resend'
 
 export async function POST(request: Request) {
   try {
@@ -81,8 +81,11 @@ export async function POST(request: Request) {
         .eq('id', orderRef)
     }
 
-    // Send confirmation email (non-blocking)
-    if (order) void sendOrderConfirmation(order).catch(console.error)
+    // Send emails (non-blocking): customer confirmation + admin alert
+    if (order) {
+      void sendOrderConfirmation(order).catch(console.error)
+      void sendAdminOrderAlert(order).catch(console.error)
+    }
 
     return NextResponse.json({ success: true, order_id: order?.id })
   } catch (err) {

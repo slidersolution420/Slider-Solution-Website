@@ -2,13 +2,25 @@
 
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
-import type { WholesaleAccount, WholesaleAccountStatus, SiteConfig, ReelItem, Review } from '@/lib/types'
+import type { WholesaleAccount, WholesaleAccountStatus, SiteConfig, ReelItem, Review, Order, OrderStatus } from '@/lib/types'
+
+type OrderRow = Pick<Order, 'id' | 'email' | 'name' | 'total_usd' | 'status' | 'created_at' | 'country'>
 
 interface AdminDashboardProps {
   accounts: WholesaleAccount[]
   config: SiteConfig
   secret: string
   reviews: Review[]
+  orders: OrderRow[]
+}
+
+const ORDER_STATUS_COLORS: Record<OrderStatus, string> = {
+  pending: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
+  paid: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+  processing: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+  shipped: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+  delivered: 'bg-green-500/20 text-green-300 border-green-500/30',
+  cancelled: 'bg-red-500/20 text-red-400 border-red-500/30',
 }
 
 const STATUS_LABELS: Record<WholesaleAccountStatus, string> = {
@@ -23,10 +35,10 @@ const STATUS_COLORS: Record<WholesaleAccountStatus, string> = {
   blocked: 'bg-red-500/20 text-red-400 border-red-500/30',
 }
 
-export default function AdminDashboard({ accounts, config, secret, reviews }: AdminDashboardProps) {
+export default function AdminDashboard({ accounts, config, secret, reviews, orders }: AdminDashboardProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
-  const [tab, setTab] = useState<'accounts' | 'content' | 'reviews'>('accounts')
+  const [tab, setTab] = useState<'accounts' | 'orders' | 'content' | 'reviews'>('accounts')
 
   const [loadingId, setLoadingId] = useState<string | null>(null)
   const [accountError, setAccountError] = useState<string | null>(null)
@@ -56,8 +68,9 @@ export default function AdminDashboard({ accounts, config, secret, reviews }: Ad
   const others = accounts.filter((a) => a.status !== 'pending')
   const approvedReviews = reviews.filter((r) => r.approved).length
 
-  const tabs: { id: 'accounts' | 'content' | 'reviews'; label: string }[] = [
+  const tabs: { id: 'accounts' | 'orders' | 'content' | 'reviews'; label: string }[] = [
     { id: 'accounts', label: 'חשבונות סיטונאי' },
+    { id: 'orders', label: 'הזמנות' },
     { id: 'content', label: 'הגדרות תוכן' },
     { id: 'reviews', label: 'ביקורות' },
   ]
@@ -89,7 +102,7 @@ export default function AdminDashboard({ accounts, config, secret, reviews }: Ad
         <div className="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
           <StatCard label="חשבונות סיטונאי" value={accounts.length} />
           <StatCard label="ממתינים לאישור" value={pending.length} highlight={pending.length > 0} />
-          <StatCard label="סה״כ ביקורות" value={reviews.length} />
+          <StatCard label="הזמנות" value={orders.length} />
           <StatCard label="ביקורות מאושרות" value={approvedReviews} />
         </div>
 
@@ -124,6 +137,10 @@ export default function AdminDashboard({ accounts, config, secret, reviews }: Ad
           />
         )}
 
+        {tab === 'orders' && (
+          <OrdersTab orders={orders} />
+        )}
+
         {tab === 'content' && (
           <ContentTab config={config} secret={secret} />
         )}
@@ -143,6 +160,47 @@ function StatCard({ label, value, highlight }: { label: string; value: number; h
     <div className={`rounded-xl border p-4 ${highlight ? 'border-yellow-500/30 bg-yellow-500/5' : 'border-white/10 bg-white/[0.02]'}`}>
       <p className={`text-2xl font-bold ${highlight ? 'text-yellow-300' : 'text-white'}`}>{value}</p>
       <p className="mt-0.5 text-xs text-gray-400">{label}</p>
+    </div>
+  )
+}
+
+// ── Orders Tab ────────────────────────────────────────────────────────────────
+
+function OrdersTab({ orders }: { orders: OrderRow[] }) {
+  return orders.length === 0 ? (
+    <p className="text-gray-500 text-center py-16">אין הזמנות עדיין.</p>
+  ) : (
+    <div className="overflow-x-auto rounded-xl border border-white/10">
+      <table className="w-full text-sm">
+        <thead className="border-b border-white/10 bg-white/5">
+          <tr>
+            {['הזמנה #', 'אימייל', 'שם', 'סכום', 'מדינה', 'סטטוס', 'תאריך'].map((h) => (
+              <th key={h} className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-400">
+                {h}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-white/5">
+          {orders.map((order) => (
+            <tr key={order.id} className="transition-colors hover:bg-white/5">
+              <td className="px-4 py-3 font-mono text-xs text-gray-300">{order.id.slice(0, 8).toUpperCase()}</td>
+              <td className="px-4 py-3 text-gray-300">{order.email}</td>
+              <td className="px-4 py-3 text-gray-300">{order.name}</td>
+              <td className="px-4 py-3 font-medium">${order.total_usd.toFixed(2)}</td>
+              <td className="px-4 py-3 text-gray-400">{order.country}</td>
+              <td className="px-4 py-3">
+                <span className={`inline-flex rounded-full border px-2 py-0.5 text-xs font-medium ${ORDER_STATUS_COLORS[order.status]}`}>
+                  {order.status}
+                </span>
+              </td>
+              <td className="px-4 py-3 text-gray-400 whitespace-nowrap">
+                {new Date(order.created_at).toLocaleDateString('he-IL')}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   )
 }
