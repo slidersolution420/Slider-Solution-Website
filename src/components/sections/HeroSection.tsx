@@ -19,7 +19,7 @@ interface HeroSectionProps {
 }
 
 const SUPABASE_STORAGE = `https://ecuhecmfxfavjdxuctkg.supabase.co/storage/v1/object/public/product-images`
-const PURPLE_VIDEO_URL = `${SUPABASE_STORAGE}/kit-purple-animation.mp4`
+const PURPLE_VIDEO_URL = `${SUPABASE_STORAGE}/kit-purple-animation.webm`
 
 export default function HeroSection({ product, locale }: HeroSectionProps) {
   const t = useTranslations('hero')
@@ -184,22 +184,22 @@ export default function HeroSection({ product, locale }: HeroSectionProps) {
 
           {/* Image side */}
           <div className="relative flex justify-center">
-            <div
-              className={`relative aspect-square w-full max-w-sm overflow-hidden rounded-3xl bg-gradient-to-br lg:max-w-md ${
-                selectedColorData?.gradient ?? 'from-gray-800 to-gray-950'
-              }`}
-            >
-              {selectedColor === 'purple' ? (
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="absolute inset-0 h-full w-full object-contain p-6"
-                />
-              ) : (
-                imageUrl && (
+            {selectedColor === 'purple' ? (
+              <video
+                ref={videoRef}
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full max-w-sm lg:max-w-md"
+              />
+            ) : (
+              <div
+                className={`relative aspect-square w-full max-w-sm overflow-hidden rounded-3xl bg-gradient-to-br lg:max-w-md ${
+                  selectedColorData?.gradient ?? 'from-gray-800 to-gray-950'
+                }`}
+              >
+                {imageUrl && (
                   <Image
                     src={imageUrl}
                     alt={`SLIDER Kit — ${locale === 'he' ? selectedColorData?.name_he : selectedColorData?.name_en}`}
@@ -207,9 +207,9 @@ export default function HeroSection({ product, locale }: HeroSectionProps) {
                     className="object-contain p-6"
                     priority
                   />
-                )
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
