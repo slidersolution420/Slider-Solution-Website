@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server'
 import { checkoutSchema } from '@/lib/schemas'
 import { initiatePayment } from '@/lib/hype'
+import { createServiceClient } from '@/lib/supabase-server'
+import { convertPrice } from '@/lib/currency'
+import { getShippingCost } from '@/lib/shipping'
 
 export async function POST(request: Request) {
   try {
@@ -16,7 +19,45 @@ export async function POST(request: Request) {
 
     const { name, email, phone, address, city, country, zip, currency, items } = parsed.data
 
-    const session = await initiatePayment({
+    // Calculate totals
+    const totalQty = items.reduce((sum, i) => sum + i.quantity, 0)
+    const subtotalUsd = items.reduce((sum, i) => sum + i.priceUsd * i.quantity, 0)
+    const shippingUsd = getShippingCost(country, totalQty)
+    const totalUsd = subtotalUsd + shippingUsd
+    const totalIls = currency === 'ILS' ? convertPrice(totalUsd, 'ILS') : totalUsd * 3.7
+
+    // Save full order data to cart_sessions.
+    // The session UUID becomes the Hype Order reference so we can look it up after payment.
+    const supabase = createServiceClient()
+    const cartPayload = {
+      items,
+      customer: { name, email, phone, address, city, country, zip },
+      totalUsd: Math.round(totalUsd * 100) / 100,
+      totalIls: Math.round(totalIls),
+    }
+
+    const { data: session, error: sessionError } = await supabase
+      .from('cart_sessions')
+      .upsert(
+        { email, cart: cartPayload, status: 'active' },
+        { onConflict: 'email' }
+      )
+      .select('id')
+      .single()
+
+    if (sessionError ?? !session) {
+      console.error('Cart session error:', sessionError)
+      return NextResponse.json({ error: 'Session error' }, { status: 500 })
+    }
+
+    // Build Hype item list for the receipt
+    const hypeItems = items.map(i => ({
+      name: i.color ? `Slider Kit (${i.color})` : 'Slider Cone Kit',
+      quantity: i.quantity,
+      priceIls: Math.round(totalIls / totalQty),
+    }))
+
+    const result = await initiatePayment({
       name,
       email,
       phone,
@@ -24,11 +65,15 @@ export async function POST(request: Request) {
       city,
       country,
       zip,
-      items,
-      currency,
+      items: hypeItems,
+      totalIls: Math.round(totalIls),
+      orderRef: session.id,
     })
 
-    return NextResponse.json({ payment_url: session.payment_url, payment_id: session.payment_id })
+    return NextResponse.json({
+      payment_url: result.payment_url,
+      order_ref: result.order_ref,
+    })
   } catch (err) {
     console.error('Checkout error:', err)
     return NextResponse.json({ error: 'Failed to initiate payment' }, { status: 500 })
