@@ -12,6 +12,7 @@ import type { ProductContent } from '@/lib/keystatic'
 interface HeroSectionProps {
   product: ProductContent
   locale: string
+  visibleColors: string[]
 }
 
 const SUPABASE_STORAGE = `https://ecuhecmfxfavjdxuctkg.supabase.co/storage/v1/object/public/product-images`
@@ -23,7 +24,7 @@ function splitHighlight(text: string, words: number): { before: string; highligh
   return { before: parts.slice(0, -words).join(' '), highlight: parts.slice(-words).join(' ') }
 }
 
-export default function HeroSection({ product, locale }: HeroSectionProps) {
+export default function HeroSection({ product, locale, visibleColors }: HeroSectionProps) {
   const t = useTranslations('hero')
   const { addItem, openCart, selectedColor, setSelectedColor, selectedQty, setSelectedQty, currency } =
     useStore()
@@ -34,7 +35,11 @@ export default function HeroSection({ product, locale }: HeroSectionProps) {
 
   const { before, highlight } = splitHighlight(tagline, isHe ? 1 : 2)
 
-  const selectedColorData = product.colors?.find((c) => c.slug === selectedColor) ?? product.colors?.[0]
+  const displayColors = visibleColors.length > 0
+    ? (product.colors ?? []).filter((c) => visibleColors.includes(c.slug))
+    : (product.colors ?? [])
+
+  const selectedColorData = displayColors.find((c) => c.slug === selectedColor) ?? displayColors[0]
 
   const imageUrl = selectedColorData?.image
     ? `${SUPABASE_STORAGE}/${selectedColorData.image}`
@@ -114,10 +119,10 @@ export default function HeroSection({ product, locale }: HeroSectionProps) {
             </p>
 
             {/* Color selector */}
-            {product.colors && product.colors.length > 0 && (
+            {displayColors.length > 1 && (
               <div className="mb-6">
                 <div className="flex gap-3" role="radiogroup" aria-label={isHe ? 'צבע' : 'Color'}>
-                  {product.colors.map((color) => (
+                  {displayColors.map((color) => (
                     <button
                       key={color.slug}
                       role="radio"

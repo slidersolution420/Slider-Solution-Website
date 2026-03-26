@@ -17,6 +17,7 @@ export interface SiteConfig {
   free_shipping_min_qty: number
   intl_paid_shipping_usd: number
   age_gate_enabled: boolean
+  visible_colors: string[]
 }
 
 export type Locale = 'he' | 'en'

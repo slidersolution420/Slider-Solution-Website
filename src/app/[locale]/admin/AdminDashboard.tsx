@@ -248,6 +248,7 @@ function ContentTab({ config, secret }: { config: SiteConfig; secret: string }) 
   })
   const [reels, setReels] = useState<ReelItem[]>(config.instagram_reels)
   const [ageGate, setAgeGate] = useState(config.age_gate_enabled)
+  const [visibleColors, setVisibleColors] = useState<string[]>(config.visible_colors)
 
   async function save(key: string, value: unknown, sectionId: string) {
     setSaving(sectionId)
@@ -562,6 +563,38 @@ function ContentTab({ config, secret }: { config: SiteConfig; secret: string }) 
           saving={saving}
           saved={saved}
           onSave={() => save('age_gate_enabled', ageGate, 'agegate')}
+        />
+      </Section>
+
+      {/* Product Colors */}
+      <Section title="Product Colors" savedId={saved} sectionId="colors">
+        <p className="mb-3 text-xs text-gray-500">Check which colors appear on the product page.</p>
+        <div className="space-y-2">
+          {[
+            { slug: 'purple', label: 'Purple (סגול)' },
+            { slug: 'black',  label: 'Black (שחור)' },
+            { slug: 'blue',   label: 'Blue (כחול)' },
+          ].map(({ slug, label }) => (
+            <label key={slug} className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                className="size-4 rounded border-white/20 bg-white/5 accent-brand-500"
+                checked={visibleColors.includes(slug)}
+                onChange={(e) => {
+                  setVisibleColors(e.target.checked
+                    ? [...visibleColors, slug]
+                    : visibleColors.filter((s) => s !== slug))
+                }}
+              />
+              <span className="text-sm text-gray-300">{label}</span>
+            </label>
+          ))}
+        </div>
+        <SaveRow
+          sectionId="colors"
+          saving={saving}
+          saved={saved}
+          onSave={() => save('visible_colors', visibleColors, 'colors')}
         />
       </Section>
     </div>

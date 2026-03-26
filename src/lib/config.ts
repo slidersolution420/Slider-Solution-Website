@@ -26,6 +26,7 @@ const DEFAULTS: SiteConfig = {
   free_shipping_min_qty: 3,
   intl_paid_shipping_usd: 25,
   age_gate_enabled: true,
+  visible_colors: ['purple'],
 }
 
 export async function getConfig(): Promise<SiteConfig> {
@@ -53,6 +54,7 @@ export async function getConfig(): Promise<SiteConfig> {
       free_shipping_min_qty:   (map.free_shipping_min_qty   as number)    ?? DEFAULTS.free_shipping_min_qty,
       intl_paid_shipping_usd:  (map.intl_paid_shipping_usd  as number)    ?? DEFAULTS.intl_paid_shipping_usd,
       age_gate_enabled:        (map.age_gate_enabled        as boolean)   ?? DEFAULTS.age_gate_enabled,
+      visible_colors:          (map.visible_colors          as string[])  ?? DEFAULTS.visible_colors,
     }
   } catch {
     return DEFAULTS

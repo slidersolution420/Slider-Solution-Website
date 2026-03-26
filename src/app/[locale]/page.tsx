@@ -91,7 +91,7 @@ export default async function HomePage({ params }: HomePageProps) {
           }}
         />
 
-        <HeroSection product={product} locale={locale} />
+        <HeroSection product={product} locale={locale} visibleColors={siteConfig.visible_colors} />
 
         {tickerText && <TickerBar text={tickerText} rtl={isRtl(locale)} />}
 
