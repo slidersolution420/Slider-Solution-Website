@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { usePathname } from 'next/navigation'
 import { useStore } from '@/store'
+import { Link } from '@/i18n/navigation'
 import { formatPrice } from '@/lib/currency'
 import { getShippingCost } from '@/lib/shipping'
 import { XMarkIcon, TrashIcon, ShoppingBagIcon } from '@heroicons/react/24/outline'
@@ -12,6 +13,12 @@ export default function CartDrawer() {
   const t = useTranslations('cart')
   const { items, cartOpen, closeCart, removeItem, currency, totalUsd } = useStore()
   const closeRef = useRef<HTMLButtonElement>(null)
+  const pathname = usePathname() // raw pathname incl. locale prefix (/en vs /) — changes on locale switch
+
+  // Close cart on any navigation (pathname from next/navigation includes locale prefix)
+  useEffect(() => {
+    closeCart()
+  }, [pathname]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Focus close button on open
   useEffect(() => {
@@ -50,10 +57,9 @@ export default function CartDrawer() {
         role="dialog"
         aria-modal="true"
         aria-label={t('title')}
-        className={`fixed inset-y-0 z-50 flex w-full max-w-sm flex-col bg-gray-950 shadow-2xl transition-transform duration-300 ease-in-out inset-inline-end-0 ${
+        className={`fixed inset-y-0 right-0 z-50 flex w-full max-w-sm flex-col bg-gray-950 shadow-2xl transition-transform duration-300 ease-in-out ${
           cartOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
-        style={{ ['--tw-translate-x' as string]: cartOpen ? '0' : '100%' }}
       >
         {/* Header */}
         <div className="flex items-center justify-between border-b border-white/10 px-5 py-4">

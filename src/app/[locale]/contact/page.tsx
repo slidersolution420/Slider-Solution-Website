@@ -29,7 +29,7 @@ export default function ContactPage() {
 
   return (
     <>
-      <NavBar locale={locale} />
+      <NavBar />
       <main className="min-h-screen bg-surface pt-24 pb-16">
         <div className="mx-auto max-w-lg px-4">
           <div className="mb-10 text-center">

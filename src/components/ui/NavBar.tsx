@@ -1,17 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { useStore } from '@/store'
 import { ShoppingBagIcon, Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Link } from '@/i18n/navigation'
 import LanguageSwitcher from './LanguageSwitcher'
 
-interface NavBarProps {
-  locale: string
-}
-
-export default function NavBar({ locale }: NavBarProps) {
+export default function NavBar() {
   const t = useTranslations('nav')
   const { totalItems, openCart } = useStore()
   const [scrolled, setScrolled] = useState(false)
@@ -60,7 +56,7 @@ export default function NavBar({ locale }: NavBarProps) {
 
         {/* Right controls */}
         <div className="flex items-center gap-3">
-          <LanguageSwitcher locale={locale} />
+          <LanguageSwitcher />
 
           {/* Cart button */}
           <button
