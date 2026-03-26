@@ -82,7 +82,8 @@ export async function POST(request: Request) {
       order_ref: result.order_ref,
     })
   } catch (err) {
-    console.error('Checkout error:', err)
-    return NextResponse.json({ error: 'Failed to initiate payment' }, { status: 500 })
+    const msg = err instanceof Error ? err.message : String(err)
+    console.error('Checkout error:', msg)
+    return NextResponse.json({ error: msg }, { status: 500 })
   }
 }

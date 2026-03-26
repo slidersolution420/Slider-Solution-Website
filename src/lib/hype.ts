@@ -89,13 +89,13 @@ export async function initiatePayment(customer: CustomerInfo): Promise<HypePayme
     tmp: '1',
   })
 
-  // When using REFERER auth mode in Hype dashboard, the Referer header must match
   const res = await fetch(`${HYPE_BASE}?${params.toString()}`, {
-    headers: { Referer: passP },
+    headers: { Referer: appUrl },
   })
   if (!res.ok) throw new Error(`Hype APISign error: ${res.status}`)
 
   const signedText = await res.text()
+  console.error('[Hype APISign] response:', signedText.slice(0, 500))
   if (!signedText || signedText.toLowerCase().includes('error')) {
     throw new Error(`Hype APISign failed: ${signedText}`)
   }
@@ -136,8 +136,9 @@ export async function verifyPayment(params: Record<string, string>): Promise<boo
     UTF8out: 'True',
   })
 
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://slidersolution.com'
   const res = await fetch(`${HYPE_BASE}?${verifyParams.toString()}`, {
-    headers: { Referer: passP },
+    headers: { Referer: appUrl },
   })
   if (!res.ok) return false
 
