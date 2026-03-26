@@ -21,7 +21,7 @@ function OrderDetails({ order, locale }: { order: Order; locale: string }) {
 
   return (
     <>
-      <NavBar locale={locale} />
+      <NavBar />
       <main className="min-h-screen bg-surface pt-24 pb-16">
         <div className="mx-auto max-w-lg px-4 text-center">
           <div className="mb-6 flex justify-center">

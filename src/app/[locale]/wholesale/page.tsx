@@ -22,7 +22,7 @@ export default async function WholesalePage({ params }: WholesalePageProps) {
   if (!account) {
     return (
       <>
-        <NavBar locale={locale} />
+        <NavBar />
         <WholesaleLanding locale={locale} />
         <Footer />
       </>
@@ -32,7 +32,7 @@ export default async function WholesalePage({ params }: WholesalePageProps) {
   if (account.status === 'blocked') {
     return (
       <>
-        <NavBar locale={locale} />
+        <NavBar />
         <main className="flex min-h-screen items-center justify-center bg-surface pt-16">
           <p className="text-red-400">
             {locale === 'he' ? 'החשבון חסום. פנה אלינו.' : 'Account blocked. Please contact us.'}
@@ -46,7 +46,7 @@ export default async function WholesalePage({ params }: WholesalePageProps) {
   if (account.status === 'pending') {
     return (
       <>
-        <NavBar locale={locale} />
+        <NavBar />
         <main className="flex min-h-screen items-center justify-center bg-surface pt-16">
           <div className="text-center">
             <p className="text-lg text-yellow-400">
@@ -76,7 +76,7 @@ export default async function WholesalePage({ params }: WholesalePageProps) {
 
   return (
     <>
-      <NavBar locale={locale} />
+      <NavBar />
       <WholesaleDashboard account={account} orders={(orders ?? []) as Order[]} locale={locale} />
       <Footer />
     </>

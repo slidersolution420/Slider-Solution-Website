@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import { useStore } from '@/store'
+import { usePathname } from '@/i18n/navigation'
+import { Link } from '@/i18n/navigation'
 import { formatPrice } from '@/lib/currency'
 import { getShippingCost } from '@/lib/shipping'
 import { XMarkIcon, TrashIcon, ShoppingBagIcon } from '@heroicons/react/24/outline'
@@ -12,6 +13,12 @@ export default function CartDrawer() {
   const t = useTranslations('cart')
   const { items, cartOpen, closeCart, removeItem, currency, totalUsd } = useStore()
   const closeRef = useRef<HTMLButtonElement>(null)
+  const pathname = usePathname()
+
+  // Close cart on any route change (prevents stuck-open state across navigations)
+  useEffect(() => {
+    closeCart()
+  }, [pathname]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Focus close button on open
   useEffect(() => {

@@ -58,7 +58,7 @@ export default async function HomePage({ params }: HomePageProps) {
   return (
     <>
       <AgeGate />
-      <NavBar locale={locale} />
+      <NavBar />
       <CartDrawer />
 
       <main>
