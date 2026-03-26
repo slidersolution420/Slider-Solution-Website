@@ -2,20 +2,45 @@ export const FREE_SHIPPING_COUNTRIES = ['IL']
 export const FREE_SHIPPING_MIN_QTY = 3
 export const INTL_PAID_SHIPPING_USD = 25
 
-export function getShippingCost(country: string, totalQty: number): number {
-  if (FREE_SHIPPING_COUNTRIES.includes(country.toUpperCase())) return 0
-  if (totalQty >= FREE_SHIPPING_MIN_QTY) return 0
-  return INTL_PAID_SHIPPING_USD
+export interface ShippingConfig {
+  freeCountries: string[]
+  minQty: number
+  intlCost: number
 }
 
-export function isShippingFree(country: string, totalQty: number): boolean {
-  return getShippingCost(country, totalQty) === 0
+const DEFAULT_CONFIG: ShippingConfig = {
+  freeCountries: FREE_SHIPPING_COUNTRIES,
+  minQty: FREE_SHIPPING_MIN_QTY,
+  intlCost: INTL_PAID_SHIPPING_USD,
 }
 
-export function getUpgradeMessage(country: string, totalQty: number, locale: string): string | null {
-  if (FREE_SHIPPING_COUNTRIES.includes(country.toUpperCase())) return null
-  if (totalQty >= FREE_SHIPPING_MIN_QTY) return null
-  const needed = FREE_SHIPPING_MIN_QTY - totalQty
+export function getShippingCost(
+  country: string,
+  totalQty: number,
+  config: ShippingConfig = DEFAULT_CONFIG
+): number {
+  if (config.freeCountries.includes(country.toUpperCase())) return 0
+  if (totalQty >= config.minQty) return 0
+  return config.intlCost
+}
+
+export function isShippingFree(
+  country: string,
+  totalQty: number,
+  config: ShippingConfig = DEFAULT_CONFIG
+): boolean {
+  return getShippingCost(country, totalQty, config) === 0
+}
+
+export function getUpgradeMessage(
+  country: string,
+  totalQty: number,
+  locale: string,
+  config: ShippingConfig = DEFAULT_CONFIG
+): string | null {
+  if (config.freeCountries.includes(country.toUpperCase())) return null
+  if (totalQty >= config.minQty) return null
+  const needed = config.minQty - totalQty
   if (locale === 'he') {
     return `הוסף עוד ${needed} קיט${needed > 1 ? 'ים' : ''} לקבלת משלוח חינם`
   }

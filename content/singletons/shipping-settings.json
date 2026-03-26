@@ -1,0 +1,5 @@
+{
+  "free_shipping_countries": ["IL"],
+  "free_shipping_min_qty": 3,
+  "intl_paid_shipping_usd": 25
+}

@@ -128,6 +128,29 @@ export default config({
         kit_contents_en: fields.array(fields.text({ label: 'Item (English)' }), {
           label: 'Kit Contents (English)',
         }),
+        stock: fields.number({
+          label: 'Stock (0 = out of stock)',
+          defaultValue: 999,
+        }),
+      },
+    }),
+
+    shippingSettings: singleton({
+      label: 'Shipping Settings',
+      path: 'content/singletons/shipping-settings',
+      schema: {
+        free_shipping_countries: fields.array(
+          fields.text({ label: 'Country Code (e.g. IL)' }),
+          { label: 'Free Shipping Countries' }
+        ),
+        free_shipping_min_qty: fields.number({
+          label: 'Min Qty for Free International Shipping',
+          defaultValue: 3,
+        }),
+        intl_paid_shipping_usd: fields.number({
+          label: 'International Shipping Cost (USD)',
+          defaultValue: 25,
+        }),
       },
     }),
   },

@@ -5,8 +5,9 @@
  * triggers a Vercel redeploy on every save, so content is always up to date
  * after each CMS edit without any filesystem access at runtime.
  */
-import productData      from '../../content/singletons/product.json'
-import siteSettingsData from '../../content/singletons/site-settings.json'
+import productData          from '../../content/singletons/product.json'
+import siteSettingsData     from '../../content/singletons/site-settings.json'
+import shippingSettingsData from '../../content/singletons/shipping-settings.json'
 
 import faqGrinderNoJam    from '../../content/faq/grinder-no-jam.json'
 import faqRefundPolicy    from '../../content/faq/refund-policy.json'
@@ -14,9 +15,10 @@ import faqShippingTime    from '../../content/faq/shipping-time.json'
 import faqStorageCapacity from '../../content/faq/storage-capacity.json'
 import faqWhatIsIncluded  from '../../content/faq/what-is-included.json'
 
-export type ProductContent = typeof productData
-export type SiteSettings   = typeof siteSettingsData
-export type FaqItem        = typeof faqWhatIsIncluded & { slug: string }
+export type ProductContent   = typeof productData
+export type SiteSettings     = typeof siteSettingsData
+export type ShippingSettings = typeof shippingSettingsData
+export type FaqItem          = typeof faqWhatIsIncluded & { slug: string }
 
 export async function getProduct(): Promise<ProductContent> {
   return productData
@@ -24,6 +26,10 @@ export async function getProduct(): Promise<ProductContent> {
 
 export async function getSiteSettings(): Promise<SiteSettings> {
   return siteSettingsData
+}
+
+export async function getShippingSettings(): Promise<ShippingSettings> {
+  return shippingSettingsData
 }
 
 export async function getFaq(): Promise<FaqItem[]> {

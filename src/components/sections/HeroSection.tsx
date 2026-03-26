@@ -66,15 +66,20 @@ export default function HeroSection({ product, locale }: HeroSectionProps) {
         <div className="grid items-center gap-12 lg:grid-cols-2">
           {/* Text side */}
           <div>
-            {/* Tagline */}
+            {/* Eyebrow */}
             <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-brand-400">
-              {tagline}
+              {product.name}
             </p>
 
             {/* Headline */}
-            <h1 className="mb-4 text-4xl font-extrabold leading-tight text-white md:text-5xl lg:text-6xl">
-              {description}
+            <h1 className="mb-4 text-5xl font-black leading-[1.1] text-white md:text-6xl lg:text-7xl">
+              {tagline}
             </h1>
+
+            {/* Subtitle */}
+            <p className="mb-8 text-lg leading-relaxed text-gray-300">
+              {description}
+            </p>
 
             {/* Badges */}
             <div className="mb-8 flex flex-wrap gap-2">
@@ -84,7 +89,7 @@ export default function HeroSection({ product, locale }: HeroSectionProps) {
                 return (
                   <span
                     key={badge}
-                    className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-gray-300"
+                    className="flex items-center gap-2 rounded-full border border-white/15 bg-white/8 px-4 py-2 text-sm font-medium text-gray-200 transition-colors hover:border-white/25 hover:bg-white/12"
                   >
                     <Icon className="size-3.5 text-brand-400" />
                     {badge}
@@ -123,7 +128,7 @@ export default function HeroSection({ product, locale }: HeroSectionProps) {
 
             {/* Quantity */}
             <div className="mb-6">
-              <p className="mb-2 text-sm text-gray-400">{t('badge_customers').includes('1,000') ? 'Quantity' : 'כמות'}</p>
+              <p className="mb-2 text-sm text-gray-400">{locale === 'he' ? 'כמות' : 'Quantity'}</p>
               <div className="flex gap-2">
                 {[1, 2, 3].map((qty) => (
                   <button
@@ -164,7 +169,7 @@ export default function HeroSection({ product, locale }: HeroSectionProps) {
           {/* Image side */}
           <div className="relative flex justify-center">
             <div
-              className={`relative h-80 w-80 overflow-hidden rounded-3xl bg-gradient-to-br lg:h-96 lg:w-96 ${
+              className={`relative aspect-square w-full max-w-sm overflow-hidden rounded-3xl bg-gradient-to-br lg:max-w-md ${
                 selectedColorData?.gradient ?? 'from-gray-800 to-gray-950'
               }`}
             >
@@ -177,11 +182,6 @@ export default function HeroSection({ product, locale }: HeroSectionProps) {
                   priority
                 />
               )}
-            </div>
-            {/* Floating price badge */}
-            <div className="absolute -bottom-4 -end-4 rounded-2xl bg-brand-600 px-4 py-2 shadow-xl">
-              <p className="text-xs text-brand-200">{locale === 'he' ? 'רק' : 'Only'}</p>
-              <p className="text-xl font-bold text-white">{formatPrice(B2C_PRICE_USD, currency)}</p>
             </div>
           </div>
         </div>
