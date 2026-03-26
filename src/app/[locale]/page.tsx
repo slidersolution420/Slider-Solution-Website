@@ -13,6 +13,7 @@ import FeaturesGrid from '@/components/sections/FeaturesGrid'
 import HowItWorks from '@/components/sections/HowItWorks'
 import ReviewsCarousel from '@/components/sections/ReviewsCarousel'
 import FaqAccordion from '@/components/sections/FaqAccordion'
+import InstagramReels from '@/components/sections/InstagramReels'
 import TrustBar from '@/components/sections/TrustBar'
 import { isRtl } from '@/i18n/routing'
 
@@ -102,6 +103,8 @@ export default async function HomePage({ params }: HomePageProps) {
         {reviews.length > 0 && (
           <ReviewsCarousel reviews={reviews} locale={locale} />
         )}
+
+        <InstagramReels locale={locale} />
 
         <FaqAccordion items={faqItems} locale={locale} />
       </main>

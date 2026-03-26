@@ -1,0 +1,56 @@
+{
+  "title_he": "מדיניות עוגיות",
+  "title_en": "Cookies Policy",
+  "sections_he": [
+    {
+      "heading": "מה הן עוגיות?",
+      "text": "עוגיות הן קבצי טקסט קטנים המאוחסנים על המכשיר שלכם בעת ביקור באתר. הן מסייעות לנו לשפר את חוויית הגלישה ולהבין כיצד משתמשים מתקשרים עם האתר שלנו."
+    },
+    {
+      "heading": "סוגי העוגיות בהן אנו משתמשים",
+      "text": "אנו משתמשים בעוגיות הכרחיות לתפקוד האתר (כגון שמירת תוכן הסל), עוגיות אנליטיקה לניתוח תנועת המשתמשים (PostHog), ועוגיות תפקוד לשמירת העדפותיכם כגון שפה ומטבע."
+    },
+    {
+      "heading": "עוגיות הכרחיות",
+      "text": "עוגיות אלו חיוניות לפעילות האתר ואינן ניתנות לבטול. הן כוללות שמירת פריטים בסל הקניות, שמירת העדפת שפה, ואימות גיל."
+    },
+    {
+      "heading": "עוגיות אנליטיקה",
+      "text": "אנו משתמשים ב-PostHog לניתוח שימוש באתר. עוגיות אלו מסייעות לנו להבין אילו עמודים פופולריים ואיך לשפר את חוויית המשתמש. המידע נאסף באופן אנונימי."
+    },
+    {
+      "heading": "ניהול עוגיות",
+      "text": "ניתן לשלוט בעוגיות דרך הגדרות הדפדפן שלכם. שימו לב כי ביטול עוגיות מסוימות עלול להשפיע על פונקציונליות האתר. רוב הדפדפנים מאפשרים מחיקת עוגיות, חסימה או התראה לפני קבלתן."
+    },
+    {
+      "heading": "שינויים במדיניות",
+      "text": "אנו עשויים לעדכן מדיניות זו מעת לעת. שינויים יפורסמו בעמוד זה. לשאלות, אנא פנו אלינו: support@slidersolution.com"
+    }
+  ],
+  "sections_en": [
+    {
+      "heading": "What Are Cookies?",
+      "text": "Cookies are small text files stored on your device when you visit a website. They help us improve your browsing experience and understand how users interact with our site."
+    },
+    {
+      "heading": "Types of Cookies We Use",
+      "text": "We use essential cookies for site functionality (such as saving cart contents), analytics cookies to analyze user traffic (PostHog), and functional cookies to save your preferences such as language and currency."
+    },
+    {
+      "heading": "Essential Cookies",
+      "text": "These cookies are vital for the site to operate and cannot be disabled. They include saving items in your shopping cart, saving language preferences, and age verification."
+    },
+    {
+      "heading": "Analytics Cookies",
+      "text": "We use PostHog to analyze site usage. These cookies help us understand which pages are popular and how to improve the user experience. Data is collected anonymously."
+    },
+    {
+      "heading": "Managing Cookies",
+      "text": "You can control cookies through your browser settings. Note that disabling certain cookies may affect site functionality. Most browsers allow you to delete cookies, block them, or alert you before accepting them."
+    },
+    {
+      "heading": "Policy Changes",
+      "text": "We may update this policy from time to time. Changes will be published on this page. For questions, please contact us: support@slidersolution.com"
+    }
+  ]
+}
