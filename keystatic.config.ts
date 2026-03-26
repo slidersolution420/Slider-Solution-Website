@@ -183,12 +183,31 @@ export default config({
       label: 'Pages',
       path: 'content/pages/*',
       slugField: 'slug',
-      format: { contentField: 'body' },
+      format: { data: 'json' },
       schema: {
         title_he: fields.text({ label: 'Title (Hebrew)' }),
         title_en: fields.text({ label: 'Title (English)' }),
         slug: fields.text({ label: 'URL Slug (e.g. terms, refund, cookies)' }),
-        body: fields.mdx({ label: 'Content' }),
+        sections_he: fields.array(
+          fields.object({
+            heading: fields.text({ label: 'Heading (leave empty to hide)', defaultValue: '' }),
+            text: fields.text({ label: 'Text', multiline: true }),
+          }),
+          {
+            label: 'Sections (Hebrew)',
+            itemLabel: (props) => props.fields.heading.value || 'Section',
+          }
+        ),
+        sections_en: fields.array(
+          fields.object({
+            heading: fields.text({ label: 'Heading (leave empty to hide)', defaultValue: '' }),
+            text: fields.text({ label: 'Text', multiline: true }),
+          }),
+          {
+            label: 'Sections (English)',
+            itemLabel: (props) => props.fields.heading.value || 'Section',
+          }
+        ),
       },
     }),
   },

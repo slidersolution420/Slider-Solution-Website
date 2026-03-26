@@ -82,5 +82,5 @@ export async function getPage(slug: string): Promise<PageContent | null> {
 }
 
 export async function getAllPageSlugs(): Promise<string[]> {
-  return ['terms', 'refund', 'cookies']
+  return Object.keys(pageMap)
 }
