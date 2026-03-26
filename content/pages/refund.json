@@ -1,0 +1,56 @@
+{
+  "title_he": "משלוחים והחזרות",
+  "title_en": "Shipping & Returns",
+  "sections_he": [
+    {
+      "heading": "משלוח בישראל",
+      "text": "אנו מציעים משלוח חינם לכל רחבי ישראל. הזמנות מגיעות בדרך כלל תוך 3-5 ימי עסקים מרגע אישור ההזמנה."
+    },
+    {
+      "heading": "משלוח בינלאומי",
+      "text": "משלוחים בינלאומיים מגיעים תוך 7-14 ימי עסקים, בהתאם למדינת היעד. עלויות משלוח בינלאומי מחושבות בהתאם ליעד ומוצגות בסיום תהליך הרכישה."
+    },
+    {
+      "heading": "מעקב אחר ההזמנה",
+      "text": "לאחר שליחת ההזמנה, תקבלו מייל אישור עם פרטי המשלוח. בכל שאלה לגבי ההזמנה שלכם, אנא פנו אלינו בכתובת support@slidersolution.com"
+    },
+    {
+      "heading": "החזרות",
+      "text": "ניתן להחזיר מוצרים שלא נפתחו תוך 14 יום מקבלת ההזמנה. המוצר חייב להיות במצב מקורי ובאריזה המקורית. לפתיחת תהליך החזרה, אנא צרו קשר עם צוות השירות שלנו."
+    },
+    {
+      "heading": "הגשת בקשת החזרה",
+      "text": "לפתיחת בקשת החזרה, שלחו מייל ל-support@slidersolution.com עם מספר ההזמנה שלכם וסיבת ההחזרה. נחזור אליכם תוך 1-2 ימי עסקים עם הוראות."
+    },
+    {
+      "heading": "החזר כספי",
+      "text": "לאחר קבלת המוצר המוחזר ואימות מצבו, ינופק החזר כספי לאמצעי התשלום המקורי תוך 5-10 ימי עסקים."
+    }
+  ],
+  "sections_en": [
+    {
+      "heading": "Shipping in Israel",
+      "text": "We offer free shipping throughout Israel. Orders typically arrive within 3-5 business days from order confirmation."
+    },
+    {
+      "heading": "International Shipping",
+      "text": "International shipments arrive within 7-14 business days, depending on the destination country. International shipping costs are calculated based on the destination and displayed at checkout."
+    },
+    {
+      "heading": "Order Tracking",
+      "text": "After your order is shipped, you will receive a confirmation email with shipping details. For any questions about your order, please contact us at support@slidersolution.com"
+    },
+    {
+      "heading": "Returns",
+      "text": "Unopened products may be returned within 14 days of receiving the order. The product must be in its original condition and original packaging. To initiate a return, please contact our support team."
+    },
+    {
+      "heading": "Submitting a Return Request",
+      "text": "To open a return request, send an email to support@slidersolution.com with your order number and reason for the return. We will get back to you within 1-2 business days with instructions."
+    },
+    {
+      "heading": "Refund",
+      "text": "After receiving and verifying the returned product's condition, a refund will be issued to the original payment method within 5-10 business days."
+    }
+  ]
+}

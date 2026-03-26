@@ -15,7 +15,6 @@
     "badge_shipping": "Free Shipping Nationwide",
     "badge_customers": "1,000+ Happy Customers",
     "badge_patent": "Patent Protected",
-    "badge_guarantee": "Satisfaction Guarantee",
     "add_to_cart": "Add to Cart",
     "order_now": "Order Now"
   },
@@ -31,9 +30,7 @@
     "shipping_title": "Free Shipping",
     "shipping_sub": "Nationwide Delivery",
     "secure_title": "Secure Payment",
-    "secure_sub": "SSL Encrypted",
-    "guarantee_title": "Satisfaction Guarantee",
-    "guarantee_sub": "Full Money Back"
+    "secure_sub": "SSL Encrypted"
   },
   "cart": {
     "title": "Your Cart",
@@ -122,6 +119,7 @@
   },
   "footer": {
     "tagline": "The Original Cone Kit",
+    "follow_us": "Follow Us",
     "home": "Home",
     "contact": "Contact",
     "wholesale": "Wholesale",

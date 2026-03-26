@@ -28,11 +28,11 @@ export default config({
         facebook: fields.url({ label: 'Facebook URL' }),
         ticker_he: fields.text({
           label: 'Ticker Bar Text (Hebrew)',
-          defaultValue: '✦ משלוח חינם בכל הארץ ✦ ערבות שביעות רצון ✦ ממציאי הסלייד המקוריים ✦',
+          defaultValue: '✦ משלוח חינם בכל הארץ ✦ ממציאי הסלייד המקוריים ✦',
         }),
         ticker_en: fields.text({
           label: 'Ticker Bar Text (English)',
-          defaultValue: '✦ Free Shipping Nationwide ✦ Satisfaction Guarantee ✦ The Original Slider Kit ✦',
+          defaultValue: '✦ Free Shipping Nationwide ✦ The Original Slider Kit ✦',
         }),
         age_gate_enabled: fields.checkbox({ label: 'Enable Age Gate (21+)', defaultValue: true }),
       },
