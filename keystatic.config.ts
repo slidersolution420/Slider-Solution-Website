@@ -1,15 +1,16 @@
 import { config, fields, collection, singleton } from '@keystatic/core'
 
 export default config({
-  storage: process.env.KEYSTATIC_GITHUB_CLIENT_ID
-    ? {
-        kind: 'github' as const,
-        repo: {
-          owner: 'slidersolution420',
-          name: 'Slider-Solution-Website',
-        },
-      }
-    : { kind: 'local' as const },
+  storage:
+    process.env.KEYSTATIC_GITHUB_CLIENT_ID && process.env.KEYSTATIC_SECRET
+      ? {
+          kind: 'github' as const,
+          repo: {
+            owner: 'slidersolution420',
+            name: 'Slider-Solution-Website',
+          },
+        }
+      : { kind: 'local' as const },
 
   ui: {
     brand: { name: 'Slider Solution CMS' },
