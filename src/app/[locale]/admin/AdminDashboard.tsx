@@ -65,9 +65,20 @@ export default function AdminDashboard({ accounts, config, secret }: AdminDashbo
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-          <span className="rounded-full bg-yellow-500/20 px-3 py-1 text-sm text-yellow-300 border border-yellow-500/30">
-            {pending.length} pending
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="rounded-full bg-yellow-500/20 px-3 py-1 text-sm text-yellow-300 border border-yellow-500/30">
+              {pending.length} pending
+            </span>
+            <button
+              onClick={async () => {
+                await fetch('/api/admin/logout', { method: 'POST' })
+                window.location.href = '/admin'
+              }}
+              className="rounded-lg border border-white/10 px-3 py-1 text-xs text-gray-400 hover:border-white/20 hover:text-white transition-colors"
+            >
+              Sign out
+            </button>
+          </div>
         </div>
 
         {/* Tabs */}

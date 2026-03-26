@@ -1,27 +1,22 @@
 import type { Metadata } from 'next'
+import { cookies } from 'next/headers'
 import { createServiceClient } from '@/lib/supabase-server'
 import { getConfig } from '@/lib/config'
 import type { WholesaleAccount } from '@/lib/types'
 import AdminDashboard from './AdminDashboard'
+import LoginForm from './LoginForm'
 
 export const metadata: Metadata = {
   title: 'Admin — SLIDER',
   robots: { index: false, follow: false },
 }
 
-interface AdminPageProps {
-  searchParams: Promise<{ secret?: string }>
-}
+export default async function AdminPage() {
+  const jar = await cookies()
+  const session = jar.get('admin_auth')?.value
 
-export default async function AdminPage({ searchParams }: AdminPageProps) {
-  const { secret } = await searchParams
-
-  if (!secret || secret !== process.env.CRON_SECRET) {
-    return (
-      <main className="flex min-h-screen items-center justify-center bg-gray-950">
-        <p className="text-red-400">Access denied.</p>
-      </main>
-    )
+  if (!session || session !== process.env.CRON_SECRET) {
+    return <LoginForm />
   }
 
   const supabase = createServiceClient()
@@ -42,7 +37,7 @@ export default async function AdminPage({ searchParams }: AdminPageProps) {
     <AdminDashboard
       accounts={(data ?? []) as WholesaleAccount[]}
       config={config}
-      secret={secret}
+      secret={session}
     />
   )
 }
