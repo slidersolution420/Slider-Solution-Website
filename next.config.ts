@@ -5,6 +5,11 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  // Include Keystatic content files in Vercel serverless function bundles.
+  // Without this, content/*.json files aren't traced and the reader throws at runtime.
+  outputFileTracingIncludes: {
+    '/**': ['./content/**/*'],
+  },
   images: {
     remotePatterns: [
       {
