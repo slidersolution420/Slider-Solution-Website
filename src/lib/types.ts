@@ -1,3 +1,24 @@
+export interface ReelItem {
+  video_url: string
+  link_url: string | null
+}
+
+export interface SiteConfig {
+  price_b2c_usd: number
+  price_b2b_usd: number
+  stock: number
+  ticker_he: string
+  ticker_en: string
+  instagram_url: string
+  facebook_url: string
+  whatsapp_number: string
+  instagram_reels: ReelItem[]
+  free_shipping_countries: string[]
+  free_shipping_min_qty: number
+  intl_paid_shipping_usd: number
+  age_gate_enabled: boolean
+}
+
 export type Locale = 'he' | 'en'
 
 export type Currency = 'ILS' | 'USD'

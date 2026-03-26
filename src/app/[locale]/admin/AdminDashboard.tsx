@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { WholesaleAccount, WholesaleAccountStatus } from '@/lib/types'
-import type { SiteConfig, ReelItem } from '@/lib/config'
+import type { SiteConfig, ReelItem } from '@/lib/types'
 
 interface AdminDashboardProps {
   accounts: WholesaleAccount[]
