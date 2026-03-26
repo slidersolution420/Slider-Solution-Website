@@ -8,7 +8,6 @@ import { formatPrice } from '@/lib/currency'
 import {
   TruckIcon,
   UserGroupIcon,
-  ShieldCheckIcon,
   StarIcon,
 } from '@heroicons/react/24/solid'
 import type { ProductContent } from '@/lib/keystatic'
@@ -20,7 +19,7 @@ interface HeroSectionProps {
 
 const SUPABASE_STORAGE = `https://ecuhecmfxfavjdxuctkg.supabase.co/storage/v1/object/public/product-images`
 
-const BADGE_ICONS = [TruckIcon, UserGroupIcon, ShieldCheckIcon, StarIcon]
+const BADGE_ICONS = [TruckIcon, UserGroupIcon, StarIcon]
 
 export default function HeroSection({ product, locale }: HeroSectionProps) {
   const t = useTranslations('hero')
@@ -34,7 +33,6 @@ export default function HeroSection({ product, locale }: HeroSectionProps) {
     t('badge_shipping'),
     t('badge_customers'),
     t('badge_patent'),
-    t('badge_guarantee'),
   ]
 
   const selectedColorData = product.colors?.find((c) => c.slug === selectedColor) ?? product.colors?.[0]

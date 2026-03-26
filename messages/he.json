@@ -15,7 +15,6 @@
     "badge_shipping": "משלוח חינם בכל הארץ",
     "badge_customers": "+1,000 לקוחות מרוצים",
     "badge_patent": "פטנט רשום",
-    "badge_guarantee": "ערבות שביעות רצון",
     "add_to_cart": "הוסף לסל",
     "order_now": "הזמן עכשיו"
   },
@@ -31,9 +30,7 @@
     "shipping_title": "משלוח חינם",
     "shipping_sub": "בכל הארץ",
     "secure_title": "תשלום מאובטח",
-    "secure_sub": "SSL מוצפן",
-    "guarantee_title": "ערבות שביעות רצון",
-    "guarantee_sub": "החזר כספי מלא"
+    "secure_sub": "SSL מוצפן"
   },
   "cart": {
     "title": "סל הקניות",
@@ -122,6 +119,7 @@
   },
   "footer": {
     "tagline": "קיט הגלגול המושלם",
+    "follow_us": "עקבו אחרינו",
     "home": "בית",
     "contact": "צור קשר",
     "wholesale": "ספקים",
