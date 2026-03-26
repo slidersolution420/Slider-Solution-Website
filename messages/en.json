@@ -67,13 +67,19 @@
     "error": "An error occurred. Please try again."
   },
   "success": {
-    "title": "Order Received!",
-    "sub": "Thank you for your purchase",
+    "title": "Order Received! 🎉",
+    "sub": "Thank you for your purchase. A confirmation will be sent to your email.",
     "order_number": "Order Number",
     "email_sent": "Confirmation sent to your email",
     "back": "Back to Shop",
     "tracking_title": "Track Your Shipment",
-    "tracking_sub": "We'll update you as soon as your package ships"
+    "tracking_sub": "We'll update you as soon as your package ships",
+    "verifying": "Verifying payment...",
+    "errorTitle": "Could not verify payment",
+    "errorBody": "If you were charged, please contact us and we'll resolve it immediately.",
+    "backHome": "Back to Home",
+    "orderRef": "Order Reference",
+    "body": "Thank you for your purchase. A confirmation will be sent to your email."
   },
   "wholesale": {
     "title": "Wholesale Portal",
@@ -133,6 +139,10 @@
     "required": "Required",
     "email_invalid": "Invalid email address",
     "min_length": "Minimum {count} characters",
-    "generic": "An error occurred. Please try again."
+    "generic": "An error occurred. Please try again.",
+    "paymentFailed": "Payment Failed",
+    "paymentFailedBody": "Something went wrong. You were not charged. Please try again.",
+    "tryAgain": "Try Again",
+    "backHome": "Back to Home"
   }
 }
