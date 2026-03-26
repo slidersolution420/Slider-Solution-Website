@@ -89,7 +89,10 @@ export async function initiatePayment(customer: CustomerInfo): Promise<HypePayme
     tmp: '1',
   })
 
-  const res = await fetch(`${HYPE_BASE}?${params.toString()}`)
+  // When using REFERER auth mode in Hype dashboard, the Referer header must match
+  const res = await fetch(`${HYPE_BASE}?${params.toString()}`, {
+    headers: { Referer: passP },
+  })
   if (!res.ok) throw new Error(`Hype APISign error: ${res.status}`)
 
   const signedText = await res.text()
@@ -135,7 +138,9 @@ export async function verifyPayment(params: Record<string, string>): Promise<boo
     UTF8out: 'True',
   })
 
-  const res = await fetch(`${HYPE_BASE}?${verifyParams.toString()}`)
+  const res = await fetch(`${HYPE_BASE}?${verifyParams.toString()}`, {
+    headers: { Referer: passP },
+  })
   if (!res.ok) return false
 
   const result = await res.text()
