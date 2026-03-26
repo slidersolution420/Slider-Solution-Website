@@ -1,47 +1,66 @@
-import type { ProductContent } from '@/lib/keystatic'
+import { getTranslations } from 'next-intl/server'
+import { getSiteSettings } from '@/lib/keystatic'
+import { PlayCircleIcon } from '@heroicons/react/24/solid'
 
 interface HowItWorksProps {
-  product: ProductContent
   locale: string
 }
 
-export default function HowItWorks({ product, locale }: HowItWorksProps) {
-  const steps = product.steps ?? []
+export default async function HowItWorks({ locale: _locale }: HowItWorksProps) {
+  const [t, settings] = await Promise.all([
+    getTranslations('how_it_works'),
+    getSiteSettings(),
+  ])
+
+  const videos = [
+    { id: settings.how_it_works_video1_id, title: t('card1_title'), desc: t('card1_desc') },
+    { id: settings.how_it_works_video2_id, title: t('card2_title'), desc: t('card2_desc') },
+  ]
 
   return (
     <section className="bg-gray-900/50 py-20">
-      <div className="mx-auto max-w-4xl px-4">
+      <div className="mx-auto max-w-5xl px-4">
         <div className="mb-12 text-center">
           <h2 className="text-3xl font-bold text-white md:text-4xl">
-            {locale === 'he' ? 'איך זה עובד?' : 'How It Works'}
+            {t('title_before')}
+            <span className="bg-gradient-to-r from-brand-400 to-brand-600 bg-clip-text font-black text-transparent">
+              {t('title_highlight')}
+            </span>
+            ?
           </h2>
-          <p className="mt-3 text-gray-400">
-            {locale === 'he' ? 'שלושה שלבים פשוטים' : 'Three simple steps'}
-          </p>
+          <p className="mt-3 text-gray-400">{t('subtitle')}</p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-3">
-          {steps.map((step, i) => {
-            const title = locale === 'he' ? step.title_he : step.title_en
-            const desc = locale === 'he' ? step.desc_he : step.desc_en
-
-            return (
-              <div key={i} className="relative text-center">
-                {/* Step number */}
-                <div className="mx-auto mb-4 flex size-16 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 to-brand-700 text-2xl font-bold text-white shadow-lg shadow-brand-900/40">
-                  {i + 1}
+        <div className="grid gap-6 md:grid-cols-2">
+          {videos.map((video, i) => (
+            <div key={i} className="rounded-2xl border border-white/10 bg-white/5 p-6">
+              <div className="mb-4 flex items-start justify-between gap-3">
+                <div>
+                  <h3 className="text-lg font-bold text-white">{video.title}</h3>
+                  <p className="mt-1 text-sm text-gray-400">{video.desc}</p>
                 </div>
-
-                {/* Connector line (not on last) */}
-                {i < steps.length - 1 && (
-                  <div className="absolute top-8 start-1/2 hidden h-0.5 w-full bg-gradient-to-r from-brand-700 to-transparent md:block" />
-                )}
-
-                <h3 className="mb-2 text-xl font-bold text-white">{title}</h3>
-                <p className="text-sm leading-relaxed text-gray-500">{desc}</p>
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-brand-600">
+                  <PlayCircleIcon className="size-5 text-white" />
+                </div>
               </div>
-            )
-          })}
+              {video.id ? (
+                <div className="aspect-video overflow-hidden rounded-xl">
+                  <iframe
+                    src={`https://www.youtube.com/embed/${video.id}`}
+                    className="h-full w-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    loading="lazy"
+                    title={video.title}
+                  />
+                </div>
+              ) : (
+                <div className="flex aspect-video items-center justify-center rounded-xl bg-white/5 text-sm text-gray-600">
+                  Video coming soon
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </section>

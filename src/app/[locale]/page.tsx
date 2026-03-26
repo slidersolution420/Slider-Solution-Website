@@ -99,7 +99,7 @@ export default async function HomePage({ params }: HomePageProps) {
 
         <FeaturesGrid product={product} locale={locale} />
 
-        <HowItWorks product={product} locale={locale} />
+        <HowItWorks locale={locale} />
 
         {reviews.length > 0 && (
           <ReviewsCarousel reviews={reviews} locale={locale} />
