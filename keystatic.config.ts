@@ -36,6 +36,8 @@ export default config({
           defaultValue: '✦ Free Shipping Nationwide ✦ The Original Slider Kit ✦',
         }),
         age_gate_enabled: fields.checkbox({ label: 'Enable Age Gate (21+)', defaultValue: true }),
+        how_it_works_video1_id: fields.text({ label: 'How It Works — Video 1 YouTube ID', defaultValue: '' }),
+        how_it_works_video2_id: fields.text({ label: 'How It Works — Video 2 YouTube ID', defaultValue: '' }),
         instagram_reels: fields.array(
           fields.object({
             video_url: fields.text({ label: 'Video URL (e.g. Supabase Storage MP4)' }),

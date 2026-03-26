@@ -16,7 +16,21 @@
     "badge_customers": "+1,000 לקוחות מרוצים",
     "badge_patent": "פטנט רשום",
     "add_to_cart": "הוסף לסל",
-    "order_now": "הזמן עכשיו"
+    "order_now": "הזמן עכשיו",
+    "shipping_pill": "משלוח חינם לכל הארץ 🚚",
+    "stat_patent_primary": "מוגן בפטנט",
+    "stat_patent_secondary": "Patent Protected",
+    "stat_customers_number": "+1K",
+    "stat_customers_label": "לקוחות מרוצים"
+  },
+  "how_it_works": {
+    "title_before": "איך זה ",
+    "title_highlight": "עובד",
+    "subtitle": "צפו בסרטוני ההדרכה שלנו ולמדו איך להפיק את המקסימום מה-SLIDER",
+    "card1_title": "למי שלא יודע לגלגל",
+    "card1_desc": "לא צריך למצוא מישהו שיגלגל לך יותר! הערכה של SLIDER מגיעה עם 5 קונוסים ריקים ומוכנים לשימוש",
+    "card2_title": "למי שאוהב לגלגל",
+    "card2_desc": "למדו איך להשתמש ב-SLIDER כדי לגלגל בכל מקום ובכל זמן"
   },
   "qty": {
     "label": "כמות",
