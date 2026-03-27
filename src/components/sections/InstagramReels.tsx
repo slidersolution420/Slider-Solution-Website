@@ -1,19 +1,20 @@
-import { getConfig } from '@/lib/config'
-import ReelVideo from './ReelVideo'
-
 interface InstagramReelsProps {
   locale: string
 }
 
-export default async function InstagramReels({ locale }: InstagramReelsProps) {
-  const config = await getConfig()
-  const reels = config.instagram_reels
+const REEL_IDS = [
+  'DVYr6w7iIug',
+  'DUgFUfbiN5W',
+  'DOByE4hCKow',
+  'DShyv2eiNFq',
+  'DOQiGgtCGSN',
+  'DOOER7UiFCf',
+]
 
-  if (reels.length === 0) return null
-
+export default function InstagramReels({ locale }: InstagramReelsProps) {
   const isHe = locale === 'he'
   const title = isHe ? 'עקבו אחרינו' : 'Follow Us'
-  const instagramUrl = config.instagram_url
+  const instagramUrl = 'https://www.instagram.com/slider.solution'
 
   return (
     <section className="bg-surface py-16">
@@ -33,12 +34,23 @@ export default async function InstagramReels({ locale }: InstagramReelsProps) {
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {reels.slice(0, 3).map((reel, i) => (
-            <ReelVideo
-              key={i}
-              videoUrl={reel.video_url}
-              linkUrl={reel.link_url}
-            />
+          {REEL_IDS.map((id) => (
+            <a
+              key={id}
+              href={`https://www.instagram.com/reel/${id}/`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block overflow-hidden rounded-2xl border border-white/10 transition-colors hover:border-white/25"
+            >
+              <iframe
+                src={`https://www.instagram.com/reel/${id}/embed/`}
+                className="h-[480px] w-full"
+                loading="lazy"
+                allowFullScreen
+                scrolling="no"
+                frameBorder="0"
+              />
+            </a>
           ))}
         </div>
       </div>

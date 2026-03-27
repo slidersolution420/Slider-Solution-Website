@@ -36,7 +36,11 @@ export default function NavBar() {
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700">
-            <span className="text-sm font-bold text-white">S</span>
+            <svg width="16" height="14" viewBox="0 0 16 14" fill="none" aria-hidden="true">
+              <rect x="0" y="0" width="16" height="2.5" rx="1.25" fill="white"/>
+              <rect x="0" y="5.75" width="16" height="2.5" rx="1.25" fill="white"/>
+              <rect x="0" y="11.5" width="16" height="2.5" rx="1.25" fill="white"/>
+            </svg>
           </div>
           <span className="text-lg font-bold tracking-tight text-white">SLIDER</span>
         </Link>

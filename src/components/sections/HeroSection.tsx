@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl'
 import { useStore } from '@/store'
 import { B2C_PRICE_USD } from '@/lib/currency'
 import { formatPrice } from '@/lib/currency'
-import { ShieldCheckIcon } from '@heroicons/react/24/solid'
+import { ShieldCheckIcon, LockClosedIcon } from '@heroicons/react/24/solid'
 import type { ProductContent } from '@/lib/keystatic'
 
 interface HeroSectionProps {
@@ -47,9 +47,26 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
     : null
 
   const videoRef = useRef<HTMLVideoElement>(null)
+  const mobileVideoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
     const video = videoRef.current
+    if (!video || selectedColor !== 'purple') return
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !video.src) {
+          video.src = PURPLE_VIDEO_URL
+          video.load()
+        }
+      },
+      { rootMargin: '200px' }
+    )
+    observer.observe(video)
+    return () => observer.disconnect()
+  }, [selectedColor])
+
+  useEffect(() => {
+    const video = mobileVideoRef.current
     if (!video || selectedColor !== 'purple') return
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -77,28 +94,16 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
   }
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-gray-900 to-surface pt-24 pb-16">
+    <section className="relative overflow-hidden bg-gradient-to-b from-gray-900 to-surface pt-32 pb-16">
       {/* Background glow */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute -top-1/4 left-1/2 size-[600px] -translate-x-1/2 rounded-full bg-brand-900/30 blur-[120px]" />
-      </div>
-
-      {/* Top shipping pill */}
-      <div className="absolute top-[72px] end-6 z-10">
-        <span className="flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-900/20 px-3 py-1.5 text-xs font-semibold text-green-400">
-          {t('shipping_pill')}
-        </span>
       </div>
 
       <div className="relative mx-auto max-w-6xl px-4">
         <div className="grid items-center gap-12 lg:grid-cols-2">
           {/* Text side */}
           <div>
-            {/* Eyebrow */}
-            <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-brand-400">
-              {product.name}
-            </p>
-
             {/* Headline */}
             <h1 className="mb-4 text-5xl font-black leading-[1.1] text-white md:text-6xl lg:text-7xl">
               {before}{before ? ' ' : ''}
@@ -108,7 +113,7 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
             </h1>
 
             {/* Subtitle with ALL IN ONE highlighted */}
-            <p className="mb-8 text-lg leading-relaxed text-gray-300">
+            <p className="mb-6 text-lg leading-relaxed text-gray-300">
               {description.split('ALL IN ONE').map((part, i, arr) => (
                 <span key={i}>
                   {part}
@@ -118,6 +123,30 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
                 </span>
               ))}
             </p>
+
+            {/* Mobile-only product visual — below description, transparent bg */}
+            <div className="mb-6 flex justify-center lg:hidden">
+              {selectedColor === 'purple' ? (
+                <video
+                  ref={mobileVideoRef}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full max-w-[280px]"
+                />
+              ) : (
+                imageUrl && (
+                  <Image
+                    src={imageUrl}
+                    alt={`SLIDER Kit — ${isHe ? selectedColorData?.name_he : selectedColorData?.name_en}`}
+                    width={280}
+                    height={280}
+                    className="object-contain"
+                  />
+                )
+              )}
+            </div>
 
             {/* Color selector */}
             {displayColors.length > 1 && (
@@ -185,16 +214,8 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
               </p>
             )}
 
-            {/* CTA */}
-            <button
-              onClick={handleAddToCart}
-              className="w-full rounded-xl bg-gradient-to-r from-brand-500 to-brand-700 py-4 text-lg font-bold text-white shadow-lg shadow-brand-900/40 transition-opacity hover:opacity-90 active:scale-[0.98]"
-            >
-              {t('add_to_cart')} — {formatPrice(B2C_PRICE_USD * selectedQty, currency)}
-            </button>
-
-            {/* Bottom stats */}
-            <div className="mt-6 flex items-center gap-6">
+            {/* Bottom stats — 3 trust badges */}
+            <div className="mt-6 flex flex-wrap items-center gap-4">
               <span className="flex flex-col items-start rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5">
                 <span className="flex items-center gap-1.5 text-sm font-bold text-white">
                   <ShieldCheckIcon className="size-4 text-brand-400" />
@@ -206,11 +227,26 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
                 <p className="text-2xl font-black text-white">{t('stat_customers_number')}</p>
                 <p className="text-xs text-gray-400">{t('stat_customers_label')}</p>
               </div>
+              <span className="flex flex-col items-start rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5">
+                <span className="flex items-center gap-1.5 text-sm font-bold text-white">
+                  <LockClosedIcon className="size-4 text-brand-400" />
+                  {isHe ? 'תשלום מאובטח' : 'Secure Payment'}
+                </span>
+                <span className="mt-0.5 flex items-center gap-1">
+                  {/* Credit card icon */}
+                  <svg className="size-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
+                    <rect x="2" y="5" width="20" height="14" rx="2" />
+                    <path d="M2 10h20" />
+                  </svg>
+                  <span className="rounded border border-white/15 px-1 py-px text-[10px] text-gray-400">Apple Pay</span>
+                  <span className="rounded border border-white/15 px-1 py-px text-[10px] text-gray-400">Google Pay</span>
+                </span>
+              </span>
             </div>
           </div>
 
-          {/* Image side */}
-          <div className="relative flex justify-center">
+          {/* Image side — desktop only */}
+          <div className="relative hidden justify-center lg:flex">
             {selectedColor === 'purple' ? (
               <video
                 ref={videoRef}
@@ -218,20 +254,16 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
                 loop
                 muted
                 playsInline
-                className="aspect-square w-full max-w-sm lg:max-w-md"
+                className="w-full max-w-md"
               />
             ) : (
-              <div
-                className={`relative aspect-square w-full max-w-sm overflow-hidden rounded-3xl bg-gradient-to-br lg:max-w-md ${
-                  selectedColorData?.gradient ?? 'from-gray-800 to-gray-950'
-                }`}
-              >
+              <div className="relative aspect-square w-full max-w-md">
                 {imageUrl && (
                   <Image
                     src={imageUrl}
                     alt={`SLIDER Kit — ${isHe ? selectedColorData?.name_he : selectedColorData?.name_en}`}
                     fill
-                    className="object-contain p-6"
+                    className="object-contain"
                     priority
                   />
                 )}

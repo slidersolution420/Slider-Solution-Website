@@ -8,6 +8,7 @@ import AgeGate from '@/components/ui/AgeGate'
 import CartDrawer from '@/components/ui/CartDrawer'
 import Footer from '@/components/ui/Footer'
 import StickyCartBar from '@/components/ui/StickyCartBar'
+import ShippingBanner from '@/components/ui/ShippingBanner'
 import HeroSection from '@/components/sections/HeroSection'
 import TickerBar from '@/components/sections/TickerBar'
 import FeaturesGrid from '@/components/sections/FeaturesGrid'
@@ -15,7 +16,6 @@ import HowItWorks from '@/components/sections/HowItWorks'
 import ReviewsCarousel from '@/components/sections/ReviewsCarousel'
 import FaqAccordion from '@/components/sections/FaqAccordion'
 import InstagramReels from '@/components/sections/InstagramReels'
-import TrustBar from '@/components/sections/TrustBar'
 import { isRtl } from '@/i18n/routing'
 
 interface HomePageProps {
@@ -67,6 +67,7 @@ export default async function HomePage({ params }: HomePageProps) {
     <>
       <AgeGate />
       <NavBar />
+      <ShippingBanner />
       <CartDrawer />
 
       <main className="pb-24 md:pb-0">
@@ -95,11 +96,9 @@ export default async function HomePage({ params }: HomePageProps) {
 
         {siteConfig.ticker_enabled && tickerText && <TickerBar text={tickerText} rtl={isRtl(locale)} />}
 
-        <TrustBar />
+        <HowItWorks locale={locale} />
 
         <FeaturesGrid product={product} locale={locale} />
-
-        <HowItWorks locale={locale} />
 
         {reviews.length > 0 && (
           <ReviewsCarousel reviews={reviews} locale={locale} />

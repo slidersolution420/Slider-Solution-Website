@@ -12,12 +12,16 @@ export default async function Footer() {
   return (
     <footer className="border-t border-white/10 bg-gray-950">
       <div className="mx-auto max-w-6xl px-4 py-12">
-        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3">
+        <div className="grid gap-8 text-center sm:grid-cols-2 sm:text-start md:grid-cols-3">
           {/* Brand */}
           <div>
-            <div className="mb-4 flex items-center gap-2">
+            <div className="mb-4 flex items-center justify-center gap-2 sm:justify-start">
               <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-to-br from-brand-500 to-brand-700">
-                <span className="text-sm font-bold text-white">S</span>
+                <svg width="16" height="14" viewBox="0 0 16 14" fill="none" aria-hidden="true">
+                  <rect x="0" y="0" width="16" height="2.5" rx="1.25" fill="white"/>
+                  <rect x="0" y="5.75" width="16" height="2.5" rx="1.25" fill="white"/>
+                  <rect x="0" y="11.5" width="16" height="2.5" rx="1.25" fill="white"/>
+                </svg>
               </div>
               <span className="text-lg font-bold text-white">SLIDER</span>
             </div>
@@ -26,7 +30,7 @@ export default async function Footer() {
               <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
                 {t('follow_us')}
               </p>
-              <div className="flex gap-3">
+              <div className="flex justify-center gap-3 sm:justify-start">
                 {settings.facebook_url && (
                   <a
                     href={settings.facebook_url}
