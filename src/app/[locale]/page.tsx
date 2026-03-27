@@ -13,7 +13,7 @@ import HeroSection from '@/components/sections/HeroSection'
 import TickerBar from '@/components/sections/TickerBar'
 import FeaturesGrid from '@/components/sections/FeaturesGrid'
 import HowItWorks from '@/components/sections/HowItWorks'
-import ReviewsCarousel from '@/components/sections/ReviewsCarousel'
+import ReviewsSection from '@/components/sections/ReviewsSection'
 import FaqAccordion from '@/components/sections/FaqAccordion'
 import InstagramReels from '@/components/sections/InstagramReels'
 import { isRtl } from '@/i18n/routing'
@@ -100,9 +100,7 @@ export default async function HomePage({ params }: HomePageProps) {
 
         <FeaturesGrid product={product} locale={locale} />
 
-        {reviews.length > 0 && (
-          <ReviewsCarousel reviews={reviews} locale={locale} />
-        )}
+        <ReviewsSection reviews={reviews} locale={locale} />
 
         <InstagramReels locale={locale} />
 

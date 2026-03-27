@@ -157,6 +157,23 @@
     "privacy_link": "מדיניות הפרטיות",
     "consent_required": "יש לאשר את תנאי השימוש ומדיניות הפרטיות"
   },
+  "reviews": {
+    "title": "מה הלקוחות שלנו אומרים",
+    "subtitle": "הצטרפו ל-+1,000 לקוחות מרוצים",
+    "rating_summary": "{count} ביקורות מאומתות",
+    "leave_review": "כתוב ביקורת",
+    "form_title": "שתפו את החוויה שלכם",
+    "form_name": "שמך",
+    "form_rating": "הדירוג שלך",
+    "form_body": "כתוב את הביקורת שלך...",
+    "form_submit": "שלח ביקורת",
+    "form_submitting": "שולח...",
+    "form_success_title": "תודה רבה!",
+    "form_success_body": "הביקורת שלך נשלחה ונמצאת בהמתנה לאישור.",
+    "form_close": "סגור",
+    "verified": "רכישה מאומתת",
+    "empty": "היה הראשון לכתוב ביקורת!"
+  },
   "errors": {
     "required": "שדה חובה",
     "email_invalid": "כתובת דוא\"ל לא תקינה",

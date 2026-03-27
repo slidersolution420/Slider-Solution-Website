@@ -157,6 +157,23 @@
     "privacy_link": "Privacy Policy",
     "consent_required": "You must agree to the terms to continue"
   },
+  "reviews": {
+    "title": "What Our Customers Say",
+    "subtitle": "Join 1,000+ happy customers",
+    "rating_summary": "{count} verified reviews",
+    "leave_review": "Leave a Review",
+    "form_title": "Share Your Experience",
+    "form_name": "Your Name",
+    "form_rating": "Your Rating",
+    "form_body": "Write your review...",
+    "form_submit": "Submit Review",
+    "form_submitting": "Submitting...",
+    "form_success_title": "Thank you!",
+    "form_success_body": "Your review has been submitted and is pending approval.",
+    "form_close": "Close",
+    "verified": "Verified Purchase",
+    "empty": "Be the first to leave a review!"
+  },
   "errors": {
     "required": "Required",
     "email_invalid": "Invalid email address",
