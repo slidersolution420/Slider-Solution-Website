@@ -12,6 +12,7 @@ function ThankYouContent() {
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
   const [orderId, setOrderId] = useState<string | null>(null)
+  const [deliveryNumber, setDeliveryNumber] = useState<string | null>(null)
   const { clearCart } = useStore()
 
   useEffect(() => {
@@ -30,11 +31,12 @@ function ThankYouContent() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(params),
     })
-      .then(r => r.json() as Promise<{ success?: boolean; order_id?: string; error?: string }>)
+      .then(r => r.json() as Promise<{ success?: boolean; order_id?: string; delivery_number?: string | null; error?: string }>)
       .then(data => {
         if (data.success) {
           clearCart()
           setOrderId(data.order_id ?? null)
+          setDeliveryNumber(data.delivery_number ?? null)
           setStatus('success')
         } else {
           setStatus('error')
@@ -82,6 +84,16 @@ function ThankYouContent() {
             {t('orderRef')}:{' '}
             <span className="font-mono text-white">{orderId.slice(0, 8).toUpperCase()}</span>
           </p>
+        )}
+        {deliveryNumber && (
+          <a
+            href="https://crm.tapuzdelivery.co.il/baldar/deliverystatus.aspx"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-primary mb-4 block"
+          >
+            {t('trackingButton')}
+          </a>
         )}
         <Link href={homeHref} className="btn-primary">
           {t('backHome')}
