@@ -47,6 +47,7 @@ export default function ContactPage() {
                 <label className="mb-1.5 block text-sm text-gray-400">{t('name')}</label>
                 <input
                   required
+                  autoComplete="name"
                   className="input-field"
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -58,6 +59,8 @@ export default function ContactPage() {
                 <input
                   required
                   type="email"
+                  dir="ltr"
+                  autoComplete="email"
                   className="input-field"
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}

@@ -84,7 +84,7 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
       </div>
 
       {/* Top shipping pill */}
-      <div className="absolute top-6 end-6 z-10">
+      <div className="absolute top-[72px] end-6 z-10">
         <span className="flex items-center gap-1.5 rounded-full border border-green-500/30 bg-green-900/20 px-3 py-1.5 text-xs font-semibold text-green-400">
           {t('shipping_pill')}
         </span>
@@ -218,7 +218,7 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
                 loop
                 muted
                 playsInline
-                className="w-full max-w-sm lg:max-w-md"
+                className="aspect-square w-full max-w-sm lg:max-w-md"
               />
             ) : (
               <div

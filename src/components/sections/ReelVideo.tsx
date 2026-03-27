@@ -21,7 +21,7 @@ export default function ReelVideo({ videoUrl, linkUrl }: ReelVideoProps) {
           video.load()
         }
       },
-      { rootMargin: '200px' }
+      { rootMargin: '50px' }
     )
 
     observer.observe(video)

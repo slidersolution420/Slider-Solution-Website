@@ -60,7 +60,7 @@ export default async function Footer() {
           {/* Links */}
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
-              Pages
+              {t('pages_heading')}
             </h3>
             <ul className="space-y-2">
               {[
@@ -83,7 +83,7 @@ export default async function Footer() {
           {/* Legal */}
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-400">
-              Legal
+              {t('legal_heading')}
             </h3>
             <ul className="space-y-2">
               {[

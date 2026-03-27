@@ -119,10 +119,10 @@ export default function WholesaleModal({ onClose, onSuccess }: WholesaleModalPro
           {tab === 'login' ? (
             <form onSubmit={loginForm.handleSubmit(handleLogin)} className="space-y-4">
               <Field label={t('email')} error={loginForm.formState.errors.email?.message}>
-                <input {...loginForm.register('email')} type="email" className="input-field" />
+                <input {...loginForm.register('email')} type="email" dir="ltr" autoComplete="email" className="input-field" />
               </Field>
               <Field label={t('password')} error={loginForm.formState.errors.password?.message}>
-                <input {...loginForm.register('password')} type="password" className="input-field" />
+                <input {...loginForm.register('password')} type="password" autoComplete="current-password" className="input-field" />
               </Field>
               <button
                 type="submit"
@@ -139,31 +139,31 @@ export default function WholesaleModal({ onClose, onSuccess }: WholesaleModalPro
                   <input {...registerForm.register('business_name')} className="input-field" />
                 </Field>
                 <Field label={t('contact_name')} error={registerForm.formState.errors.contact_name?.message}>
-                  <input {...registerForm.register('contact_name')} className="input-field" />
+                  <input {...registerForm.register('contact_name')} autoComplete="name" className="input-field" />
                 </Field>
                 <Field label={t('phone')} error={registerForm.formState.errors.phone?.message}>
-                  <input {...registerForm.register('phone')} type="tel" className="input-field" />
+                  <input {...registerForm.register('phone')} type="tel" dir="ltr" autoComplete="tel" className="input-field" />
                 </Field>
                 <Field label={t('username')} error={registerForm.formState.errors.username?.message}>
-                  <input {...registerForm.register('username')} className="input-field" />
+                  <input {...registerForm.register('username')} autoComplete="username" className="input-field" />
                 </Field>
                 <Field label={t('store_name')} error={registerForm.formState.errors.store_name?.message}>
-                  <input {...registerForm.register('store_name')} className="input-field" />
+                  <input {...registerForm.register('store_name')} autoComplete="organization" className="input-field" />
                 </Field>
                 <Field label="Email" error={registerForm.formState.errors.email?.message} className="sm:col-span-2">
-                  <input {...registerForm.register('email')} type="email" className="input-field" />
+                  <input {...registerForm.register('email')} type="email" dir="ltr" autoComplete="email" className="input-field" />
                 </Field>
                 <Field label={t('password')} error={registerForm.formState.errors.password?.message} className="sm:col-span-2">
-                  <input {...registerForm.register('password')} type="password" className="input-field" />
+                  <input {...registerForm.register('password')} type="password" autoComplete="new-password" className="input-field" />
                 </Field>
                 <Field label={t('address')} error={registerForm.formState.errors.address?.message} className="sm:col-span-2">
-                  <input {...registerForm.register('address')} className="input-field" />
+                  <input {...registerForm.register('address')} autoComplete="street-address" className="input-field" />
                 </Field>
                 <Field label={t('city')} error={registerForm.formState.errors.city?.message}>
-                  <input {...registerForm.register('city')} className="input-field" />
+                  <input {...registerForm.register('city')} autoComplete="address-level2" className="input-field" />
                 </Field>
                 <Field label={t('zip')} error={registerForm.formState.errors.zip?.message}>
-                  <input {...registerForm.register('zip')} className="input-field" />
+                  <input {...registerForm.register('zip')} dir="ltr" autoComplete="postal-code" className="input-field" />
                 </Field>
                 <Field label={t('country')} error={registerForm.formState.errors.country?.message} className="sm:col-span-2">
                   <select {...registerForm.register('country')} className="input-field">

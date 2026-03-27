@@ -141,7 +141,9 @@
     "terms": "Terms of Use",
     "refund": "Return Policy",
     "cookies": "Cookies",
-    "copyright": "All rights reserved"
+    "copyright": "All rights reserved",
+    "pages_heading": "Pages",
+    "legal_heading": "Legal"
   },
   "currency": {
     "label": "Currency",

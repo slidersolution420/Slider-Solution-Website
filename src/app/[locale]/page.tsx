@@ -69,7 +69,7 @@ export default async function HomePage({ params }: HomePageProps) {
       <NavBar />
       <CartDrawer />
 
-      <main>
+      <main className="pb-24 md:pb-0">
         {/* JSON-LD Product Schema */}
         <script
           type="application/ld+json"
