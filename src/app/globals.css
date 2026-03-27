@@ -36,6 +36,17 @@
   100% { transform: translateX(50%); }
 }
 
+/* View transitions — smooth locale switch */
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.18s;
+  animation-timing-function: ease-in-out;
+}
+
 /* Base styles */
 html {
   scroll-behavior: smooth;

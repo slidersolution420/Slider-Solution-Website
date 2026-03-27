@@ -12,6 +12,7 @@ export default function LanguageSwitcher() {
       <Link
         href={pathname}
         locale="he"
+        unstable_viewTransition
         className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${
           locale === 'he' ? 'bg-brand-500 text-white' : 'text-gray-300 hover:text-white'
         }`}
@@ -21,6 +22,7 @@ export default function LanguageSwitcher() {
       <Link
         href={pathname}
         locale="en"
+        unstable_viewTransition
         className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${
           locale === 'en' ? 'bg-brand-500 text-white' : 'text-gray-300 hover:text-white'
         }`}
