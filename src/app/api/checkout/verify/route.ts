@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server'
 import { verifyPayment } from '@/lib/hype'
+import { EXCHANGE_RATES } from '@/lib/currency'
 import { createServiceClient } from '@/lib/supabase-server'
-import { sendOrderConfirmation } from '@/lib/resend'
+import { sendOrderConfirmation, sendAdminOrderAlert } from '@/lib/resend'
 import { createShipment } from '@/lib/tapuz'
 import type { Order } from '@/lib/types'
 
@@ -9,9 +10,14 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as Record<string, string>
 
-    const verified = await verifyPayment(body)
+    console.error('[verify route] incoming params:', JSON.stringify(body))
+    const { verified, rawResponse } = await verifyPayment(body)
+    console.error('[verify route] verifyPayment result:', verified, '| hypeResponse:', rawResponse)
     if (!verified) {
-      return NextResponse.json({ error: 'Payment verification failed' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Payment verification failed', hypeResponse: rawResponse },
+        { status: 400 }
+      )
     }
 
     const supabase = createServiceClient()
@@ -56,7 +62,7 @@ export async function POST(request: Request) {
 
     const cart = cartSession?.cart as CartPayload | null
     const customer = cart?.customer
-    const totalUsd = cart?.totalUsd ?? parseFloat(amountStr ?? '0') / 3.7
+    const totalUsd = cart?.totalUsd ?? Math.round((parseFloat(amountStr ?? '0') / EXCHANGE_RATES.ILS) * 100) / 100
 
     const { data: order, error } = await supabase
       .from('orders')
@@ -87,8 +93,11 @@ export async function POST(request: Request) {
         .eq('id', orderRef)
     }
 
-    // Send confirmation email (non-blocking)
-    if (order) void sendOrderConfirmation(order).catch(console.error)
+    // Send emails (non-blocking): customer confirmation + admin alert
+    if (order) {
+      void sendOrderConfirmation(order).catch(console.error)
+      void sendAdminOrderAlert(order).catch(console.error)
+    }
 
     // Create Tapuz shipment — await but never block customer on failure
     let deliveryNumber: string | null = null

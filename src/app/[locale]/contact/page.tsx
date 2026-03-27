@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import NavBar from '@/components/ui/NavBar'
-import Footer from '@/components/ui/Footer'
 import { Link } from '@/i18n/navigation'
 
 export default function ContactPage() {
@@ -107,7 +106,6 @@ export default function ContactPage() {
           )}
         </div>
       </main>
-      <Footer />
     </>
   )
 }

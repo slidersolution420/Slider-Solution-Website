@@ -16,7 +16,21 @@
     "badge_customers": "1,000+ Happy Customers",
     "badge_patent": "Patent Protected",
     "add_to_cart": "Add to Cart",
-    "order_now": "Order Now"
+    "order_now": "Order Now",
+    "shipping_pill": "Free Shipping to the US & Europe on 3+ items 🚚",
+    "stat_patent_primary": "מוגן בפטנט",
+    "stat_patent_secondary": "Patent Protected",
+    "stat_customers_number": "+1K",
+    "stat_customers_label": "Happy Customers"
+  },
+  "how_it_works": {
+    "title_before": "How It ",
+    "title_highlight": "Works",
+    "subtitle": "Watch our tutorial videos and learn how to get the most out of SLIDER",
+    "card1_title": "For Those Who Can't Roll",
+    "card1_desc": "No need to find someone to roll for you! The SLIDER kit comes with 5 empty cones ready to use",
+    "card2_title": "For Those Who Love Rolling",
+    "card2_desc": "Learn how to use SLIDER to roll anywhere, anytime"
   },
   "qty": {
     "label": "Quantity",

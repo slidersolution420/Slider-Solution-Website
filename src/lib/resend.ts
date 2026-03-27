@@ -84,6 +84,36 @@ export async function sendContactSubmission(
   })
 }
 
+export async function sendAdminOrderAlert(order: Order): Promise<void> {
+  const items = order.items
+    .map(
+      (item) =>
+        `<tr><td style="padding:8px 0;color:#ccc">${item.name} × ${item.quantity}</td><td style="padding:8px 0;text-align:right">$${(item.priceUsd * item.quantity).toFixed(2)}</td></tr>`
+    )
+    .join('')
+
+  const body = `
+    <p style="color:#ccc">New order received from <strong>${order.name}</strong> (${order.email})</p>
+    <p style="color:#ccc">Order #: <strong>${order.id.slice(0, 8).toUpperCase()}</strong></p>
+    <table style="width:100%;border-collapse:collapse;margin:16px 0">
+      ${items}
+      <tr style="border-top:1px solid #333">
+        <td style="padding:8px 0;font-weight:700">Total</td>
+        <td style="padding:8px 0;text-align:right;font-weight:700">$${order.total_usd.toFixed(2)}</td>
+      </tr>
+    </table>
+    <p style="color:#ccc">Ship to: ${order.shipping_address.address}, ${order.shipping_address.city}, ${order.shipping_address.country}</p>
+    <p style="color:#ccc">Status: <strong>${order.status}</strong></p>
+  `
+
+  await getResend().emails.send({
+    from: FROM,
+    to: OWNER,
+    subject: `New Order #${order.id.slice(0, 8).toUpperCase()} — $${order.total_usd.toFixed(2)}`,
+    html: emailTemplate('New Order Received', body),
+  })
+}
+
 export async function sendWholesaleWelcome(
   businessName: string,
   contactName: string,

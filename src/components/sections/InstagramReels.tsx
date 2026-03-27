@@ -1,19 +1,19 @@
-const REEL_IDS = [
-  'DVYr6w7iIug',
-  'DUgFUfbiN5W',
-  'DOByE4hCKow',
-  'DShyv2eiNFq',
-  'DOQiGgtCGSN',
-  'DOOER7UiFCf',
-]
+import { getConfig } from '@/lib/config'
+import ReelVideo from './ReelVideo'
 
 interface InstagramReelsProps {
   locale: string
 }
 
-export default function InstagramReels({ locale }: InstagramReelsProps) {
+export default async function InstagramReels({ locale }: InstagramReelsProps) {
+  const config = await getConfig()
+  const reels = config.instagram_reels
+
+  if (reels.length === 0) return null
+
   const isHe = locale === 'he'
   const title = isHe ? 'עקבו אחרינו' : 'Follow Us'
+  const instagramUrl = config.instagram_url
 
   return (
     <section className="bg-surface py-16">
@@ -21,7 +21,7 @@ export default function InstagramReels({ locale }: InstagramReelsProps) {
         <div className="mb-10 text-center">
           <h2 className="text-3xl font-black text-white">
             <a
-              href="https://www.instagram.com/slider.solution"
+              href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="transition-colors hover:text-brand-400"
@@ -33,23 +33,12 @@ export default function InstagramReels({ locale }: InstagramReelsProps) {
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {REEL_IDS.map((id) => (
-            <a
-              key={id}
-              href={`https://www.instagram.com/reel/${id}/`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block overflow-hidden rounded-2xl border border-white/10 transition-colors hover:border-white/25"
-            >
-              <iframe
-                src={`https://www.instagram.com/reel/${id}/embed/`}
-                className="h-[480px] w-full"
-                allowFullScreen
-                loading="lazy"
-                scrolling="no"
-                frameBorder="0"
-              />
-            </a>
+          {reels.map((reel, i) => (
+            <ReelVideo
+              key={i}
+              videoUrl={reel.video_url}
+              linkUrl={reel.link_url}
+            />
           ))}
         </div>
       </div>

@@ -32,11 +32,11 @@ export interface CustomerInfo {
  * Step 1+2: Call APISign (SIGN) to get signed payment page params, then build the payment URL.
  */
 export async function initiatePayment(customer: CustomerInfo): Promise<HypePaymentSession> {
-  const apiKey = process.env.HYPE_API_KEY
+  const apiKey = process.env.HYPE_API_KEY?.trim()
   // HYPE_PASSP is the "PassP" from Hype settings page (previously stored as HYPE_REFERER)
-  const passP = process.env.HYPE_PASSP ?? process.env.HYPE_REFERER
-  const masof = process.env.HYPE_TERMINAL
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://slidersolution.com'
+  const passP = process.env.HYPE_PASSP?.trim()
+  const masof = process.env.HYPE_TERMINAL?.trim()
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://slidersolution.com').trim()
 
   if (!apiKey || !masof || !passP) {
     // Dev mock: redirect straight to thank-you with mock params
@@ -89,15 +89,21 @@ export async function initiatePayment(customer: CustomerInfo): Promise<HypePayme
     tmp: '1',
   })
 
-  // When using REFERER auth mode in Hype dashboard, the Referer header must match
+  const debugUrl = `${HYPE_BASE}?${params.toString()}`.replace(/PassP=[^&]*/, 'PassP=***')
+  console.error('[Hype APISign SIGN] calling:', debugUrl)
+
   const res = await fetch(`${HYPE_BASE}?${params.toString()}`, {
-    headers: { Referer: passP },
+    headers: { Referer: appUrl },
   })
-  if (!res.ok) throw new Error(`Hype APISign error: ${res.status}`)
 
   const signedText = await res.text()
-  if (!signedText || signedText.toLowerCase().includes('error')) {
-    throw new Error(`Hype APISign failed: ${signedText}`)
+  console.error('[Hype APISign SIGN] HTTP status:', res.status, res.statusText)
+  console.error('[Hype APISign SIGN] raw response:', signedText)
+
+  if (!res.ok) throw new Error(`Hype APISign HTTP error: ${res.status} — ${signedText}`)
+  if (!signedText) throw new Error('Hype APISign returned empty response')
+  if (signedText.startsWith('ERR') || signedText.startsWith('error') || signedText.startsWith('Error')) {
+    throw new Error(`Hype APISign error response: ${signedText}`)
   }
 
   return {
@@ -106,44 +112,65 @@ export async function initiatePayment(customer: CustomerInfo): Promise<HypePayme
   }
 }
 
+export interface VerifyResult {
+  verified: boolean
+  rawResponse: string
+}
+
 /**
  * Step 5: Verify a completed payment using params from the Hype success redirect URL.
- * Returns true if CCode=0 and Hype confirms the transaction is genuine.
+ * Returns { verified: true } if CCode=0 and Hype confirms the transaction is genuine.
+ * rawResponse contains whatever Hype returned, for diagnostics.
+ *
+ * REQUIRES: "Verify by signature in the payment page" enabled in Hype terminal settings.
  */
-export async function verifyPayment(params: Record<string, string>): Promise<boolean> {
+export async function verifyPayment(params: Record<string, string>): Promise<VerifyResult> {
   // Mock payments always succeed
-  if (params['mock'] === '1') return true
+  if (params['mock'] === '1') return { verified: true, rawResponse: 'mock' }
 
-  const apiKey = process.env.HYPE_API_KEY
-  const passP = process.env.HYPE_PASSP ?? process.env.HYPE_REFERER
-  const masof = process.env.HYPE_TERMINAL
+  const apiKey = process.env.HYPE_API_KEY?.trim()
+  const passP = process.env.HYPE_PASSP?.trim()
+  const masof = process.env.HYPE_TERMINAL?.trim()
 
   // Dev mode — skip verification
-  if (!apiKey || !masof || !passP) return true
+  if (!apiKey || !masof || !passP) return { verified: true, rawResponse: 'dev-mode' }
 
-  if (params['CCode'] !== '0') return false
+  if (params['CCode'] !== '0') return { verified: false, rawResponse: 'ccode-not-zero' }
 
+  // Forward ALL redirect params (including Sign, Fild1-3, Bank, etc.) so Hype can
+  // validate the cryptographic signature. Auth params are set last to prevent spoofing.
   const verifyParams = new URLSearchParams({
+    ...params,
     action: 'APISign',
     What: 'VERIFY',
     KEY: apiKey,
     PassP: passP,
     Masof: masof,
-    Id: params['Id'] ?? '',
-    CCode: params['CCode'] ?? '',
-    Amount: params['Amount'] ?? '',
-    ACode: params['ACode'] ?? '',
-    Order: params['Order'] ?? '',
     UTF8: 'True',
     UTF8out: 'True',
   })
 
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://slidersolution.com').trim()
+
+  const debugVerifyUrl = `${HYPE_BASE}?${verifyParams.toString()}`
+    .replace(/PassP=[^&]*/, 'PassP=***')
+    .replace(/KEY=[^&]*/, 'KEY=***')
+  console.error('[Hype VERIFY] calling:', debugVerifyUrl)
+
   const res = await fetch(`${HYPE_BASE}?${verifyParams.toString()}`, {
-    headers: { Referer: passP },
+    headers: { Referer: appUrl },
   })
-  if (!res.ok) return false
 
   const result = await res.text()
-  const resultParams = new URLSearchParams(result)
-  return resultParams.get('CCode') === '0'
+  console.error('[Hype VERIFY] HTTP status:', res.status, res.statusText)
+  console.error('[Hype VERIFY] raw response:', result)
+
+  if (!res.ok) {
+    console.error('[Hype VERIFY] non-200, returning false')
+    return { verified: false, rawResponse: `http-${res.status}: ${result}` }
+  }
+
+  const cCode = new URLSearchParams(result.trim()).get('CCode')
+  console.error('[Hype VERIFY] parsed CCode:', cCode)
+  return { verified: cCode === '0', rawResponse: result }
 }

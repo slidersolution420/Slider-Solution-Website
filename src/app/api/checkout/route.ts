@@ -4,7 +4,7 @@ import { initiatePayment } from '@/lib/hype'
 import { createServiceClient } from '@/lib/supabase-server'
 import { convertPrice } from '@/lib/currency'
 import { getShippingCost } from '@/lib/shipping'
-import { getShippingSettings } from '@/lib/keystatic'
+import { getConfig } from '@/lib/config'
 
 export async function POST(request: Request) {
   try {
@@ -20,17 +20,17 @@ export async function POST(request: Request) {
 
     const { name, email, phone, address, city, country, zip, currency, items } = parsed.data
 
-    // Calculate totals
+    // Calculate totals — use server-known price, never trust client-supplied priceUsd
+    const cfg = await getConfig()
     const totalQty = items.reduce((sum, i) => sum + i.quantity, 0)
-    const subtotalUsd = items.reduce((sum, i) => sum + i.priceUsd * i.quantity, 0)
-    const shippingCfg = await getShippingSettings()
+    const subtotalUsd = totalQty * cfg.price_b2c_usd
     const shippingUsd = getShippingCost(country, totalQty, {
-      freeCountries: shippingCfg.free_shipping_countries,
-      minQty: shippingCfg.free_shipping_min_qty,
-      intlCost: shippingCfg.intl_paid_shipping_usd,
+      freeCountries: cfg.free_shipping_countries,
+      minQty: cfg.free_shipping_min_qty,
+      intlCost: cfg.intl_paid_shipping_usd,
     })
     const totalUsd = subtotalUsd + shippingUsd
-    const totalIls = currency === 'ILS' ? convertPrice(totalUsd, 'ILS') : totalUsd * 3.7
+    const totalIls = convertPrice(totalUsd, 'ILS')
 
     // Save full order data to cart_sessions.
     // The session UUID becomes the Hype Order reference so we can look it up after payment.
@@ -42,25 +42,41 @@ export async function POST(request: Request) {
       totalIls: Math.round(totalIls),
     }
 
-    const { data: session, error: sessionError } = await supabase
+    const { data: existing, error: selectError } = await supabase
       .from('cart_sessions')
-      .upsert(
-        { email, cart: cartPayload, status: 'active' },
-        { onConflict: 'email' }
-      )
       .select('id')
-      .single()
+      .eq('email', email)
+      .maybeSingle()
 
-    if (sessionError ?? !session) {
-      console.error('Cart session error:', sessionError)
-      return NextResponse.json({ error: 'Session error' }, { status: 500 })
+    console.error('[checkout] cart_sessions select — existing:', existing, 'selectError:', selectError)
+
+    let sessionId: string
+
+    if (existing) {
+      const { error: updateError } = await supabase
+        .from('cart_sessions')
+        .update({ cart: cartPayload, status: 'active', updated_at: new Date().toISOString() })
+        .eq('email', email)
+      console.error('[checkout] cart_sessions update — updateError:', updateError)
+      if (updateError) throw new Error(`Cart session update error: ${updateError.message} (${updateError.code})`)
+      sessionId = existing.id
+    } else {
+      const { data: newSession, error: insertError } = await supabase
+        .from('cart_sessions')
+        .insert({ email, cart: cartPayload, status: 'active' })
+        .select('id')
+        .single()
+      console.error('[checkout] cart_sessions insert — newSession:', newSession, 'insertError:', insertError)
+      if (insertError) throw new Error(`Cart session insert error: ${insertError.message} (${insertError.code})`)
+      sessionId = newSession.id
     }
 
-    // Build Hype item list for the receipt
+    // Build Hype item list for the receipt — use server-known per-item ILS price
+    const priceIlsPerKit = convertPrice(cfg.price_b2c_usd, 'ILS')
     const hypeItems = items.map(i => ({
       name: i.color ? `Slider Kit (${i.color})` : 'Slider Cone Kit',
       quantity: i.quantity,
-      priceIls: Math.round(totalIls / totalQty),
+      priceIls: priceIlsPerKit,
     }))
 
     const result = await initiatePayment({
@@ -73,7 +89,7 @@ export async function POST(request: Request) {
       zip,
       items: hypeItems,
       totalIls: Math.round(totalIls),
-      orderRef: session.id,
+      orderRef: sessionId,
     })
 
     return NextResponse.json({
@@ -81,7 +97,8 @@ export async function POST(request: Request) {
       order_ref: result.order_ref,
     })
   } catch (err) {
-    console.error('Checkout error:', err)
-    return NextResponse.json({ error: 'Failed to initiate payment' }, { status: 500 })
+    const msg = err instanceof Error ? err.message : String(err)
+    console.error('Checkout error:', msg)
+    return NextResponse.json({ error: msg }, { status: 500 })
   }
 }

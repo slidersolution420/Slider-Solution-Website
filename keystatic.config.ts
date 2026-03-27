@@ -24,8 +24,9 @@ export default config({
         phone: fields.text({ label: 'Phone', defaultValue: '052-455-3311' }),
         email: fields.text({ label: 'Contact Email', defaultValue: 'support@slidersolution.com' }),
         address: fields.text({ label: 'Address' }),
-        instagram: fields.url({ label: 'Instagram URL' }),
-        facebook: fields.url({ label: 'Facebook URL' }),
+        instagram_url: fields.url({ label: 'Instagram URL' }),
+        facebook_url: fields.url({ label: 'Facebook URL' }),
+        whatsapp_number: fields.text({ label: 'WhatsApp Number (with country code, e.g. +972501234567)' }),
         ticker_he: fields.text({
           label: 'Ticker Bar Text (Hebrew)',
           defaultValue: '✦ משלוח חינם בכל הארץ ✦ ממציאי הסלייד המקוריים ✦',
@@ -35,6 +36,19 @@ export default config({
           defaultValue: '✦ Free Shipping Nationwide ✦ The Original Slider Kit ✦',
         }),
         age_gate_enabled: fields.checkbox({ label: 'Enable Age Gate (21+)', defaultValue: true }),
+        how_it_works_video1_id: fields.text({ label: 'How It Works — Video 1 YouTube ID', defaultValue: '' }),
+        how_it_works_video2_id: fields.text({ label: 'How It Works — Video 2 YouTube ID', defaultValue: '' }),
+        instagram_reels: fields.array(
+          fields.object({
+            video_url: fields.text({ label: 'Video URL (e.g. Supabase Storage MP4)' }),
+            link_url: fields.url({ label: 'Instagram Reel Link (optional)' }),
+          }),
+          { label: 'Instagram Reels' }
+        ),
+        ils_exchange_rate: fields.number({
+          label: 'ILS Exchange Rate (1 USD = ? ILS)',
+          defaultValue: 3.7,
+        }),
       },
     }),
 
@@ -175,12 +189,31 @@ export default config({
       label: 'Pages',
       path: 'content/pages/*',
       slugField: 'slug',
-      format: { contentField: 'body' },
+      format: { data: 'json' },
       schema: {
         title_he: fields.text({ label: 'Title (Hebrew)' }),
         title_en: fields.text({ label: 'Title (English)' }),
         slug: fields.text({ label: 'URL Slug (e.g. terms, refund, cookies)' }),
-        body: fields.mdx({ label: 'Content' }),
+        sections_he: fields.array(
+          fields.object({
+            heading: fields.text({ label: 'Heading (leave empty to hide)', defaultValue: '' }),
+            text: fields.text({ label: 'Text', multiline: true }),
+          }),
+          {
+            label: 'Sections (Hebrew)',
+            itemLabel: (props) => props.fields.heading.value || 'Section',
+          }
+        ),
+        sections_en: fields.array(
+          fields.object({
+            heading: fields.text({ label: 'Heading (leave empty to hide)', defaultValue: '' }),
+            text: fields.text({ label: 'Text', multiline: true }),
+          }),
+          {
+            label: 'Sections (English)',
+            itemLabel: (props) => props.fields.heading.value || 'Section',
+          }
+        ),
       },
     }),
   },

@@ -4,7 +4,7 @@ import { createServiceClient } from '@/lib/supabase-server'
 
 const patchSchema = z.object({
   id: z.string().uuid(),
-  status: z.enum(['pending', 'paid', 'processing', 'shipped', 'delivered', 'cancelled']),
+  status: z.enum(['pending', 'paid', 'shipped', 'delivered', 'cancelled', 'refunded']),
 })
 
 export async function PATCH(req: NextRequest) {

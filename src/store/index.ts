@@ -29,7 +29,7 @@ export const useStore = create<CartState>()(
     (set, get) => ({
       items: [],
       currency: 'ILS',
-      selectedColor: 'black',
+      selectedColor: 'purple',
       selectedQty: 1,
       cartOpen: false,
       ageVerified: false,
