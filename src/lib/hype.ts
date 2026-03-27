@@ -143,12 +143,27 @@ export async function verifyPayment(params: Record<string, string>): Promise<boo
   })
 
   const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://slidersolution.com').trim()
+
+  const debugVerifyUrl = `${HYPE_BASE}?${verifyParams.toString()}`
+    .replace(/PassP=[^&]*/, 'PassP=***')
+    .replace(/KEY=[^&]*/, 'KEY=***')
+  console.error('[Hype VERIFY] calling:', debugVerifyUrl)
+
   const res = await fetch(`${HYPE_BASE}?${verifyParams.toString()}`, {
     headers: { Referer: appUrl },
   })
-  if (!res.ok) return false
 
   const result = await res.text()
+  console.error('[Hype VERIFY] HTTP status:', res.status, res.statusText)
+  console.error('[Hype VERIFY] raw response:', result)
+
+  if (!res.ok) {
+    console.error('[Hype VERIFY] non-200, returning false')
+    return false
+  }
+
   const resultParams = new URLSearchParams(result)
-  return resultParams.get('CCode') === '0'
+  const cCode = resultParams.get('CCode')
+  console.error('[Hype VERIFY] parsed CCode:', cCode)
+  return cCode === '0'
 }

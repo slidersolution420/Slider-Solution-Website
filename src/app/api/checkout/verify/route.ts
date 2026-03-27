@@ -7,7 +7,9 @@ export async function POST(request: Request) {
   try {
     const body = (await request.json()) as Record<string, string>
 
+    console.error('[verify route] incoming params:', JSON.stringify(body))
     const verified = await verifyPayment(body)
+    console.error('[verify route] verifyPayment result:', verified)
     if (!verified) {
       return NextResponse.json({ error: 'Payment verification failed' }, { status: 400 })
     }
