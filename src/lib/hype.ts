@@ -32,11 +32,11 @@ export interface CustomerInfo {
  * Step 1+2: Call APISign (SIGN) to get signed payment page params, then build the payment URL.
  */
 export async function initiatePayment(customer: CustomerInfo): Promise<HypePaymentSession> {
-  const apiKey = process.env.HYPE_API_KEY
+  const apiKey = process.env.HYPE_API_KEY?.trim()
   // HYPE_PASSP is the "PassP" from Hype settings page (previously stored as HYPE_REFERER)
-  const passP = process.env.HYPE_PASSP
-  const masof = process.env.HYPE_TERMINAL
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://slidersolution.com'
+  const passP = process.env.HYPE_PASSP?.trim()
+  const masof = process.env.HYPE_TERMINAL?.trim()
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://slidersolution.com').trim()
 
   if (!apiKey || !masof || !passP) {
     // Dev mock: redirect straight to thank-you with mock params
@@ -120,9 +120,9 @@ export async function verifyPayment(params: Record<string, string>): Promise<boo
   // Mock payments always succeed
   if (params['mock'] === '1') return true
 
-  const apiKey = process.env.HYPE_API_KEY
-  const passP = process.env.HYPE_PASSP
-  const masof = process.env.HYPE_TERMINAL
+  const apiKey = process.env.HYPE_API_KEY?.trim()
+  const passP = process.env.HYPE_PASSP?.trim()
+  const masof = process.env.HYPE_TERMINAL?.trim()
 
   // Dev mode — skip verification
   if (!apiKey || !masof || !passP) return true
@@ -142,7 +142,7 @@ export async function verifyPayment(params: Record<string, string>): Promise<boo
     UTF8out: 'True',
   })
 
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://slidersolution.com'
+  const appUrl = (process.env.NEXT_PUBLIC_APP_URL ?? 'https://slidersolution.com').trim()
   const res = await fetch(`${HYPE_BASE}?${verifyParams.toString()}`, {
     headers: { Referer: appUrl },
   })
