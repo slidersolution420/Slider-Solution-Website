@@ -28,10 +28,10 @@ export type Currency = 'ILS' | 'USD'
 export type OrderStatus =
   | 'pending'
   | 'paid'
-  | 'processing'
   | 'shipped'
   | 'delivered'
   | 'cancelled'
+  | 'refunded'
 
 export type OrderType = 'b2c' | 'b2b'
 

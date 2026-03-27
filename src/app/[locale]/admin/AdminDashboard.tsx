@@ -17,10 +17,10 @@ interface AdminDashboardProps {
 const ORDER_STATUS_COLORS: Record<OrderStatus, string> = {
   pending: 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
   paid: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-  processing: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
   shipped: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
   delivered: 'bg-green-500/20 text-green-300 border-green-500/30',
   cancelled: 'bg-red-500/20 text-red-400 border-red-500/30',
+  refunded: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
 }
 
 const STATUS_LABELS: Record<WholesaleAccountStatus, string> = {

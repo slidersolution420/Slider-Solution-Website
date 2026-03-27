@@ -9,6 +9,7 @@
  */
 import { createServiceClient } from '@/lib/supabase-server'
 import type { ReelItem, SiteConfig } from '@/lib/types'
+import { FREE_SHIPPING_COUNTRIES, FREE_SHIPPING_MIN_QTY, INTL_PAID_SHIPPING_USD } from '@/lib/shipping'
 
 export type { ReelItem, SiteConfig }
 
@@ -22,9 +23,9 @@ const DEFAULTS: SiteConfig = {
   facebook_url: 'https://www.facebook.com/profile.php?id=100094631066285',
   whatsapp_number: '',
   instagram_reels: [],
-  free_shipping_countries: ['IL'],
-  free_shipping_min_qty: 3,
-  intl_paid_shipping_usd: 25,
+  free_shipping_countries: FREE_SHIPPING_COUNTRIES,
+  free_shipping_min_qty: FREE_SHIPPING_MIN_QTY,
+  intl_paid_shipping_usd: INTL_PAID_SHIPPING_USD,
   age_gate_enabled: true,
   visible_colors: ['purple'],
   ticker_enabled: true,

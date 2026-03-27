@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { verifyPayment } from '@/lib/hype'
+import { EXCHANGE_RATES } from '@/lib/currency'
 import { createServiceClient } from '@/lib/supabase-server'
 import { sendOrderConfirmation, sendAdminOrderAlert } from '@/lib/resend'
 
@@ -55,7 +56,7 @@ export async function POST(request: Request) {
 
     const cart = cartSession?.cart as CartPayload | null
     const customer = cart?.customer
-    const totalUsd = cart?.totalUsd ?? parseFloat(amountStr ?? '0') / 3.7
+    const totalUsd = cart?.totalUsd ?? Math.round((parseFloat(amountStr ?? '0') / EXCHANGE_RATES.ILS) * 100) / 100
 
     const { data: order, error } = await supabase
       .from('orders')

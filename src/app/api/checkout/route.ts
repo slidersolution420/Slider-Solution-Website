@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { checkoutSchema } from '@/lib/schemas'
 import { initiatePayment } from '@/lib/hype'
 import { createServiceClient } from '@/lib/supabase-server'
-import { convertPrice, B2C_PRICE_USD } from '@/lib/currency'
+import { convertPrice } from '@/lib/currency'
 import { getShippingCost } from '@/lib/shipping'
 import { getConfig } from '@/lib/config'
 
@@ -21,9 +21,9 @@ export async function POST(request: Request) {
     const { name, email, phone, address, city, country, zip, currency, items } = parsed.data
 
     // Calculate totals — use server-known price, never trust client-supplied priceUsd
-    const totalQty = items.reduce((sum, i) => sum + i.quantity, 0)
-    const subtotalUsd = totalQty * B2C_PRICE_USD
     const cfg = await getConfig()
+    const totalQty = items.reduce((sum, i) => sum + i.quantity, 0)
+    const subtotalUsd = totalQty * cfg.price_b2c_usd
     const shippingUsd = getShippingCost(country, totalQty, {
       freeCountries: cfg.free_shipping_countries,
       minQty: cfg.free_shipping_min_qty,
@@ -72,7 +72,7 @@ export async function POST(request: Request) {
     }
 
     // Build Hype item list for the receipt — use server-known per-item ILS price
-    const priceIlsPerKit = Math.round(B2C_PRICE_USD * 3.7)
+    const priceIlsPerKit = convertPrice(cfg.price_b2c_usd, 'ILS')
     const hypeItems = items.map(i => ({
       name: i.color ? `Slider Kit (${i.color})` : 'Slider Cone Kit',
       quantity: i.quantity,
