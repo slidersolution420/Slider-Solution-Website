@@ -112,22 +112,30 @@ export async function initiatePayment(customer: CustomerInfo): Promise<HypePayme
   }
 }
 
+export interface VerifyResult {
+  verified: boolean
+  rawResponse: string
+}
+
 /**
  * Step 5: Verify a completed payment using params from the Hype success redirect URL.
- * Returns true if CCode=0 and Hype confirms the transaction is genuine.
+ * Returns { verified: true } if CCode=0 and Hype confirms the transaction is genuine.
+ * rawResponse contains whatever Hype returned, for diagnostics.
+ *
+ * REQUIRES: "Verify by signature in the payment page" enabled in Hype terminal settings.
  */
-export async function verifyPayment(params: Record<string, string>): Promise<boolean> {
+export async function verifyPayment(params: Record<string, string>): Promise<VerifyResult> {
   // Mock payments always succeed
-  if (params['mock'] === '1') return true
+  if (params['mock'] === '1') return { verified: true, rawResponse: 'mock' }
 
   const apiKey = process.env.HYPE_API_KEY?.trim()
   const passP = process.env.HYPE_PASSP?.trim()
   const masof = process.env.HYPE_TERMINAL?.trim()
 
   // Dev mode — skip verification
-  if (!apiKey || !masof || !passP) return true
+  if (!apiKey || !masof || !passP) return { verified: true, rawResponse: 'dev-mode' }
 
-  if (params['CCode'] !== '0') return false
+  if (params['CCode'] !== '0') return { verified: false, rawResponse: 'ccode-not-zero' }
 
   // Forward ALL redirect params (including Sign, Fild1-3, Bank, etc.) so Hype can
   // validate the cryptographic signature. Auth params are set last to prevent spoofing.
@@ -159,11 +167,10 @@ export async function verifyPayment(params: Record<string, string>): Promise<boo
 
   if (!res.ok) {
     console.error('[Hype VERIFY] non-200, returning false')
-    return false
+    return { verified: false, rawResponse: `http-${res.status}: ${result}` }
   }
 
-  const resultParams = new URLSearchParams(result)
-  const cCode = resultParams.get('CCode')
+  const cCode = new URLSearchParams(result).get('CCode')
   console.error('[Hype VERIFY] parsed CCode:', cCode)
-  return cCode === '0'
+  return { verified: cCode === '0', rawResponse: result }
 }

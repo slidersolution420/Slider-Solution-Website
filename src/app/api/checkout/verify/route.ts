@@ -8,10 +8,13 @@ export async function POST(request: Request) {
     const body = (await request.json()) as Record<string, string>
 
     console.error('[verify route] incoming params:', JSON.stringify(body))
-    const verified = await verifyPayment(body)
-    console.error('[verify route] verifyPayment result:', verified)
+    const { verified, rawResponse } = await verifyPayment(body)
+    console.error('[verify route] verifyPayment result:', verified, '| hypeResponse:', rawResponse)
     if (!verified) {
-      return NextResponse.json({ error: 'Payment verification failed' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Payment verification failed', hypeResponse: rawResponse },
+        { status: 400 }
+      )
     }
 
     const supabase = createServiceClient()
