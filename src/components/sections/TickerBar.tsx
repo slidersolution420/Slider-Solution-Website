@@ -4,9 +4,6 @@ interface TickerBarProps {
 }
 
 export default function TickerBar({ text, rtl = false }: TickerBarProps) {
-  // Duplicate text so the marquee loops seamlessly
-  const content = `${text}  •  ${text}`
-
   return (
     <div className="overflow-hidden border-y border-white/10 bg-brand-900/30 py-2.5">
       <div
@@ -15,8 +12,8 @@ export default function TickerBar({ text, rtl = false }: TickerBarProps) {
         }`}
         aria-hidden="true"
       >
-        <span className="inline-block">{content}</span>
-        <span className="inline-block">{content}</span>
+        <span className="inline-block shrink-0 px-8">{text}</span>
+        <span className="inline-block shrink-0 px-8">{text}</span>
       </div>
     </div>
   )
