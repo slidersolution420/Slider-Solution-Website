@@ -89,15 +89,21 @@ export async function initiatePayment(customer: CustomerInfo): Promise<HypePayme
     tmp: '1',
   })
 
+  const debugUrl = `${HYPE_BASE}?${params.toString()}`.replace(/PassP=[^&]*/, 'PassP=***')
+  console.error('[Hype APISign SIGN] calling:', debugUrl)
+
   const res = await fetch(`${HYPE_BASE}?${params.toString()}`, {
     headers: { Referer: appUrl },
   })
-  if (!res.ok) throw new Error(`Hype APISign error: ${res.status}`)
 
   const signedText = await res.text()
-  console.error('[Hype APISign] response:', signedText.slice(0, 500))
-  if (!signedText || signedText.toLowerCase().includes('error')) {
-    throw new Error(`Hype APISign failed: ${signedText}`)
+  console.error('[Hype APISign SIGN] HTTP status:', res.status, res.statusText)
+  console.error('[Hype APISign SIGN] raw response:', signedText)
+
+  if (!res.ok) throw new Error(`Hype APISign HTTP error: ${res.status} — ${signedText}`)
+  if (!signedText) throw new Error('Hype APISign returned empty response')
+  if (signedText.startsWith('ERR') || signedText.startsWith('error') || signedText.startsWith('Error')) {
+    throw new Error(`Hype APISign error response: ${signedText}`)
   }
 
   return {
