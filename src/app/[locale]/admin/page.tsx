@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
 import { createServiceClient } from '@/lib/supabase-server'
 import { getConfig } from '@/lib/config'
-import type { WholesaleAccount, Review, Order } from '@/lib/types'
+import type { Order, WholesaleAccount, Review } from '@/lib/types'
 import AdminDashboard from './AdminDashboard'
 import LoginForm from './LoginForm'
 
@@ -26,9 +26,9 @@ export default async function AdminPage() {
     supabase.from('reviews').select('*').order('created_at', { ascending: false }),
     supabase
       .from('orders')
-      .select('id, email, name, total_usd, status, created_at, country')
+      .select('*')
       .order('created_at', { ascending: false })
-      .limit(100),
+      .limit(200),
   ])
 
   if (error) {
@@ -45,7 +45,7 @@ export default async function AdminPage() {
       config={config}
       secret={session}
       reviews={(reviews ?? []) as Review[]}
-      orders={(orders ?? []) as Pick<Order, 'id' | 'email' | 'name' | 'total_usd' | 'status' | 'created_at' | 'country'>[]}
+      orders={(orders ?? []) as Order[]}
     />
   )
 }

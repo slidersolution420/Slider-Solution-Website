@@ -3,6 +3,8 @@ import { verifyPayment } from '@/lib/hype'
 import { EXCHANGE_RATES } from '@/lib/currency'
 import { createServiceClient } from '@/lib/supabase-server'
 import { sendOrderConfirmation, sendAdminOrderAlert } from '@/lib/resend'
+import { createShipment } from '@/lib/tapuz'
+import type { Order } from '@/lib/types'
 
 export async function POST(request: Request) {
   try {
@@ -24,12 +26,16 @@ export async function POST(request: Request) {
     // Guard against duplicate processing
     const { data: existing } = await supabase
       .from('orders')
-      .select('id')
+      .select('id, delivery_number')
       .eq('hype_payment_id', hypeTxId ?? orderRef)
       .maybeSingle()
 
     if (existing) {
-      return NextResponse.json({ success: true, order_id: existing.id })
+      return NextResponse.json({
+        success: true,
+        order_id: existing.id,
+        delivery_number: (existing as { delivery_number: string | null }).delivery_number ?? null,
+      })
     }
 
     // Retrieve customer + cart data from the session we saved at checkout
@@ -93,7 +99,34 @@ export async function POST(request: Request) {
       void sendAdminOrderAlert(order).catch(console.error)
     }
 
-    return NextResponse.json({ success: true, order_id: order?.id })
+    // Create Tapuz shipment — await but never block customer on failure
+    let deliveryNumber: string | null = null
+    if (order) {
+      try {
+        const tapuzResult = await createShipment(order as Order)
+        deliveryNumber = tapuzResult.deliveryNumber
+        await supabase
+          .from('orders')
+          .update({
+            delivery_number: tapuzResult.deliveryNumber,
+            tapuz_branch: tapuzResult.branch,
+            tapuz_sent_at: new Date().toISOString(),
+          })
+          .eq('id', order.id)
+      } catch (tapuzErr) {
+        const errMsg = tapuzErr instanceof Error ? tapuzErr.message : String(tapuzErr)
+        console.error('[Tapuz] Shipment creation failed:', errMsg)
+        await supabase
+          .from('orders')
+          .update({
+            tapuz_error: errMsg,
+            tapuz_sent_at: new Date().toISOString(),
+          })
+          .eq('id', order.id)
+      }
+    }
+
+    return NextResponse.json({ success: true, order_id: order?.id, delivery_number: deliveryNumber })
   } catch (err) {
     console.error('Verify error:', err)
     return NextResponse.json({ error: 'Internal error' }, { status: 500 })

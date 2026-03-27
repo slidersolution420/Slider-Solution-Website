@@ -66,6 +66,10 @@ export interface Order {
   status: OrderStatus
   hype_payment_id: string | null
   tapuz_tracking_number: string | null
+  delivery_number: string | null
+  tapuz_branch: string | null
+  tapuz_error: string | null
+  tapuz_sent_at: string | null
   type: OrderType
   created_at: string
   updated_at: string

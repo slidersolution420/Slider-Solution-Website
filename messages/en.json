@@ -90,7 +90,8 @@
     "errorBody": "If you were charged, please contact us and we'll resolve it immediately.",
     "backHome": "Back to Home",
     "orderRef": "Order Reference",
-    "body": "Thank you for your purchase. A confirmation will be sent to your email."
+    "body": "Thank you for your purchase. A confirmation will be sent to your email.",
+    "trackingButton": "Track Shipment"
   },
   "wholesale": {
     "title": "Wholesale Portal",
