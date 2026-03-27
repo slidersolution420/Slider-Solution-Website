@@ -99,7 +99,8 @@ export async function POST(request: Request) {
       void sendAdminOrderAlert(order).catch(console.error)
     }
 
-    // Create Tapuz shipment — await but never block customer on failure
+    // Intentional: auto-create Tapuz shipment on every successful payment.
+    // Failures are caught and stored in tapuz_error — never block the customer.
     let deliveryNumber: string | null = null
     if (order) {
       try {

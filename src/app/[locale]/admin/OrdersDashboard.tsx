@@ -39,6 +39,27 @@ export default function OrdersDashboard({ orders, secret }: OrdersDashboardProps
   const [isPending, startTransition] = useTransition()
   const [loadingId, setLoadingId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [tapuzLoading, setTapuzLoading] = useState<string | null>(null)
+  const [tapuzResults, setTapuzResults] = useState<Record<string, { deliveryNumber?: string; error?: string }>>({})
+
+  async function sendToTapuz(orderId: string) {
+    setTapuzLoading(orderId)
+    try {
+      const res = await fetch('/api/admin/tapuz-ship', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${secret}` },
+        body: JSON.stringify({ orderId }),
+      })
+      const data = await res.json() as { success?: boolean; delivery_number?: string; error?: string }
+      if (!res.ok) throw new Error(data.error ?? 'Failed')
+      setTapuzResults(prev => ({ ...prev, [orderId]: { deliveryNumber: data.delivery_number } }))
+      startTransition(() => { router.refresh() })
+    } catch (err) {
+      setTapuzResults(prev => ({ ...prev, [orderId]: { error: err instanceof Error ? err.message : 'Error' } }))
+    } finally {
+      setTapuzLoading(null)
+    }
+  }
 
   async function updateStatus(id: string, status: OrderStatus) {
     setLoadingId(id)
@@ -197,6 +218,15 @@ export default function OrdersDashboard({ orders, secret }: OrdersDashboardProps
                               {order.tapuz_branch}
                             </div>
                           )}
+                          <a
+                            href="https://crm.tapuzdelivery.co.il/Baldar/Deliveries.aspx"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="יפתח את פורטל תפוז — התחבר, בחר הזמנה ולחץ מדבקות"
+                            className="mt-1 inline-flex items-center gap-1 rounded px-2 py-0.5 text-xs bg-orange-700/40 text-orange-300 hover:bg-orange-700/60 transition-colors"
+                          >
+                            🖨️ הדפס מדבקה
+                          </a>
                         </div>
                       ) : (
                         <div>
@@ -205,6 +235,23 @@ export default function OrdersDashboard({ orders, secret }: OrdersDashboardProps
                             <div className="text-xs text-red-600 mt-0.5 max-w-[140px] truncate" title={order.tapuz_error}>
                               {order.tapuz_error}
                             </div>
+                          )}
+                        </div>
+                      )}
+                      {order.status === 'paid' && (!order.delivery_number || order.tapuz_error) && (
+                        <div className="mt-1">
+                          {tapuzResults[order.id]?.deliveryNumber ? (
+                            <span className="text-xs text-green-400">✓ {tapuzResults[order.id].deliveryNumber}</span>
+                          ) : tapuzResults[order.id]?.error ? (
+                            <span className="text-xs text-red-400 max-w-[140px] block truncate" title={tapuzResults[order.id].error}>{tapuzResults[order.id].error}</span>
+                          ) : (
+                            <button
+                              onClick={() => sendToTapuz(order.id)}
+                              disabled={tapuzLoading === order.id}
+                              className="rounded px-2 py-0.5 text-xs bg-purple-700/60 text-purple-200 hover:bg-purple-700 disabled:opacity-50 transition-colors whitespace-nowrap"
+                            >
+                              {tapuzLoading === order.id ? '…' : '📦 שלח לתפוז'}
+                            </button>
                           )}
                         </div>
                       )}
