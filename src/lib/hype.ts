@@ -170,7 +170,7 @@ export async function verifyPayment(params: Record<string, string>): Promise<Ver
     return { verified: false, rawResponse: `http-${res.status}: ${result}` }
   }
 
-  const cCode = new URLSearchParams(result).get('CCode')
+  const cCode = new URLSearchParams(result.trim()).get('CCode')
   console.error('[Hype VERIFY] parsed CCode:', cCode)
   return { verified: cCode === '0', rawResponse: result }
 }
