@@ -22,8 +22,8 @@
   --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
 
   /* Animation */
-  --animate-marquee: marquee 4s linear infinite;
-  --animate-marquee-rtl: marquee-rtl 4s linear infinite;
+  --animate-marquee: marquee 8s linear infinite;
+  --animate-marquee-rtl: marquee-rtl 8s linear infinite;
 }
 
 @keyframes marquee {
