@@ -11,6 +11,7 @@ interface ReviewsCarouselProps {
 
 export default function ReviewsCarousel({ reviews, locale }: ReviewsCarouselProps) {
   const [index, setIndex] = useState(0)
+  const isRtl = locale === 'he'
 
   if (reviews.length === 0) return null
 
@@ -56,7 +57,7 @@ export default function ReviewsCarousel({ reviews, locale }: ReviewsCarouselProp
           {reviews.length > 1 && (
             <div className="mt-8 flex items-center gap-4">
               <button
-                onClick={prev}
+                onClick={isRtl ? next : prev}
                 className="flex size-9 items-center justify-center rounded-full border border-white/20 text-gray-400 transition-colors hover:border-white/40 hover:text-white"
                 aria-label="Previous review"
               >
@@ -66,7 +67,7 @@ export default function ReviewsCarousel({ reviews, locale }: ReviewsCarouselProp
                 {index + 1} / {reviews.length}
               </span>
               <button
-                onClick={next}
+                onClick={isRtl ? prev : next}
                 className="flex size-9 items-center justify-center rounded-full border border-white/20 text-gray-400 transition-colors hover:border-white/40 hover:text-white"
                 aria-label="Next review"
               >

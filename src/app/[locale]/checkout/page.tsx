@@ -55,6 +55,10 @@ export default function CheckoutPage() {
   }, [email, items])
 
   async function onSubmit(data: CheckoutInput) {
+    if (!consented) {
+      setConsentError(true)
+      return
+    }
     setLoading(true)
     setError(null)
     try {
@@ -79,7 +83,7 @@ export default function CheckoutPage() {
   return (
     <>
       <NavBar />
-      <main className="min-h-screen bg-surface pt-24 pb-16">
+      <main className="min-h-screen bg-surface pb-24 pt-24 md:pb-16">
         <div className="mx-auto max-w-4xl px-4">
           <h1 className="mb-8 text-2xl font-bold text-white">{t('title')}</h1>
 
@@ -93,6 +97,7 @@ export default function CheckoutPage() {
                   <Field label={t('name')} error={errors.name?.message}>
                     <input
                       {...register('name')}
+                      autoComplete="name"
                       className="input-field"
                       placeholder={t('name')}
                     />
@@ -101,6 +106,8 @@ export default function CheckoutPage() {
                     <input
                       {...register('email')}
                       type="email"
+                      dir="ltr"
+                      autoComplete="email"
                       className="input-field"
                       placeholder={t('email')}
                     />
@@ -109,6 +116,8 @@ export default function CheckoutPage() {
                     <input
                       {...register('phone')}
                       type="tel"
+                      dir="ltr"
+                      autoComplete="tel"
                       className="input-field"
                       placeholder={t('phone')}
                     />
@@ -123,18 +132,30 @@ export default function CheckoutPage() {
                   <Field label={t('address')} error={errors.address?.message} className="sm:col-span-2">
                     <input
                       {...register('address')}
+                      autoComplete="street-address"
                       className="input-field"
                       placeholder={t('address')}
                     />
                   </Field>
                   <Field label={t('city')} error={errors.city?.message}>
-                    <input {...register('city')} className="input-field" placeholder={t('city')} />
+                    <input
+                      {...register('city')}
+                      autoComplete="address-level2"
+                      className="input-field"
+                      placeholder={t('city')}
+                    />
                   </Field>
                   <Field label={t('zip')} error={errors.zip?.message}>
-                    <input {...register('zip')} className="input-field" placeholder={t('zip')} />
+                    <input
+                      {...register('zip')}
+                      dir="ltr"
+                      autoComplete="postal-code"
+                      className="input-field"
+                      placeholder={t('zip')}
+                    />
                   </Field>
                   <Field label={t('country')} error={errors.country?.message} className="sm:col-span-2">
-                    <select {...register('country')} className="input-field">
+                    <select {...register('country')} autoComplete="country" className="input-field">
                       {SUPPORTED_COUNTRIES.map((c) => (
                         <option key={c.code} value={c.code}>
                           {c.name}
@@ -173,17 +194,18 @@ export default function CheckoutPage() {
                 {consentError && <p className="ps-7 text-xs text-red-400">{tf('consent_required')}</p>}
               </div>
 
+              {/* Desktop submit button */}
               <button
                 type="submit"
                 disabled={loading || items.length === 0 || !consented}
-                className="w-full rounded-xl bg-gradient-to-r from-brand-500 to-brand-700 py-4 text-base font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                className="hidden w-full rounded-xl bg-gradient-to-r from-brand-500 to-brand-700 py-4 text-base font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50 md:block"
               >
                 {loading ? t('submitting') : `${t('submit')} — ${formatPrice(grandTotalUsd, currency)}`}
               </button>
             </form>
 
-            {/* Order summary */}
-            <div className="self-start rounded-2xl border border-white/10 bg-gray-900/50 p-6">
+            {/* Order summary — first on mobile (order-first), right column on desktop (lg:order-last) */}
+            <div className="order-first self-start rounded-2xl border border-white/10 bg-gray-900/50 p-6 lg:order-last">
               <h2 className="mb-4 font-semibold text-white">{t('order_summary')}</h2>
               <ul className="mb-4 space-y-3">
                 {items.map((item) => (
@@ -217,6 +239,24 @@ export default function CheckoutPage() {
           </div>
         </div>
       </main>
+
+      {/* Sticky mobile submit bar */}
+      {items.length > 0 && (
+        <div className="fixed inset-x-0 bottom-0 z-30 border-t border-white/10 bg-gray-950/95 p-4 backdrop-blur-sm md:hidden">
+          <button
+            type="submit"
+            form="checkout-form"
+            disabled={loading || !consented}
+            onClick={() => {
+              if (!consented) setConsentError(true)
+              void handleSubmit(onSubmit)()
+            }}
+            className="w-full rounded-xl bg-gradient-to-r from-brand-500 to-brand-700 py-3.5 text-base font-bold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+          >
+            {loading ? t('submitting') : `${t('submit')} — ${formatPrice(grandTotalUsd, currency)}`}
+          </button>
+        </div>
+      )}
     </>
   )
 }
