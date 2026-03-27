@@ -33,18 +33,18 @@ export default function InstagramReels({ locale }: InstagramReelsProps) {
           <p className="mt-2 text-gray-400">@slider.solution</p>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
           {REEL_IDS.map((id) => (
             <a
               key={id}
               href={`https://www.instagram.com/reel/${id}/`}
               target="_blank"
               rel="noopener noreferrer"
-              className="block overflow-hidden rounded-2xl border border-white/10 transition-colors hover:border-white/25"
+              className="block overflow-hidden rounded-xl border border-white/10 transition-colors hover:border-white/25 sm:rounded-2xl"
             >
               <iframe
                 src={`https://www.instagram.com/reel/${id}/embed/`}
-                className="h-[480px] w-full"
+                className="h-[140px] w-full sm:h-[360px] lg:h-[480px]"
                 loading="lazy"
                 allowFullScreen
                 scrolling="no"

@@ -125,7 +125,7 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
             </p>
 
             {/* Mobile-only product visual — below description, transparent bg */}
-            <div className="mb-6 flex justify-center lg:hidden">
+            <div className="mb-6 flex justify-center bg-transparent lg:hidden">
               {selectedColor === 'purple' ? (
                 <video
                   ref={mobileVideoRef}
@@ -133,7 +133,7 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
                   loop
                   muted
                   playsInline
-                  className="w-full max-w-[280px]"
+                  className="w-full max-w-[280px] mix-blend-screen"
                 />
               ) : (
                 imageUrl && (
@@ -214,8 +214,9 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
               </p>
             )}
 
-            {/* Bottom stats — 3 trust badges */}
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            {/* Bottom stats — 3 trust badges: Patent | Secure Payment | Customers */}
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
+              {/* 1. Patent */}
               <span className="flex flex-col items-start rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5">
                 <span className="flex items-center gap-1.5 text-sm font-bold text-white">
                   <ShieldCheckIcon className="size-4 text-brand-400" />
@@ -223,17 +224,13 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
                 </span>
                 <span className="text-xs text-gray-500">{t('stat_patent_secondary')}</span>
               </span>
-              <div>
-                <p className="text-2xl font-black text-white">{t('stat_customers_number')}</p>
-                <p className="text-xs text-gray-400">{t('stat_customers_label')}</p>
-              </div>
+              {/* 2. Secure Payment */}
               <span className="flex flex-col items-start rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5">
                 <span className="flex items-center gap-1.5 text-sm font-bold text-white">
                   <LockClosedIcon className="size-4 text-brand-400" />
                   {isHe ? 'תשלום מאובטח' : 'Secure Payment'}
                 </span>
                 <span className="mt-0.5 flex items-center gap-1">
-                  {/* Credit card icon */}
                   <svg className="size-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
                     <rect x="2" y="5" width="20" height="14" rx="2" />
                     <path d="M2 10h20" />
@@ -242,6 +239,11 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
                   <span className="rounded border border-white/15 px-1 py-px text-[10px] text-gray-400">Google Pay</span>
                 </span>
               </span>
+              {/* 3. Customers */}
+              <div className="text-center">
+                <p className="text-2xl font-black text-white">{t('stat_customers_number')}</p>
+                <p className="text-xs text-gray-400">{t('stat_customers_label')}</p>
+              </div>
             </div>
           </div>
 
