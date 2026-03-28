@@ -89,7 +89,7 @@ export default function CheckoutPage() {
 
           <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
             {/* Form */}
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form id="checkout-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               {/* Contact */}
               <section className="rounded-2xl border border-white/10 bg-gray-900/50 p-6">
                 <h2 className="mb-4 font-semibold text-white">{t('section_contact')}</h2>

@@ -101,6 +101,21 @@ export interface Review {
   created_at: string
 }
 
+export interface CartPayload {
+  items: CartItem[]
+  customer: {
+    name: string
+    email: string
+    phone: string
+    address: string
+    city: string
+    country: string
+    zip: string
+  }
+  totalUsd: number
+  totalIls: number
+}
+
 export interface CartSession {
   id: string
   email: string | null

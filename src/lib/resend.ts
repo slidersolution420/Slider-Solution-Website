@@ -1,9 +1,20 @@
 import { Resend } from 'resend'
 import type { Order } from './types'
 
-// Lazy initialization — avoids build-time error when RESEND_API_KEY is not set
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+}
+
+// Lazy initialization — throws clearly if RESEND_API_KEY is missing at runtime
 function getResend() {
-  return new Resend(process.env.RESEND_API_KEY ?? 'placeholder')
+  const key = process.env.RESEND_API_KEY
+  if (!key) throw new Error('RESEND_API_KEY environment variable is not set')
+  return new Resend(key)
 }
 
 const FROM = process.env.RESEND_FROM_EMAIL ?? 'support@slidersolution.com'
@@ -37,12 +48,12 @@ export async function sendOrderConfirmation(order: Order): Promise<void> {
   const items = order.items
     .map(
       (item) =>
-        `<tr><td style="padding:8px 0;color:#ccc">${item.name} × ${item.quantity}</td><td style="padding:8px 0;text-align:right">$${(item.priceUsd * item.quantity).toFixed(2)}</td></tr>`
+        `<tr><td style="padding:8px 0;color:#ccc">${escapeHtml(item.name)} × ${item.quantity}</td><td style="padding:8px 0;text-align:right">$${(item.priceUsd * item.quantity).toFixed(2)}</td></tr>`
     )
     .join('')
 
   const body = `
-    <p style="color:#ccc">Thank you for your order, <strong>${order.name}</strong>!</p>
+    <p style="color:#ccc">Thank you for your order, <strong>${escapeHtml(order.name)}</strong>!</p>
     <p style="color:#ccc">Order #: <strong>${order.id.slice(0, 8).toUpperCase()}</strong></p>
     <table style="width:100%;border-collapse:collapse;margin:16px 0">
       ${items}
@@ -51,7 +62,7 @@ export async function sendOrderConfirmation(order: Order): Promise<void> {
         <td style="padding:8px 0;text-align:right;font-weight:700">$${order.total_usd.toFixed(2)}</td>
       </tr>
     </table>
-    <p style="color:#ccc">Shipping to: ${order.shipping_address.address}, ${order.shipping_address.city}, ${order.shipping_address.country}</p>
+    <p style="color:#ccc">Shipping to: ${escapeHtml(order.shipping_address.address)}, ${escapeHtml(order.shipping_address.city)}, ${escapeHtml(order.shipping_address.country)}</p>
     <p style="color:#ccc">We'll send you a tracking number once your order ships.</p>
   `
 
@@ -69,10 +80,10 @@ export async function sendContactSubmission(
   message: string
 ): Promise<void> {
   const body = `
-    <p style="color:#ccc"><strong>From:</strong> ${name} (${email})</p>
+    <p style="color:#ccc"><strong>From:</strong> ${escapeHtml(name)} (${escapeHtml(email)})</p>
     <p style="color:#ccc"><strong>Message:</strong></p>
-    <p style="color:#ccc;background:#1a1a1a;padding:16px;border-radius:8px">${message}</p>
-    <p style="color:#ccc"><a href="mailto:${email}" style="color:#a855f7">Reply to ${name}</a></p>
+    <p style="color:#ccc;background:#1a1a1a;padding:16px;border-radius:8px">${escapeHtml(message)}</p>
+    <p style="color:#ccc"><a href="mailto:${escapeHtml(email)}" style="color:#a855f7">Reply to ${escapeHtml(name)}</a></p>
   `
 
   await getResend().emails.send({
@@ -88,12 +99,12 @@ export async function sendAdminOrderAlert(order: Order): Promise<void> {
   const items = order.items
     .map(
       (item) =>
-        `<tr><td style="padding:8px 0;color:#ccc">${item.name} × ${item.quantity}</td><td style="padding:8px 0;text-align:right">$${(item.priceUsd * item.quantity).toFixed(2)}</td></tr>`
+        `<tr><td style="padding:8px 0;color:#ccc">${escapeHtml(item.name)} × ${item.quantity}</td><td style="padding:8px 0;text-align:right">$${(item.priceUsd * item.quantity).toFixed(2)}</td></tr>`
     )
     .join('')
 
   const body = `
-    <p style="color:#ccc">New order received from <strong>${order.name}</strong> (${order.email})</p>
+    <p style="color:#ccc">New order received from <strong>${escapeHtml(order.name)}</strong> (${escapeHtml(order.email)})</p>
     <p style="color:#ccc">Order #: <strong>${order.id.slice(0, 8).toUpperCase()}</strong></p>
     <table style="width:100%;border-collapse:collapse;margin:16px 0">
       ${items}
@@ -102,8 +113,8 @@ export async function sendAdminOrderAlert(order: Order): Promise<void> {
         <td style="padding:8px 0;text-align:right;font-weight:700">$${order.total_usd.toFixed(2)}</td>
       </tr>
     </table>
-    <p style="color:#ccc">Ship to: ${order.shipping_address.address}, ${order.shipping_address.city}, ${order.shipping_address.country}</p>
-    <p style="color:#ccc">Status: <strong>${order.status}</strong></p>
+    <p style="color:#ccc">Ship to: ${escapeHtml(order.shipping_address.address)}, ${escapeHtml(order.shipping_address.city)}, ${escapeHtml(order.shipping_address.country)}</p>
+    <p style="color:#ccc">Status: <strong>${escapeHtml(order.status)}</strong></p>
   `
 
   await getResend().emails.send({
@@ -120,8 +131,8 @@ export async function sendWholesaleWelcome(
   email: string
 ): Promise<void> {
   const body = `
-    <p style="color:#ccc">Welcome to the Slider Solution wholesale program, <strong>${contactName}</strong>!</p>
-    <p style="color:#ccc">Your account for <strong>${businessName}</strong> is under review. We'll notify you within 24 hours once approved.</p>
+    <p style="color:#ccc">Welcome to the Slider Solution wholesale program, <strong>${escapeHtml(contactName)}</strong>!</p>
+    <p style="color:#ccc">Your account for <strong>${escapeHtml(businessName)}</strong> is under review. We'll notify you within 24 hours once approved.</p>
     <p style="color:#ccc">Once approved, you'll have access to wholesale pricing:</p>
     <ul style="color:#ccc">
       <li>Display Box (6 kits): $82</li>
@@ -144,7 +155,7 @@ export async function sendWholesaleWelcome(
       subject: `New Wholesale Signup: ${businessName}`,
       html: emailTemplate(
         'New Wholesale Signup',
-        `<p style="color:#ccc"><strong>${businessName}</strong> (${contactName}) just registered for wholesale access. Email: ${email}</p>
+        `<p style="color:#ccc"><strong>${escapeHtml(businessName)}</strong> (${escapeHtml(contactName)}) just registered for wholesale access. Email: ${escapeHtml(email)}</p>
          <p><a href="${APP_URL}/wholesale" style="color:#a855f7">View in dashboard →</a></p>`
       ),
     }),

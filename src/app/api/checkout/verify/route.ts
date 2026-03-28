@@ -4,7 +4,7 @@ import { EXCHANGE_RATES } from '@/lib/currency'
 import { createServiceClient } from '@/lib/supabase-server'
 import { sendOrderConfirmation, sendAdminOrderAlert } from '@/lib/resend'
 import { createShipment } from '@/lib/tapuz'
-import type { Order } from '@/lib/types'
+import type { Order, CartPayload } from '@/lib/types'
 
 export async function POST(request: Request) {
   try {
@@ -44,21 +44,6 @@ export async function POST(request: Request) {
       .select('*')
       .eq('id', orderRef)
       .single()
-
-    type CartPayload = {
-      items: unknown[]
-      customer: {
-        name: string
-        email: string
-        phone: string
-        address: string
-        city: string
-        country: string
-        zip: string
-      }
-      totalUsd: number
-      totalIls: number
-    }
 
     const cart = cartSession?.cart as CartPayload | null
     const customer = cart?.customer

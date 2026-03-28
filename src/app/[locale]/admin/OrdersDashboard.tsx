@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import type { Order, OrderStatus } from '@/lib/types'
+import { convertPrice } from '@/lib/currency'
 
 interface OrdersDashboardProps {
   orders: Order[]
@@ -133,7 +134,7 @@ export default function OrdersDashboard({ orders, secret }: OrdersDashboardProps
             <tbody className="divide-y divide-white/5">
               {orders.map((order) => {
                 const addr = order.shipping_address
-                const totalIls = Math.round(order.total_usd * 3.7)
+                const totalIls = convertPrice(order.total_usd, 'ILS')
                 const nextStatuses = NEXT_STATUSES[order.status] ?? []
 
                 return (
