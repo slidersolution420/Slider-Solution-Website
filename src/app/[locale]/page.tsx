@@ -108,7 +108,7 @@ export default async function HomePage({ params }: HomePageProps) {
       </main>
 
       <Footer />
-      <StickyCartBar />
+      <StickyCartBar product={product} locale={locale} />
     </>
   )
 }

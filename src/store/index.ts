@@ -30,7 +30,7 @@ export const useStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
-      currency: 'ILS',
+      currency: 'USD',
       selectedColor: 'purple',
       selectedQty: 1,
       cartOpen: false,

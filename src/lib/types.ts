@@ -43,6 +43,8 @@ export interface CartItem {
   quantity: number
   priceUsd: number
   name: string
+  name_he: string
+  name_en: string
 }
 
 export interface ShippingAddress {

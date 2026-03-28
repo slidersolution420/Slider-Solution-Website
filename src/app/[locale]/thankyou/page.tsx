@@ -45,7 +45,7 @@ function ThankYouContent() {
       .catch(() => setStatus('error'))
   }, [searchParams])
 
-  const homeHref = locale === 'he' ? '/' : `/${locale}`
+  const homeHref = locale === 'en' ? '/' : `/${locale}`
 
   if (status === 'loading') {
     return (

@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { usePathname } from 'next/navigation'
 import { useStore } from '@/store'
 import { Link } from '@/i18n/navigation'
@@ -11,6 +11,7 @@ import { XMarkIcon, TrashIcon, ShoppingBagIcon } from '@heroicons/react/24/outli
 
 export default function CartDrawer() {
   const t = useTranslations('cart')
+  const locale = useLocale()
   const { items, cartOpen, closeCart, removeItem, currency, totalUsd, selectedCountry } = useStore()
   const closeRef = useRef<HTMLButtonElement>(null)
   const pathname = usePathname() // raw pathname incl. locale prefix (/en vs /) — changes on locale switch
@@ -88,7 +89,7 @@ export default function CartDrawer() {
                   className="flex items-center gap-4 rounded-xl border border-white/10 bg-gray-900/50 p-3"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-white">{item.name}</p>
+                    <p className="truncate text-sm font-medium text-white">{locale === 'he' ? item.name_he || item.name : item.name_en || item.name}</p>
                     <p className="text-xs text-gray-500">× {item.quantity}</p>
                   </div>
                   <p className="shrink-0 text-sm font-semibold text-white">

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { routing, isRtl } from '@/i18n/routing'
 import type { Locale } from '@/i18n/routing'
 import { Inter } from 'next/font/google'
+import CurrencyInitializer from '@/components/ui/CurrencyInitializer'
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
@@ -26,6 +27,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
     <html lang={locale as Locale} dir={dir} className={inter.className}>
       <body>
         <NextIntlClientProvider messages={messages}>
+          <CurrencyInitializer />
           {children}
         </NextIntlClientProvider>
       </body>

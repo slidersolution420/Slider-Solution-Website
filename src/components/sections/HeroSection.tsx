@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { useStore } from '@/store'
 import { B2C_PRICE_USD } from '@/lib/currency'
@@ -88,7 +88,9 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
       color: selectedColorData.slug,
       quantity: selectedQty,
       priceUsd: B2C_PRICE_USD,
-      name: `${product.name} — ${isHe ? selectedColorData.name_he : selectedColorData.name_en}`,
+      name: `${product.name} — ${selectedColorData.name_en}`,
+      name_he: `${product.name} — ${selectedColorData.name_he}`,
+      name_en: `${product.name} — ${selectedColorData.name_en}`,
     })
     openCart()
   }
@@ -208,7 +210,7 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
               <p className="-mt-4 mb-4 text-xs text-gray-400">
                 {isHe ? 'צריך יותר מ-10? ' : 'Need more than 10? '}
                 <Link
-                  href={isHe ? '/wholesale' : '/en/wholesale'}
+                  href="/wholesale"
                   className="text-brand-400 underline hover:text-brand-300"
                 >
                   {isHe ? 'הצטרף כמשווק' : 'Join as a wholesaler'}

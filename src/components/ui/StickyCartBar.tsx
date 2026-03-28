@@ -3,18 +3,28 @@
 import { useTranslations } from 'next-intl'
 import { useStore } from '@/store'
 import { formatPrice, B2C_PRICE_USD } from '@/lib/currency'
+import type { ProductContent } from '@/lib/keystatic'
 
-export default function StickyCartBar() {
+interface StickyCartBarProps {
+  product: ProductContent
+  locale: string
+}
+
+export default function StickyCartBar({ product, locale }: StickyCartBarProps) {
   const t = useTranslations('hero')
   const { addItem, openCart, selectedColor, selectedQty, currency } = useStore()
+  const colorData = (product.colors ?? []).find((c) => c.slug === selectedColor) ?? product.colors?.[0]
 
   function handleAdd() {
+    if (!colorData) return
     addItem({
       productId: 'slider-cone-kit',
       color: selectedColor,
       quantity: selectedQty,
       priceUsd: B2C_PRICE_USD,
-      name: `SLIDER — ${selectedColor}`,
+      name: `${product.name} — ${colorData.name_en}`,
+      name_he: `${product.name} — ${colorData.name_he}`,
+      name_en: `${product.name} — ${colorData.name_en}`,
     })
     openCart()
   }

@@ -3,8 +3,8 @@ import Link from 'next/link'
 
 export default async function ProblemPage() {
   const [t, locale] = await Promise.all([getTranslations('errors'), getLocale()])
-  const homeHref = locale === 'he' ? '/' : `/${locale}`
-  const checkoutHref = locale === 'he' ? '/checkout' : `/${locale}/checkout`
+  const homeHref = locale === 'en' ? '/' : `/${locale}`
+  const checkoutHref = locale === 'en' ? '/checkout' : `/${locale}/checkout`
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--color-surface-0)] px-4">

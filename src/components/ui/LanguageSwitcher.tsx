@@ -3,11 +3,13 @@
 import { useEffect } from 'react'
 import { useLocale } from 'next-intl'
 import { Link, usePathname, useRouter } from '@/i18n/navigation'
+import { useStore } from '@/store'
 
 export default function LanguageSwitcher() {
   const locale = useLocale()
   const pathname = usePathname()
   const router = useRouter()
+  const setCurrency = useStore((s) => s.setCurrency)
 
   // Eagerly prefetch the other locale so the switch is instant
   useEffect(() => {
@@ -19,6 +21,7 @@ export default function LanguageSwitcher() {
       <Link
         href={pathname}
         locale="he"
+        onClick={() => setCurrency('ILS')}
         className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${
           locale === 'he' ? 'bg-brand-500 text-white' : 'text-gray-300 hover:text-white'
         }`}
@@ -28,6 +31,7 @@ export default function LanguageSwitcher() {
       <Link
         href={pathname}
         locale="en"
+        onClick={() => setCurrency('USD')}
         className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${
           locale === 'en' ? 'bg-brand-500 text-white' : 'text-gray-300 hover:text-white'
         }`}
