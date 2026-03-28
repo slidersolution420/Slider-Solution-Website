@@ -17,7 +17,7 @@ export default function CheckoutPage() {
   const t = useTranslations('checkout')
   const tf = useTranslations('forms')
   const locale = useLocale()
-  const { items, currency, clearCart } = useStore()
+  const { items, currency, clearCart, setSelectedCountry } = useStore()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [consented, setConsented] = useState(false)
@@ -40,6 +40,11 @@ export default function CheckoutPage() {
   const shippingUsd = getShippingCost(country, totalQty)
   const grandTotalUsd = subtotalUsd + shippingUsd
   const upgradeMsg = getUpgradeMessage(country, totalQty, locale)
+
+  // Sync selected country to store so CartDrawer shows the right shipping estimate
+  useEffect(() => {
+    setSelectedCountry(country)
+  }, [country, setSelectedCountry])
 
   // Save cart session to Supabase when email is entered
   useEffect(() => {

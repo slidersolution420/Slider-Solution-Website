@@ -173,8 +173,8 @@ export default function OrdersDashboard({ orders, secret }: OrdersDashboardProps
                     {/* Items */}
                     <td className="px-3 py-3">
                       <div className="flex flex-col gap-0.5">
-                        {order.items.map((item, i) => (
-                          <span key={i} className="text-xs text-gray-300 whitespace-nowrap">
+                        {order.items.map((item) => (
+                          <span key={`${item.productId}-${item.color}`} className="text-xs text-gray-300 whitespace-nowrap">
                             {item.color ?? item.name ?? '—'} × {item.quantity ?? 1}
                           </span>
                         ))}

@@ -48,8 +48,6 @@ export async function POST(request: Request) {
       .eq('email', email)
       .maybeSingle()
 
-    console.error('[checkout] cart_sessions select — existing:', existing, 'selectError:', selectError)
-
     let sessionId: string
 
     if (existing) {
@@ -57,7 +55,6 @@ export async function POST(request: Request) {
         .from('cart_sessions')
         .update({ cart: cartPayload, status: 'active', updated_at: new Date().toISOString() })
         .eq('email', email)
-      console.error('[checkout] cart_sessions update — updateError:', updateError)
       if (updateError) throw new Error(`Cart session update error: ${updateError.message} (${updateError.code})`)
       sessionId = existing.id
     } else {
@@ -66,7 +63,6 @@ export async function POST(request: Request) {
         .insert({ email, cart: cartPayload, status: 'active' })
         .select('id')
         .single()
-      console.error('[checkout] cart_sessions insert — newSession:', newSession, 'insertError:', insertError)
       if (insertError) throw new Error(`Cart session insert error: ${insertError.message} (${insertError.code})`)
       sessionId = newSession.id
     }

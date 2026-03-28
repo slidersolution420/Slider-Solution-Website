@@ -544,7 +544,7 @@ function ContentTab({ config, secret }: { config: SiteConfig; secret: string }) 
       <Section title="ריילס אינסטגרם" savedId={saved} sectionId="reels">
         <div className="space-y-3">
           {reels.map((reel, i) => (
-            <div key={i} className="flex gap-3 items-start rounded-lg border border-white/5 bg-white/[0.02] p-3">
+            <div key={reel.video_url || `new-reel-${i}`} className="flex gap-3 items-start rounded-lg border border-white/5 bg-white/[0.02] p-3">
               <div className="flex-1">
                 <label className={labelCls}>קישור וידאו (MP4 ב-Supabase Storage)</label>
                 <input type="text" className={inputCls} placeholder="https://..."

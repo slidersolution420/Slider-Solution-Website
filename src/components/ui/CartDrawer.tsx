@@ -11,7 +11,7 @@ import { XMarkIcon, TrashIcon, ShoppingBagIcon } from '@heroicons/react/24/outli
 
 export default function CartDrawer() {
   const t = useTranslations('cart')
-  const { items, cartOpen, closeCart, removeItem, currency, totalUsd } = useStore()
+  const { items, cartOpen, closeCart, removeItem, currency, totalUsd, selectedCountry } = useStore()
   const closeRef = useRef<HTMLButtonElement>(null)
   const pathname = usePathname() // raw pathname incl. locale prefix (/en vs /) — changes on locale switch
 
@@ -36,9 +36,8 @@ export default function CartDrawer() {
   }, [cartOpen])
 
   const subtotalUsd = totalUsd()
-  const country = 'IL' // default shipping country
   const totalQty = items.reduce((sum, i) => sum + i.quantity, 0)
-  const shippingUsd = getShippingCost(country, totalQty)
+  const shippingUsd = getShippingCost(selectedCountry, totalQty)
   const grandTotalUsd = subtotalUsd + shippingUsd
 
   return (
