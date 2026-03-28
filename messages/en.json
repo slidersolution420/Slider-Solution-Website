@@ -56,6 +56,7 @@
     "shipping_free": "Free",
     "shipping_calculated": "Calculated at checkout",
     "total": "Total",
+    "discount": "Discount",
     "continue_shopping": "Continue Shopping"
   },
   "checkout": {
@@ -70,8 +71,10 @@
     "country": "Country",
     "zip": "ZIP / Postal Code",
     "order_summary": "Order Summary",
+    "subtotal": "Subtotal",
     "shipping_cost": "Shipping",
     "shipping_free": "Free",
+    "discount": "Discount",
     "total": "Total",
     "submit": "Continue to Payment",
     "submitting": "Processing...",

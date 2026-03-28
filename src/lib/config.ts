@@ -33,6 +33,7 @@ const DEFAULTS: SiteConfig = {
   age_gate_enabled: true,
   visible_colors: ['purple'],
   ticker_enabled: true,
+  discount_pct: 0,
 }
 
 export async function getConfig(): Promise<SiteConfig> {
@@ -66,6 +67,7 @@ export async function getConfig(): Promise<SiteConfig> {
       age_gate_enabled:        (map.age_gate_enabled        as boolean)   ?? DEFAULTS.age_gate_enabled,
       visible_colors:          (map.visible_colors          as string[])  ?? DEFAULTS.visible_colors,
       ticker_enabled:          (map.ticker_enabled          as boolean)   ?? DEFAULTS.ticker_enabled,
+      discount_pct:            (map.discount_pct            as number)    ?? DEFAULTS.discount_pct,
     }
     configCachedAt = Date.now()
     return configCache

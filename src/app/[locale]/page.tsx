@@ -16,7 +16,9 @@ import HowItWorks from '@/components/sections/HowItWorks'
 import ReviewsSection from '@/components/sections/ReviewsSection'
 import FaqAccordion from '@/components/sections/FaqAccordion'
 import InstagramReels from '@/components/sections/InstagramReels'
+import DiscountInitializer from '@/components/ui/DiscountInitializer'
 import { isRtl } from '@/i18n/routing'
+import { calcPrice } from '@/lib/pricing'
 
 interface HomePageProps {
   params: Promise<{ locale: string }>
@@ -68,6 +70,7 @@ export default async function HomePage({ params }: HomePageProps) {
       <AgeGate />
       <NavBar />
       <ShippingBanner />
+      <DiscountInitializer discountPct={siteConfig.discount_pct} />
       <CartDrawer />
 
       <main className="pb-24 md:pb-0">
@@ -83,7 +86,7 @@ export default async function HomePage({ params }: HomePageProps) {
               brand: { '@type': 'Brand', name: 'Slider Solution' },
               offers: {
                 '@type': 'Offer',
-                price: product.price_b2c_usd,
+                price: calcPrice(product.price_b2c_usd, siteConfig.discount_pct).discountedUsd,
                 priceCurrency: 'USD',
                 availability: 'https://schema.org/InStock',
                 url: process.env.NEXT_PUBLIC_APP_URL,
@@ -92,7 +95,7 @@ export default async function HomePage({ params }: HomePageProps) {
           }}
         />
 
-        <HeroSection product={product} locale={locale} visibleColors={siteConfig.visible_colors} />
+        <HeroSection product={product} locale={locale} visibleColors={siteConfig.visible_colors} discountPct={siteConfig.discount_pct} />
 
         {siteConfig.ticker_enabled && tickerText && <TickerBar text={tickerText} rtl={isRtl(locale)} />}
 
@@ -108,7 +111,7 @@ export default async function HomePage({ params }: HomePageProps) {
       </main>
 
       <Footer />
-      <StickyCartBar product={product} locale={locale} />
+      <StickyCartBar product={product} locale={locale} discountPct={siteConfig.discount_pct} />
     </>
   )
 }

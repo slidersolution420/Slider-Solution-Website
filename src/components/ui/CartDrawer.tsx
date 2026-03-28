@@ -6,13 +6,14 @@ import { usePathname } from 'next/navigation'
 import { useStore } from '@/store'
 import { Link } from '@/i18n/navigation'
 import { formatPrice } from '@/lib/currency'
+import { calcPrice } from '@/lib/pricing'
 import { getShippingCost } from '@/lib/shipping'
 import { XMarkIcon, TrashIcon, ShoppingBagIcon } from '@heroicons/react/24/outline'
 
 export default function CartDrawer() {
   const t = useTranslations('cart')
   const locale = useLocale()
-  const { items, cartOpen, closeCart, removeItem, currency, totalUsd, selectedCountry } = useStore()
+  const { items, cartOpen, closeCart, removeItem, currency, selectedCountry, discountPct } = useStore()
   const closeRef = useRef<HTMLButtonElement>(null)
   const pathname = usePathname() // raw pathname incl. locale prefix (/en vs /) — changes on locale switch
 
@@ -36,8 +37,13 @@ export default function CartDrawer() {
     }
   }, [cartOpen])
 
-  const subtotalUsd = totalUsd()
   const totalQty = items.reduce((sum, i) => sum + i.quantity, 0)
+  const originalSubtotal = items.reduce((sum, i) => sum + i.priceUsd * i.quantity, 0)
+  const subtotalUsd = items.reduce((sum, i) => {
+    const { discountedUsd } = calcPrice(i.priceUsd, discountPct)
+    return sum + discountedUsd * i.quantity
+  }, 0)
+  const hasDiscount = discountPct > 0
   const shippingUsd = getShippingCost(selectedCountry, totalQty)
   const grandTotalUsd = subtotalUsd + shippingUsd
 
@@ -92,9 +98,21 @@ export default function CartDrawer() {
                     <p className="truncate text-sm font-medium text-white">{locale === 'he' ? item.name_he || item.name : item.name_en || item.name}</p>
                     <p className="text-xs text-gray-500">× {item.quantity}</p>
                   </div>
-                  <p className="shrink-0 text-sm font-semibold text-white">
-                    {formatPrice(item.priceUsd * item.quantity, currency)}
-                  </p>
+                  <div className="shrink-0 text-sm font-semibold text-white">
+                    {(() => {
+                      const { originalUsd, discountedUsd, hasDiscount: itemHasDiscount } = calcPrice(item.priceUsd, discountPct)
+                      return itemHasDiscount ? (
+                        <span className="flex flex-col items-end">
+                          <span className="text-xs text-gray-500 line-through">
+                            {formatPrice(originalUsd * item.quantity, currency)}
+                          </span>
+                          <span>{formatPrice(discountedUsd * item.quantity, currency)}</span>
+                        </span>
+                      ) : (
+                        <span>{formatPrice(item.priceUsd * item.quantity, currency)}</span>
+                      )
+                    })()}
+                  </div>
                   <button
                     onClick={() => removeItem(item.productId, item.color)}
                     className="shrink-0 rounded-lg p-1.5 text-gray-500 hover:bg-white/10 hover:text-white"
@@ -116,6 +134,12 @@ export default function CartDrawer() {
                 <span>{t('subtotal')}</span>
                 <span>{formatPrice(subtotalUsd, currency)}</span>
               </div>
+              {hasDiscount && (
+                <div className="flex justify-between text-sm text-green-400">
+                  <span>{t('discount')} ({discountPct}%)</span>
+                  <span>-{formatPrice(originalSubtotal - subtotalUsd, currency)}</span>
+                </div>
+              )}
               <div className="flex justify-between text-gray-400">
                 <span>{t('shipping')}</span>
                 <span>

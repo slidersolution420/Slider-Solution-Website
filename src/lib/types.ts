@@ -19,6 +19,7 @@ export interface SiteConfig {
   age_gate_enabled: boolean
   visible_colors: string[]
   ticker_enabled: boolean
+  discount_pct: number  // 0 = no discount, 1–100 = percentage off
 }
 
 import { localeConfig } from '@/i18n/routing'

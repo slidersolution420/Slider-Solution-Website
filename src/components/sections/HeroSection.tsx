@@ -5,8 +5,8 @@ import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { useStore } from '@/store'
-import { B2C_PRICE_USD } from '@/lib/currency'
-import { formatPrice } from '@/lib/currency'
+import { B2C_PRICE_USD, formatPrice } from '@/lib/currency'
+import { calcPrice } from '@/lib/pricing'
 import { ShieldCheckIcon, LockClosedIcon } from '@heroicons/react/24/solid'
 import type { ProductContent } from '@/lib/keystatic'
 
@@ -14,6 +14,7 @@ interface HeroSectionProps {
   product: ProductContent
   locale: string
   visibleColors: string[]
+  discountPct: number
 }
 
 const SUPABASE_STORAGE = `https://ecuhecmfxfavjdxuctkg.supabase.co/storage/v1/object/public/product-images`
@@ -25,7 +26,7 @@ function splitHighlight(text: string, words: number): { before: string; highligh
   return { before: parts.slice(0, -words).join(' '), highlight: parts.slice(-words).join(' ') }
 }
 
-export default function HeroSection({ product, locale, visibleColors }: HeroSectionProps) {
+export default function HeroSection({ product, locale, visibleColors, discountPct }: HeroSectionProps) {
   const t = useTranslations('hero')
   const { addItem, openCart, selectedColor, setSelectedColor, selectedQty, setSelectedQty, currency } =
     useStore()
@@ -178,7 +179,19 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
             <div className="mb-6 flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 px-5 py-4">
               <div className="flex-1">
                 <p className="text-2xl font-black text-brand-400">
-                  {formatPrice(B2C_PRICE_USD * selectedQty, currency)}
+                  {(() => {
+                    const { originalUsd, discountedUsd, hasDiscount } = calcPrice(B2C_PRICE_USD, discountPct)
+                    return (
+                      <>
+                        {hasDiscount && (
+                          <span className="mr-2 text-lg text-gray-500 line-through">
+                            {formatPrice(originalUsd * selectedQty, currency)}
+                          </span>
+                        )}
+                        {formatPrice(discountedUsd * selectedQty, currency)}
+                      </>
+                    )
+                  })()}
                 </p>
                 {(isHe || selectedQty >= 3) ? (
                   <p className="text-xs text-green-400">{isHe ? 'משלוח חינם' : 'Free Shipping'}</p>
@@ -223,7 +236,7 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
               onClick={handleAddToCart}
               className="hidden w-full rounded-xl bg-gradient-to-r from-brand-500 to-brand-700 py-4 text-base font-bold text-white transition-opacity hover:opacity-90 md:block"
             >
-              {t('add_to_cart')} — {formatPrice(B2C_PRICE_USD * selectedQty, currency)}
+              {t('add_to_cart')} — {formatPrice(calcPrice(B2C_PRICE_USD, discountPct).discountedUsd * selectedQty, currency)}
             </button>
 
             {/* Bottom stats — 3 trust badges: Patent | Secure Payment | Customers */}

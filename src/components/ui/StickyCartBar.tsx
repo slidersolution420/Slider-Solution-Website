@@ -3,14 +3,16 @@
 import { useTranslations } from 'next-intl'
 import { useStore } from '@/store'
 import { formatPrice, B2C_PRICE_USD } from '@/lib/currency'
+import { calcPrice } from '@/lib/pricing'
 import type { ProductContent } from '@/lib/keystatic'
 
 interface StickyCartBarProps {
   product: ProductContent
   locale: string
+  discountPct: number
 }
 
-export default function StickyCartBar({ product, locale }: StickyCartBarProps) {
+export default function StickyCartBar({ product, locale, discountPct }: StickyCartBarProps) {
   const t = useTranslations('hero')
   const { addItem, openCart, selectedColor, selectedQty, currency } = useStore()
   const colorData = (product.colors ?? []).find((c) => c.slug === selectedColor) ?? product.colors?.[0]
@@ -35,7 +37,7 @@ export default function StickyCartBar({ product, locale }: StickyCartBarProps) {
         onClick={handleAdd}
         className="w-full rounded-xl bg-gradient-to-r from-brand-500 to-brand-700 py-3.5 text-base font-bold text-white"
       >
-        {t('add_to_cart')} — {formatPrice(B2C_PRICE_USD * selectedQty, currency)}
+        {t('add_to_cart')} — {formatPrice(calcPrice(B2C_PRICE_USD, discountPct).discountedUsd * selectedQty, currency)}
       </button>
     </div>
   )

@@ -5,6 +5,7 @@ import { createServiceClient } from '@/lib/supabase-server'
 import { convertPrice } from '@/lib/currency'
 import { getShippingCost } from '@/lib/shipping'
 import { getConfig } from '@/lib/config'
+import { calcPrice } from '@/lib/pricing'
 
 export async function POST(request: Request) {
   try {
@@ -22,8 +23,9 @@ export async function POST(request: Request) {
 
     // Calculate totals — use server-known price, never trust client-supplied priceUsd
     const cfg = await getConfig()
+    const { discountedUsd: effectivePrice } = calcPrice(cfg.price_b2c_usd, cfg.discount_pct)
     const totalQty = items.reduce((sum, i) => sum + i.quantity, 0)
-    const subtotalUsd = totalQty * cfg.price_b2c_usd
+    const subtotalUsd = totalQty * effectivePrice
     const shippingUsd = getShippingCost(country, totalQty, {
       freeCountries: cfg.free_shipping_countries,
       minQty: cfg.free_shipping_min_qty,
@@ -67,8 +69,8 @@ export async function POST(request: Request) {
       sessionId = newSession.id
     }
 
-    // Build Hype item list for the receipt — use server-known per-item ILS price
-    const priceIlsPerKit = convertPrice(cfg.price_b2c_usd, 'ILS')
+    // Build Hype item list for the receipt — use server-known per-item ILS price (with discount)
+    const priceIlsPerKit = convertPrice(effectivePrice, 'ILS')
     const hypeItems = items.map(i => ({
       name: i.color ? `Slider Kit (${i.color})` : 'Slider Cone Kit',
       quantity: i.quantity,

@@ -11,6 +11,7 @@ interface CartState {
   cartOpen: boolean
   ageVerified: boolean
   selectedCountry: string
+  discountPct: number
 
   addItem: (item: CartItem) => void
   removeItem: (productId: string, color: string) => void
@@ -23,6 +24,7 @@ interface CartState {
   closeCart: () => void
   setAgeVerified: (verified: boolean) => void
   setSelectedCountry: (country: string) => void
+  setDiscountPct: (pct: number) => void
   totalItems: () => number
   totalUsd: () => number
 }
@@ -37,6 +39,7 @@ export const useStore = create<CartState>()(
       cartOpen: false,
       ageVerified: false,
       selectedCountry: 'IL',
+      discountPct: 0,
 
       addItem: (item) =>
         set((state) => {
@@ -91,6 +94,8 @@ export const useStore = create<CartState>()(
       setAgeVerified: (verified) => set({ ageVerified: verified }),
 
       setSelectedCountry: (country) => set({ selectedCountry: country }),
+
+      setDiscountPct: (pct) => set({ discountPct: pct }),
 
       totalItems: () => get().items.reduce((sum, i) => sum + i.quantity, 0),
 

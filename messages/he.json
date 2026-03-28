@@ -56,6 +56,7 @@
     "shipping_free": "חינם",
     "shipping_calculated": "יחושב בקופה",
     "total": "סה\"כ",
+    "discount": "הנחה",
     "continue_shopping": "המשך בקנייה"
   },
   "checkout": {
@@ -70,8 +71,10 @@
     "country": "מדינה",
     "zip": "מיקוד",
     "order_summary": "סיכום הזמנה",
+    "subtotal": "סיכום ביניים",
     "shipping_cost": "עלות משלוח",
     "shipping_free": "חינם",
+    "discount": "הנחה",
     "total": "סה\"כ",
     "submit": "המשך לתשלום",
     "submitting": "מעבד...",

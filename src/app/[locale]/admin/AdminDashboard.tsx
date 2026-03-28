@@ -353,6 +353,7 @@ function ContentTab({ config, secret }: { config: SiteConfig; secret: string }) 
     price_b2c_usd: config.price_b2c_usd,
     price_b2b_usd: config.price_b2b_usd,
     stock: config.stock,
+    discount_pct: config.discount_pct,
   })
   const [ticker, setTicker] = useState({
     ticker_he: config.ticker_he,
@@ -434,7 +435,7 @@ function ContentTab({ config, secret }: { config: SiteConfig; secret: string }) 
 
       {/* מחירים ומלאי */}
       <Section title="מחירים ומלאי" savedId={saved} sectionId="prices">
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-4">
           <div>
             <label className={labelCls}>מחיר קצה (דולר)</label>
             <input type="number" className={inputCls} value={prices.price_b2c_usd}
@@ -450,12 +451,19 @@ function ContentTab({ config, secret }: { config: SiteConfig; secret: string }) 
             <input type="number" className={inputCls} value={prices.stock}
               onChange={(e) => setPrices((p) => ({ ...p, stock: Number(e.target.value) }))} />
           </div>
+          <div>
+            <label className={labelCls}>הנחה (%)</label>
+            <input type="number" min={0} max={100} className={inputCls} value={prices.discount_pct}
+              onChange={(e) => setPrices((p) => ({ ...p, discount_pct: Math.max(0, Math.min(100, Number(e.target.value))) }))} />
+            <p className="mt-1 text-xs text-gray-500">0 = ללא הנחה</p>
+          </div>
         </div>
         <SaveRow sectionId="prices" saving={saving} saved={saved}
           onSave={() => saveSection('prices', [
             ['price_b2c_usd', prices.price_b2c_usd],
             ['price_b2b_usd', prices.price_b2b_usd],
             ['stock', prices.stock],
+            ['discount_pct', prices.discount_pct],
           ])} />
       </Section>
 
