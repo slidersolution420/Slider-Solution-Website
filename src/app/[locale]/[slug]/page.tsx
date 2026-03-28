@@ -4,6 +4,15 @@ import { getPage } from '@/lib/keystatic'
 import type { PageSection } from '@/lib/keystatic'
 import NavBar from '@/components/ui/NavBar'
 import Footer from '@/components/ui/Footer'
+import { routing } from '@/i18n/routing'
+
+export const revalidate = false // fully static — content is git-tracked JSON
+
+export function generateStaticParams() {
+  return routing.locales.flatMap((locale) =>
+    ['terms', 'refund', 'cookies'].map((slug) => ({ locale, slug }))
+  )
+}
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>

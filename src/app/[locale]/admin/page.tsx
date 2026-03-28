@@ -6,6 +6,8 @@ import type { Order, WholesaleAccount, Review } from '@/lib/types'
 import AdminDashboard from './AdminDashboard'
 import LoginForm from './LoginForm'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Admin — SLIDER',
   robots: { index: false, follow: false },

@@ -8,6 +8,8 @@ import Footer from '@/components/ui/Footer'
 import { CheckCircleIcon } from '@heroicons/react/24/solid'
 import type { Order } from '@/lib/types'
 
+export const revalidate = 60 // cache order pages for 60 s — status changes are infrequent
+
 export const metadata: Metadata = {
   title: 'Order Confirmed — SLIDER',
 }

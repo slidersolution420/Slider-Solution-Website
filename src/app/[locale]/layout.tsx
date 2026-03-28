@@ -3,6 +3,9 @@ import { getMessages } from 'next-intl/server'
 import { notFound } from 'next/navigation'
 import { routing, isRtl } from '@/i18n/routing'
 import type { Locale } from '@/i18n/routing'
+import { Inter } from 'next/font/google'
+
+const inter = Inter({ subsets: ['latin'], display: 'swap' })
 
 interface LocaleLayoutProps {
   children: React.ReactNode
@@ -20,7 +23,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   const dir = isRtl(locale) ? 'rtl' : 'ltr'
 
   return (
-    <html lang={locale as Locale} dir={dir}>
+    <html lang={locale as Locale} dir={dir} className={inter.className}>
       <body>
         <NextIntlClientProvider messages={messages}>
           {children}

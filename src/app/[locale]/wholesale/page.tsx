@@ -7,6 +7,8 @@ import Footer from '@/components/ui/Footer'
 import WholesaleDashboard from './WholesaleDashboard'
 import WholesaleLanding from './WholesaleLanding'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Wholesale Portal — SLIDER',
 }

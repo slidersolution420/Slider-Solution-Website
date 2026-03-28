@@ -127,14 +127,16 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
             {/* Mobile-only product visual — below description, transparent bg */}
             <div className="mb-6 flex justify-center bg-transparent lg:hidden">
               {selectedColor === 'purple' ? (
-                <video
-                  ref={mobileVideoRef}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="w-full max-w-[280px] mix-blend-screen"
-                />
+                <div className="aspect-square w-full max-w-[280px]">
+                  <video
+                    ref={mobileVideoRef}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="h-full w-full mix-blend-screen"
+                  />
+                </div>
               ) : (
                 imageUrl && (
                   <Image
@@ -258,14 +260,16 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
           {/* Image side — desktop only */}
           <div className="relative hidden justify-center lg:flex">
             {selectedColor === 'purple' ? (
-              <video
-                ref={videoRef}
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full max-w-md"
-              />
+              <div className="aspect-square w-full max-w-md">
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="h-full w-full object-contain"
+                />
+              </div>
             ) : (
               <div className="relative aspect-square w-full max-w-md">
                 {imageUrl && (
@@ -275,6 +279,7 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
                     fill
                     className="object-contain"
                     priority
+                    sizes="(max-width: 1023px) 0px, (max-width: 1280px) 45vw, 560px"
                   />
                 )}
               </div>

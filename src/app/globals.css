@@ -19,7 +19,7 @@
   --color-surface-3: oklch(0.16 0 0);
 
   /* Typography */
-  --font-sans: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Segoe UI', system-ui, -apple-system, sans-serif; /* Inter loaded via next/font in layout */
 
   /* Animation */
   --animate-marquee: marquee 8s linear infinite;
