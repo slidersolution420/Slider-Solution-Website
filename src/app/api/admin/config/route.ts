@@ -4,7 +4,7 @@ import type { SiteConfig } from '@/lib/types'
 
 export async function PATCH(request: Request) {
   const auth = request.headers.get('Authorization')
-  if (!auth || auth !== `Bearer ${process.env.CRON_SECRET}`) {
+  if (!auth || auth !== `Bearer ${process.env.ADMIN_PASSWORD}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 

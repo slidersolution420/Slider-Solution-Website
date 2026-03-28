@@ -15,7 +15,7 @@ export default async function AdminPage() {
   const jar = await cookies()
   const session = jar.get('admin_auth')?.value
 
-  if (!session || session !== process.env.CRON_SECRET) {
+  if (!session || session !== process.env.ADMIN_PASSWORD) {
     return <LoginForm />
   }
 

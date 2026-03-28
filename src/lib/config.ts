@@ -1,7 +1,7 @@
 /**
  * Runtime site configuration backed by Supabase `site_config` table.
  *
- * Values are editable in the admin dashboard at /admin?secret=CRON_SECRET
+ * Values are editable in the admin dashboard at /admin (login with ADMIN_PASSWORD)
  * and take effect immediately — no rebuild required.
  *
  * Falls back to hardcoded defaults if Supabase is unreachable.
@@ -12,6 +12,10 @@ import type { ReelItem, SiteConfig } from '@/lib/types'
 import { FREE_SHIPPING_COUNTRIES, FREE_SHIPPING_MIN_QTY, INTL_PAID_SHIPPING_USD } from '@/lib/shipping'
 
 export type { ReelItem, SiteConfig }
+
+const CONFIG_TTL_MS = 60_000 // 60 seconds
+let configCache: SiteConfig | null = null
+let configCachedAt = 0
 
 const DEFAULTS: SiteConfig = {
   price_b2c_usd: 25,
@@ -32,6 +36,10 @@ const DEFAULTS: SiteConfig = {
 }
 
 export async function getConfig(): Promise<SiteConfig> {
+  if (configCache && Date.now() - configCachedAt < CONFIG_TTL_MS) {
+    return configCache
+  }
+
   try {
     const supabase = createServiceClient()
     const { data, error } = await supabase
@@ -42,7 +50,7 @@ export async function getConfig(): Promise<SiteConfig> {
 
     const map = Object.fromEntries(data.map((row) => [row.key, row.value]))
 
-    return {
+    configCache = {
       price_b2c_usd:           (map.price_b2c_usd           as number)    ?? DEFAULTS.price_b2c_usd,
       price_b2b_usd:           (map.price_b2b_usd           as number)    ?? DEFAULTS.price_b2b_usd,
       stock:                   (map.stock                   as number)    ?? DEFAULTS.stock,
@@ -59,6 +67,8 @@ export async function getConfig(): Promise<SiteConfig> {
       visible_colors:          (map.visible_colors          as string[])  ?? DEFAULTS.visible_colors,
       ticker_enabled:          (map.ticker_enabled          as boolean)   ?? DEFAULTS.ticker_enabled,
     }
+    configCachedAt = Date.now()
+    return configCache
   } catch {
     return DEFAULTS
   }

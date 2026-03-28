@@ -1,6 +1,7 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createServiceClient } from '@/lib/supabase-server'
+import { rateLimit } from '@/lib/ratelimit'
 
 const schema = z.object({
   name: z.string().min(2).max(100),
@@ -8,7 +9,12 @@ const schema = z.object({
   body: z.string().min(10).max(2000),
 })
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown'
+  if (!rateLimit(ip, 5)) {
+    return NextResponse.json({ error: 'Too many requests' }, { status: 429 })
+  }
+
   try {
     const body = (await request.json()) as unknown
     const parsed = schema.safeParse(body)
