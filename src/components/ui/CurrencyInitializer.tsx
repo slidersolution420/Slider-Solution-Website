@@ -3,6 +3,8 @@
 import { useEffect } from 'react'
 import { useLocale } from 'next-intl'
 import { useStore } from '@/store'
+import { localeConfig } from '@/i18n/routing'
+import type { Locale } from '@/i18n/routing'
 
 export default function CurrencyInitializer() {
   const locale = useLocale()
@@ -11,7 +13,7 @@ export default function CurrencyInitializer() {
   useEffect(() => {
     const hasPersistedCart = Boolean(localStorage.getItem('slider-cart'))
     if (!hasPersistedCart) {
-      setCurrency(locale === 'he' ? 'ILS' : 'USD')
+      setCurrency(localeConfig[locale as Locale].currency)
     }
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -1,13 +1,18 @@
 import { defineRouting } from 'next-intl/routing'
 
+export const localeConfig = {
+  en: { currency: 'USD', dir: 'ltr', label: 'EN' },
+  he: { currency: 'ILS', dir: 'rtl', label: 'עב' },
+} as const
+
+export type Locale = keyof typeof localeConfig
+
 export const routing = defineRouting({
-  locales: ['he', 'en'],
-  defaultLocale: 'en',
+  locales: Object.keys(localeConfig) as [Locale, ...Locale[]],
+  defaultLocale: 'en' satisfies Locale,
   localePrefix: 'as-needed', // 'en' has no prefix, '/he' has prefix
 })
 
-export type Locale = (typeof routing.locales)[number]
-
 export function isRtl(locale: string): boolean {
-  return locale === 'he'
+  return localeConfig[locale as Locale]?.dir === 'rtl'
 }

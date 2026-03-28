@@ -21,9 +21,9 @@ export interface SiteConfig {
   ticker_enabled: boolean
 }
 
-export type Locale = 'he' | 'en'
+import { localeConfig } from '@/i18n/routing'
 
-export type Currency = 'ILS' | 'USD'
+export type Currency = (typeof localeConfig)[keyof typeof localeConfig]['currency']
 
 export type OrderStatus =
   | 'pending'

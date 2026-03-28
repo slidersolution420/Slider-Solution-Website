@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import type { CartItem, Currency } from '@/lib/types'
+import { localeConfig, routing } from '@/i18n/routing'
 
 interface CartState {
   items: CartItem[]
@@ -30,7 +31,7 @@ export const useStore = create<CartState>()(
   persist(
     (set, get) => ({
       items: [],
-      currency: 'USD',
+      currency: localeConfig[routing.defaultLocale].currency,
       selectedColor: 'purple',
       selectedQty: 1,
       cartOpen: false,
