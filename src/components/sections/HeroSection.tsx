@@ -214,6 +214,14 @@ export default function HeroSection({ product, locale, visibleColors }: HeroSect
               </p>
             )}
 
+            {/* Add to cart — desktop only (mobile uses StickyCartBar) */}
+            <button
+              onClick={handleAddToCart}
+              className="hidden w-full rounded-xl bg-gradient-to-r from-brand-500 to-brand-700 py-4 text-base font-bold text-white transition-opacity hover:opacity-90 md:block"
+            >
+              {t('add_to_cart')} — {formatPrice(B2C_PRICE_USD * selectedQty, currency)}
+            </button>
+
             {/* Bottom stats — 3 trust badges: Patent | Secure Payment | Customers */}
             <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
               {/* 1. Patent */}
