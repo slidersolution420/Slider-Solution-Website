@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl'
 import { signOutWholesale } from '@/lib/auth'
 import { useRouter } from 'next/navigation'
+import { Link } from '@/i18n/navigation'
 import type { WholesaleAccount, Order } from '@/lib/types'
 import { formatPrice, B2B_BOX_PRICE_USD } from '@/lib/currency'
 import { useStore } from '@/store'
@@ -50,12 +51,12 @@ export default function WholesaleDashboard({ account, orders, locale }: Wholesal
               {formatPrice(B2B_BOX_PRICE_USD, currency)}
             </span>
           </p>
-          <a
+          <Link
             href="/checkout"
             className="inline-block rounded-xl bg-gradient-to-r from-brand-500 to-brand-700 px-6 py-3 font-bold text-white transition-opacity hover:opacity-90"
           >
             {locale === 'he' ? 'הזמן עכשיו' : 'Order Now'}
-          </a>
+          </Link>
         </div>
 
         {/* Orders */}

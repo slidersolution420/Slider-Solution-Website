@@ -1,10 +1,8 @@
-import { getTranslations, getLocale } from 'next-intl/server'
-import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
+import { Link } from '@/i18n/navigation'
 
 export default async function ProblemPage() {
-  const [t, locale] = await Promise.all([getTranslations('errors'), getLocale()])
-  const homeHref = locale === 'en' ? '/' : `/${locale}`
-  const checkoutHref = locale === 'en' ? '/checkout' : `/${locale}/checkout`
+  const t = await getTranslations('errors')
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[var(--color-surface-0)] px-4">
@@ -13,11 +11,11 @@ export default async function ProblemPage() {
         <h1 className="text-2xl font-bold text-white mb-2">{t('paymentFailed')}</h1>
         <p className="text-[var(--color-surface-5)] mb-6">{t('paymentFailedBody')}</p>
         <div className="flex gap-3 justify-center">
-          <Link href={checkoutHref} className="btn-primary">
+          <Link href="/checkout" className="btn-primary">
             {t('tryAgain')}
           </Link>
           <Link
-            href={homeHref}
+            href="/"
             className="px-6 py-3 rounded-xl border border-[var(--color-surface-3)] text-[var(--color-surface-5)] hover:text-white transition-colors"
           >
             {t('backHome')}

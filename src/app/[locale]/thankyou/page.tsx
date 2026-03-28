@@ -2,13 +2,12 @@
 
 import { Suspense, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { useTranslations, useLocale } from 'next-intl'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 import { useStore } from '@/store'
 
 function ThankYouContent() {
   const t = useTranslations('success')
-  const locale = useLocale()
   const searchParams = useSearchParams()
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
   const [orderId, setOrderId] = useState<string | null>(null)
@@ -45,8 +44,6 @@ function ThankYouContent() {
       .catch(() => setStatus('error'))
   }, [searchParams])
 
-  const homeHref = locale === 'en' ? '/' : `/${locale}`
-
   if (status === 'loading') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[var(--color-surface-0)]">
@@ -65,7 +62,7 @@ function ThankYouContent() {
           <div className="text-6xl mb-4">❌</div>
           <h1 className="text-2xl font-bold text-white mb-2">{t('errorTitle')}</h1>
           <p className="text-[var(--color-surface-5)] mb-6">{t('errorBody')}</p>
-          <Link href={homeHref} className="btn-primary">
+          <Link href="/" className="btn-primary">
             {t('backHome')}
           </Link>
         </div>
@@ -95,7 +92,7 @@ function ThankYouContent() {
             {t('trackingButton')}
           </a>
         )}
-        <Link href={homeHref} className="btn-primary">
+        <Link href="/" className="btn-primary">
           {t('backHome')}
         </Link>
       </div>
