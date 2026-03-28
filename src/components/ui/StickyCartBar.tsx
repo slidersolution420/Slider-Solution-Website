@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import { useStore } from '@/store'
-import { formatPrice, B2C_PRICE_USD } from '@/lib/currency'
+import { formatPrice } from '@/lib/currency'
 import { calcPrice } from '@/lib/pricing'
 import type { ProductContent } from '@/lib/keystatic'
 
@@ -10,9 +10,10 @@ interface StickyCartBarProps {
   product: ProductContent
   locale: string
   discountPct: number
+  priceUsd: number
 }
 
-export default function StickyCartBar({ product, locale, discountPct }: StickyCartBarProps) {
+export default function StickyCartBar({ product, locale, discountPct, priceUsd }: StickyCartBarProps) {
   const t = useTranslations('hero')
   const { addItem, openCart, selectedColor, selectedQty, currency } = useStore()
   const colorData = (product.colors ?? []).find((c) => c.slug === selectedColor) ?? product.colors?.[0]
@@ -23,7 +24,7 @@ export default function StickyCartBar({ product, locale, discountPct }: StickyCa
       productId: 'slider-cone-kit',
       color: selectedColor,
       quantity: selectedQty,
-      priceUsd: B2C_PRICE_USD,
+      priceUsd: priceUsd,
       name: `${product.name} — ${colorData.name_en}`,
       name_he: `${product.name} — ${colorData.name_he}`,
       name_en: `${product.name} — ${colorData.name_en}`,
@@ -37,7 +38,7 @@ export default function StickyCartBar({ product, locale, discountPct }: StickyCa
         onClick={handleAdd}
         className="w-full rounded-xl bg-gradient-to-r from-brand-500 to-brand-700 py-3.5 text-base font-bold text-white"
       >
-        {t('add_to_cart')} — {formatPrice(calcPrice(B2C_PRICE_USD, discountPct).discountedUsd * selectedQty, currency)}
+        {t('add_to_cart')} — {formatPrice(calcPrice(priceUsd, discountPct).discountedUsd * selectedQty, currency)}
       </button>
     </div>
   )

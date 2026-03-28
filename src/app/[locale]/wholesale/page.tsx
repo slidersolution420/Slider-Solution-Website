@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { checkWholesaleSession } from '@/lib/auth-server'
 import { createServiceClient } from '@/lib/supabase-server'
 import type { Order } from '@/lib/types'
+import { getConfig } from '@/lib/config'
 import NavBar from '@/components/ui/NavBar'
 import Footer from '@/components/ui/Footer'
 import WholesaleDashboard from './WholesaleDashboard'
@@ -67,6 +68,7 @@ export default async function WholesalePage({ params }: WholesalePageProps) {
   }
 
   // Active account — show dashboard
+  const cfg = await getConfig()
   const supabase = createServiceClient()
   const { data: orders } = await supabase
     .from('orders')
@@ -79,7 +81,7 @@ export default async function WholesalePage({ params }: WholesalePageProps) {
   return (
     <>
       <NavBar />
-      <WholesaleDashboard account={account} orders={(orders ?? []) as Order[]} locale={locale} />
+      <WholesaleDashboard account={account} orders={(orders ?? []) as Order[]} locale={locale} priceB2bUsd={cfg.price_b2b_usd} />
       <Footer />
     </>
   )

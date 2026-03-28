@@ -17,9 +17,10 @@ import { Link } from '@/i18n/navigation'
 interface CheckoutClientProps {
   discountPct: number
   priceUsd: number
+  defaultCountry: string
 }
 
-export default function CheckoutClient({ discountPct, priceUsd }: CheckoutClientProps) {
+export default function CheckoutClient({ discountPct, priceUsd, defaultCountry }: CheckoutClientProps) {
   const t = useTranslations('checkout')
   const tf = useTranslations('forms')
   const locale = useLocale()
@@ -36,7 +37,7 @@ export default function CheckoutClient({ discountPct, priceUsd }: CheckoutClient
     formState: { errors },
   } = useForm<CheckoutInput>({
     resolver: zodResolver(checkoutSchema),
-    defaultValues: { currency, items, country: 'IL' },
+    defaultValues: { currency, items, country: defaultCountry },
   })
 
   const country = watch('country') ?? 'IL'

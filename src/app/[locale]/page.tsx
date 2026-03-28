@@ -70,7 +70,7 @@ export default async function HomePage({ params }: HomePageProps) {
       <AgeGate />
       <NavBar />
       <ShippingBanner />
-      <DiscountInitializer discountPct={siteConfig.discount_pct} />
+      <DiscountInitializer discountPct={siteConfig.discount_pct_b2c} />
       <CartDrawer />
 
       <main className="pb-24 md:pb-0">
@@ -86,7 +86,7 @@ export default async function HomePage({ params }: HomePageProps) {
               brand: { '@type': 'Brand', name: 'Slider Solution' },
               offers: {
                 '@type': 'Offer',
-                price: calcPrice(product.price_b2c_usd, siteConfig.discount_pct).discountedUsd,
+                price: calcPrice(product.price_b2c_usd, siteConfig.discount_pct_b2c).discountedUsd,
                 priceCurrency: 'USD',
                 availability: 'https://schema.org/InStock',
                 url: process.env.NEXT_PUBLIC_APP_URL,
@@ -95,7 +95,7 @@ export default async function HomePage({ params }: HomePageProps) {
           }}
         />
 
-        <HeroSection product={product} locale={locale} visibleColors={siteConfig.visible_colors} discountPct={siteConfig.discount_pct} />
+        <HeroSection product={product} locale={locale} visibleColors={siteConfig.visible_colors} discountPct={siteConfig.discount_pct_b2c} priceUsd={siteConfig.price_b2c_usd} />
 
         {siteConfig.ticker_enabled && tickerText && <TickerBar text={tickerText} rtl={isRtl(locale)} />}
 
@@ -111,7 +111,7 @@ export default async function HomePage({ params }: HomePageProps) {
       </main>
 
       <Footer />
-      <StickyCartBar product={product} locale={locale} discountPct={siteConfig.discount_pct} />
+      <StickyCartBar product={product} locale={locale} discountPct={siteConfig.discount_pct_b2c} priceUsd={siteConfig.price_b2c_usd} />
     </>
   )
 }

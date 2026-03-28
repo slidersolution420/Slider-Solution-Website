@@ -3,7 +3,13 @@ import CheckoutClient from './CheckoutClient'
 
 export const dynamic = 'force-dynamic'
 
-export default async function CheckoutPage() {
+interface CheckoutPageProps {
+  params: Promise<{ locale: string }>
+}
+
+export default async function CheckoutPage({ params }: CheckoutPageProps) {
+  const { locale } = await params
   const cfg = await getConfig()
-  return <CheckoutClient discountPct={cfg.discount_pct} priceUsd={cfg.price_b2c_usd} />
+  const defaultCountry = locale === 'he' ? 'IL' : 'US'
+  return <CheckoutClient discountPct={cfg.discount_pct_b2c} priceUsd={cfg.price_b2c_usd} defaultCountry={defaultCountry} />
 }

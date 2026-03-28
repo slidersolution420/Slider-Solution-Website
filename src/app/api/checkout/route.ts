@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
     // Calculate totals — use server-known price, never trust client-supplied priceUsd
     const cfg = await getConfig()
-    const { discountedUsd: effectivePrice } = calcPrice(cfg.price_b2c_usd, cfg.discount_pct)
+    const { discountedUsd: effectivePrice } = calcPrice(cfg.price_b2c_usd, cfg.discount_pct_b2c)
     const totalQty = items.reduce((sum, i) => sum + i.quantity, 0)
     const subtotalUsd = totalQty * effectivePrice
     const shippingUsd = getShippingCost(country, totalQty, {

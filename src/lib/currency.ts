@@ -1,9 +1,6 @@
 import type { Currency } from './types'
 import siteSettingsData from '../../content/singletons/site-settings.json'
 
-export const B2C_PRICE_USD = 1 // TODO: restore to 25 after live testing
-export const B2B_BOX_PRICE_USD = 82
-
 export const EXCHANGE_RATES: Record<Currency, number> = {
   USD: 1,
   ILS: siteSettingsData.ils_exchange_rate,

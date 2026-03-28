@@ -5,16 +5,17 @@ import { signOutWholesale } from '@/lib/auth'
 import { useRouter } from 'next/navigation'
 import { Link } from '@/i18n/navigation'
 import type { WholesaleAccount, Order } from '@/lib/types'
-import { formatPrice, B2B_BOX_PRICE_USD } from '@/lib/currency'
+import { formatPrice } from '@/lib/currency'
 import { useStore } from '@/store'
 
 interface WholesaleDashboardProps {
   account: WholesaleAccount
   orders: Order[]
   locale: string
+  priceB2bUsd: number
 }
 
-export default function WholesaleDashboard({ account, orders, locale }: WholesaleDashboardProps) {
+export default function WholesaleDashboard({ account, orders, locale, priceB2bUsd }: WholesaleDashboardProps) {
   const t = useTranslations('wholesale')
   const { currency } = useStore()
   const router = useRouter()
@@ -48,7 +49,7 @@ export default function WholesaleDashboard({ account, orders, locale }: Wholesal
           <p className="mb-4 text-sm text-gray-400">
             {locale === 'he' ? '6 קיטים לקופסה' : '6 kits per box'} —{' '}
             <span className="font-bold text-brand-300">
-              {formatPrice(B2B_BOX_PRICE_USD, currency)}
+              {formatPrice(priceB2bUsd, currency)}
             </span>
           </p>
           <Link

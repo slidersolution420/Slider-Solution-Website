@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import { useTranslations } from 'next-intl'
 import { useStore } from '@/store'
-import { B2C_PRICE_USD, formatPrice } from '@/lib/currency'
+import { formatPrice } from '@/lib/currency'
 import { calcPrice } from '@/lib/pricing'
 import { ShieldCheckIcon, LockClosedIcon } from '@heroicons/react/24/solid'
 import type { ProductContent } from '@/lib/keystatic'
@@ -15,6 +15,7 @@ interface HeroSectionProps {
   locale: string
   visibleColors: string[]
   discountPct: number
+  priceUsd: number
 }
 
 const SUPABASE_STORAGE = `https://ecuhecmfxfavjdxuctkg.supabase.co/storage/v1/object/public/product-images`
@@ -26,7 +27,7 @@ function splitHighlight(text: string, words: number): { before: string; highligh
   return { before: parts.slice(0, -words).join(' '), highlight: parts.slice(-words).join(' ') }
 }
 
-export default function HeroSection({ product, locale, visibleColors, discountPct }: HeroSectionProps) {
+export default function HeroSection({ product, locale, visibleColors, discountPct, priceUsd }: HeroSectionProps) {
   const t = useTranslations('hero')
   const { addItem, openCart, selectedColor, setSelectedColor, selectedQty, setSelectedQty, currency } =
     useStore()
@@ -88,7 +89,7 @@ export default function HeroSection({ product, locale, visibleColors, discountPc
       productId: 'slider-cone-kit',
       color: selectedColorData.slug,
       quantity: selectedQty,
-      priceUsd: B2C_PRICE_USD,
+      priceUsd: priceUsd,
       name: `${product.name} — ${selectedColorData.name_en}`,
       name_he: `${product.name} — ${selectedColorData.name_he}`,
       name_en: `${product.name} — ${selectedColorData.name_en}`,
@@ -180,7 +181,7 @@ export default function HeroSection({ product, locale, visibleColors, discountPc
               <div className="flex-1">
                 <p className="text-2xl font-black text-brand-400">
                   {(() => {
-                    const { originalUsd, discountedUsd, hasDiscount } = calcPrice(B2C_PRICE_USD, discountPct)
+                    const { originalUsd, discountedUsd, hasDiscount } = calcPrice(priceUsd, discountPct)
                     return (
                       <>
                         {hasDiscount && (
@@ -236,7 +237,7 @@ export default function HeroSection({ product, locale, visibleColors, discountPc
               onClick={handleAddToCart}
               className="hidden w-full rounded-xl bg-gradient-to-r from-brand-500 to-brand-700 py-4 text-base font-bold text-white transition-opacity hover:opacity-90 md:block"
             >
-              {t('add_to_cart')} — {formatPrice(calcPrice(B2C_PRICE_USD, discountPct).discountedUsd * selectedQty, currency)}
+              {t('add_to_cart')} — {formatPrice(calcPrice(priceUsd, discountPct).discountedUsd * selectedQty, currency)}
             </button>
 
             {/* Bottom stats — 3 trust badges: Patent | Secure Payment | Customers */}
