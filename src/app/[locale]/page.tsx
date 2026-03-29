@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { getProduct, getFaq } from '@/lib/keystatic'
+import { getProduct, getFaq } from '@/lib/cms'
 import { getConfig } from '@/lib/config'
 import { createServiceClient } from '@/lib/supabase-server'
 import type { Review } from '@/lib/types'

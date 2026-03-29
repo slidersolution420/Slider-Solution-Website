@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
-import type { FaqItem } from '@/lib/keystatic'
+import type { FaqItem } from '@/lib/cms'
 
 interface FaqAccordionProps {
   items: FaqItem[]

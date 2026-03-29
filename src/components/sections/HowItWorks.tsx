@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server'
-import { getSiteSettings } from '@/lib/keystatic'
+import { getConfig } from '@/lib/config'
 import { PlayCircleIcon } from '@heroicons/react/24/solid'
 
 interface HowItWorksProps {
@@ -7,14 +7,14 @@ interface HowItWorksProps {
 }
 
 export default async function HowItWorks({ locale: _locale }: HowItWorksProps) {
-  const [t, settings] = await Promise.all([
+  const [t, config] = await Promise.all([
     getTranslations('how_it_works'),
-    getSiteSettings(),
+    getConfig(),
   ])
 
   const videos = [
-    { id: settings.how_it_works_video1_id, title: t('card1_title'), desc: t('card1_desc') },
-    { id: settings.how_it_works_video2_id, title: t('card2_title'), desc: t('card2_desc') },
+    { id: config.how_it_works_video1_id, title: t('card1_title'), desc: t('card1_desc') },
+    { id: config.how_it_works_video2_id, title: t('card2_title'), desc: t('card2_desc') },
   ]
 
   return (

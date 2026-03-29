@@ -5,7 +5,7 @@ export function GET() {
   const content = `User-agent: *
 Allow: /
 
-Disallow: /keystatic
+Disallow: /admin
 Disallow: /api/
 
 Sitemap: ${appUrl}/sitemap.xml

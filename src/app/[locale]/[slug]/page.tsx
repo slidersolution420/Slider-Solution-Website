@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getPage } from '@/lib/keystatic'
-import type { PageSection } from '@/lib/keystatic'
+import { getPage } from '@/lib/cms'
+import type { PageSection } from '@/lib/cms'
 import NavBar from '@/components/ui/NavBar'
 import Footer from '@/components/ui/Footer'
 import { routing } from '@/i18n/routing'
 
-export const revalidate = false // fully static — content is git-tracked JSON
+export const revalidate = 3600 // revalidate hourly — content is in Supabase
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>

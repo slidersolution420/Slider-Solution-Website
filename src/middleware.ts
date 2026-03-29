@@ -16,9 +16,8 @@ export const config = {
      * Match all paths EXCEPT:
      *   - api routes
      *   - Next.js internals (_next, _vercel)
-     *   - /keystatic and everything under it
      *   - files with extensions (images, fonts, etc.)
      */
-    '/((?!api|_next|_vercel|keystatic(?:/.*)?|.*\\..*).*)',
+    '/((?!api|_next|_vercel|.*\\..*).*)',
   ],
 }

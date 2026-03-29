@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next'
-import { getAllPageSlugs } from '@/lib/keystatic'
+import { getAllPageSlugs } from '@/lib/cms'
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://slidersolution.com'
 const LOCALES = ['he', 'en'] as const

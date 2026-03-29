@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import type { WholesaleAccount, WholesaleAccountStatus, SiteConfig, ReelItem, Review, Order, OrderStatus } from '@/lib/types'
 import OrdersDashboard from './OrdersDashboard'
@@ -29,7 +29,7 @@ const STATUS_COLORS: Record<WholesaleAccountStatus, string> = {
 export default function AdminDashboard({ accounts, config, secret, reviews, orders }: AdminDashboardProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
-  const [tab, setTab] = useState<'accounts' | 'orders' | 'content' | 'reviews'>('accounts')
+  const [tab, setTab] = useState<'accounts' | 'orders' | 'content' | 'reviews' | 'cms'>('accounts')
 
   const [loadingId, setLoadingId] = useState<string | null>(null)
   const [accountError, setAccountError] = useState<string | null>(null)
@@ -59,10 +59,11 @@ export default function AdminDashboard({ accounts, config, secret, reviews, orde
   const others = accounts.filter((a) => a.status !== 'pending')
   const approvedReviews = reviews.filter((r) => r.approved).length
 
-  const tabs: { id: 'accounts' | 'orders' | 'content' | 'reviews'; label: string }[] = [
+  const tabs: { id: 'accounts' | 'orders' | 'content' | 'reviews' | 'cms'; label: string }[] = [
     { id: 'accounts', label: 'חשבונות סיטונאי' },
     { id: 'orders', label: 'הזמנות' },
     { id: 'content', label: 'הגדרות תוכן' },
+    { id: 'cms', label: 'תוכן אתר' },
     { id: 'reviews', label: 'ביקורות' },
   ]
 
@@ -134,6 +135,10 @@ export default function AdminDashboard({ accounts, config, secret, reviews, orde
 
         {tab === 'content' && (
           <ContentTab config={config} secret={secret} />
+        )}
+
+        {tab === 'cms' && (
+          <CmsTab secret={secret} />
         )}
 
         {tab === 'reviews' && (
@@ -338,6 +343,565 @@ function ReviewsTab({ reviews, secret }: { reviews: Review[]; secret: string }) 
         </div>
       )}
     </>
+  )
+}
+
+// ── CMS Tab ────────────────────────────────────────────────────────────────────
+
+interface FaqRow {
+  id: string
+  slug: string
+  question_he: string
+  question_en: string
+  answer_he: string
+  answer_en: string
+  sort_order: number
+}
+
+interface PageRow {
+  id: string
+  slug: string
+  title_he: string
+  title_en: string
+  sections_he: { heading?: string; text: string }[]
+  sections_en: { heading?: string; text: string }[]
+}
+
+interface ProductCopy {
+  name: string
+  tagline_he: string
+  tagline_en: string
+  description_he: string
+  description_en: string
+  kit_contents_he: string[]
+  kit_contents_en: string[]
+}
+
+type CmsSection = 'faq' | 'pages' | 'product'
+
+function CmsTab({ secret }: { secret: string }) {
+  const [section, setSection] = useState<CmsSection>('faq')
+
+  return (
+    <div className="space-y-4">
+      {/* Sub-navigation */}
+      <div className="flex gap-1 rounded-xl bg-white/5 p-1 w-fit text-sm">
+        {(['faq', 'pages', 'product'] as CmsSection[]).map((s) => (
+          <button
+            key={s}
+            onClick={() => setSection(s)}
+            className={`rounded-lg px-4 py-1.5 font-medium transition-colors ${
+              section === s ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white'
+            }`}
+          >
+            {s === 'faq' ? 'שאלות נפוצות' : s === 'pages' ? 'דפי מדיניות' : 'תוכן מוצר'}
+          </button>
+        ))}
+      </div>
+
+      {section === 'faq'     && <FaqEditor secret={secret} />}
+      {section === 'pages'   && <PagesEditor secret={secret} />}
+      {section === 'product' && <ProductCopyEditor secret={secret} />}
+    </div>
+  )
+}
+
+// ── FAQ Editor ─────────────────────────────────────────────────────────────────
+
+function FaqEditor({ secret }: { secret: string }) {
+  const [items, setItems] = useState<FaqRow[]>([])
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [editId, setEditId] = useState<string | null>(null)
+  const [adding, setAdding] = useState(false)
+  const [newItem, setNewItem] = useState<Omit<FaqRow, 'id'>>({
+    slug: '', question_he: '', question_en: '', answer_he: '', answer_en: '', sort_order: 0,
+  })
+
+  const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${secret}` }
+
+  const load = useCallback(async () => {
+    setLoading(true)
+    try {
+      const res = await fetch('/api/admin/faq', { headers: { Authorization: `Bearer ${secret}` } })
+      const data = await res.json() as FaqRow[]
+      setItems(data)
+    } catch {
+      setError('שגיאה בטעינה')
+    } finally {
+      setLoading(false)
+    }
+  }, [secret])
+
+  useEffect(() => { void load() }, [load])
+
+  async function saveEdit(item: FaqRow) {
+    setSaving(item.id)
+    setError(null)
+    try {
+      const res = await fetch('/api/admin/faq', {
+        method: 'PATCH', headers,
+        body: JSON.stringify({
+          id: item.id,
+          question_he: item.question_he,
+          question_en: item.question_en,
+          answer_he: item.answer_he,
+          answer_en: item.answer_en,
+          sort_order: item.sort_order,
+        }),
+      })
+      if (!res.ok) throw new Error((await res.json() as { error?: string }).error ?? 'שגיאה')
+      setEditId(null)
+      await load()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'שגיאה')
+    } finally {
+      setSaving(null)
+    }
+  }
+
+  async function deleteItem(id: string) {
+    if (!confirm('למחוק שאלה זו?')) return
+    setSaving(id)
+    setError(null)
+    try {
+      const res = await fetch('/api/admin/faq', {
+        method: 'DELETE', headers, body: JSON.stringify({ id }),
+      })
+      if (!res.ok) throw new Error((await res.json() as { error?: string }).error ?? 'שגיאה')
+      await load()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'שגיאה')
+    } finally {
+      setSaving(null)
+    }
+  }
+
+  async function addItem() {
+    setSaving('new')
+    setError(null)
+    try {
+      const res = await fetch('/api/admin/faq', {
+        method: 'POST', headers, body: JSON.stringify(newItem),
+      })
+      if (!res.ok) throw new Error((await res.json() as { error?: string }).error ?? 'שגיאה')
+      setAdding(false)
+      setNewItem({ slug: '', question_he: '', question_en: '', answer_he: '', answer_en: '', sort_order: 0 })
+      await load()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'שגיאה')
+    } finally {
+      setSaving(null)
+    }
+  }
+
+  const inputCls = 'w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-brand-500 focus:outline-none'
+  const labelCls = 'mb-1 block text-xs font-medium text-gray-400'
+
+  if (loading) return <p className="text-gray-500 py-8 text-center">טוען...</p>
+
+  return (
+    <div className="space-y-3">
+      {error && (
+        <div className="rounded-lg bg-red-500/20 border border-red-500/30 p-3 text-red-300 text-sm">{error}</div>
+      )}
+
+      {items.map((item) =>
+        editId === item.id ? (
+          <div key={item.id} className="rounded-xl border border-brand-500/30 bg-white/[0.02] p-4 space-y-3">
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div>
+                <label className={labelCls}>שאלה בעברית</label>
+                <input className={inputCls} value={item.question_he}
+                  onChange={(e) => setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, question_he: e.target.value } : i))} />
+              </div>
+              <div>
+                <label className={labelCls}>שאלה באנגלית</label>
+                <input className={inputCls} value={item.question_en}
+                  onChange={(e) => setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, question_en: e.target.value } : i))} />
+              </div>
+              <div>
+                <label className={labelCls}>תשובה בעברית</label>
+                <textarea rows={3} className={inputCls} value={item.answer_he}
+                  onChange={(e) => setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, answer_he: e.target.value } : i))} />
+              </div>
+              <div>
+                <label className={labelCls}>תשובה באנגלית</label>
+                <textarea rows={3} className={inputCls} value={item.answer_en}
+                  onChange={(e) => setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, answer_en: e.target.value } : i))} />
+              </div>
+              <div>
+                <label className={labelCls}>סדר הצגה</label>
+                <input type="number" className={inputCls} value={item.sort_order}
+                  onChange={(e) => setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, sort_order: Number(e.target.value) } : i))} />
+              </div>
+            </div>
+            <div className="flex gap-2">
+              <button onClick={() => saveEdit(item)} disabled={saving === item.id}
+                className="rounded-lg bg-brand-600 px-4 py-2 text-sm font-medium text-white hover:bg-brand-500 disabled:opacity-50">
+                {saving === item.id ? 'שומר...' : 'שמור'}
+              </button>
+              <button onClick={() => setEditId(null)}
+                className="rounded-lg border border-white/10 px-4 py-2 text-sm text-gray-400 hover:text-white">
+                ביטול
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div key={item.id} className="rounded-xl border border-white/10 bg-white/[0.02] p-4 flex items-start justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-white">{item.question_he}</p>
+              <p className="text-xs text-gray-500 mt-0.5">{item.question_en}</p>
+              <p className="text-xs text-gray-400 mt-1 line-clamp-2">{item.answer_he}</p>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-xs text-gray-600">#{item.sort_order}</span>
+              <button onClick={() => setEditId(item.id)}
+                className="rounded bg-white/10 px-2.5 py-1 text-xs text-gray-300 hover:bg-white/20">
+                עריכה
+              </button>
+              <button onClick={() => deleteItem(item.id)} disabled={saving === item.id}
+                className="rounded bg-red-900/40 px-2.5 py-1 text-xs text-red-300 hover:bg-red-800/50 disabled:opacity-50">
+                מחיקה
+              </button>
+            </div>
+          </div>
+        )
+      )}
+
+      {adding ? (
+        <div className="rounded-xl border border-green-500/30 bg-white/[0.02] p-4 space-y-3">
+          <p className="text-sm font-medium text-green-300">שאלה חדשה</p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className={labelCls}>Slug (ייחודי, ללא רווחים)</label>
+              <input className={inputCls} placeholder="my-question" value={newItem.slug}
+                onChange={(e) => setNewItem((n) => ({ ...n, slug: e.target.value }))} />
+            </div>
+            <div>
+              <label className={labelCls}>סדר הצגה</label>
+              <input type="number" className={inputCls} value={newItem.sort_order}
+                onChange={(e) => setNewItem((n) => ({ ...n, sort_order: Number(e.target.value) }))} />
+            </div>
+            <div>
+              <label className={labelCls}>שאלה בעברית</label>
+              <input className={inputCls} value={newItem.question_he}
+                onChange={(e) => setNewItem((n) => ({ ...n, question_he: e.target.value }))} />
+            </div>
+            <div>
+              <label className={labelCls}>שאלה באנגלית</label>
+              <input className={inputCls} value={newItem.question_en}
+                onChange={(e) => setNewItem((n) => ({ ...n, question_en: e.target.value }))} />
+            </div>
+            <div>
+              <label className={labelCls}>תשובה בעברית</label>
+              <textarea rows={3} className={inputCls} value={newItem.answer_he}
+                onChange={(e) => setNewItem((n) => ({ ...n, answer_he: e.target.value }))} />
+            </div>
+            <div>
+              <label className={labelCls}>תשובה באנגלית</label>
+              <textarea rows={3} className={inputCls} value={newItem.answer_en}
+                onChange={(e) => setNewItem((n) => ({ ...n, answer_en: e.target.value }))} />
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <button onClick={addItem} disabled={saving === 'new' || !newItem.slug}
+              className="rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-500 disabled:opacity-50">
+              {saving === 'new' ? 'שומר...' : 'הוסף שאלה'}
+            </button>
+            <button onClick={() => setAdding(false)}
+              className="rounded-lg border border-white/10 px-4 py-2 text-sm text-gray-400 hover:text-white">
+              ביטול
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button onClick={() => setAdding(true)}
+          className="rounded-lg border border-white/10 px-4 py-2 text-sm text-gray-400 hover:border-white/20 hover:text-white transition-colors">
+          + הוסף שאלה
+        </button>
+      )}
+    </div>
+  )
+}
+
+// ── Pages Editor ───────────────────────────────────────────────────────────────
+
+const PAGE_LABELS: Record<string, string> = {
+  terms: 'תנאי שימוש',
+  refund: 'משלוחים והחזרות',
+  cookies: 'מדיניות עוגיות',
+}
+
+function PagesEditor({ secret }: { secret: string }) {
+  const [selectedSlug, setSelectedSlug] = useState<string>('terms')
+  const [page, setPage] = useState<PageRow | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${secret}` }
+
+  const loadPage = useCallback(async (slug: string) => {
+    setLoading(true)
+    setSaved(false)
+    setError(null)
+    try {
+      const res = await fetch(`/api/admin/pages/${slug}`, { headers: { Authorization: `Bearer ${secret}` } })
+      const data = await res.json() as PageRow
+      setPage(data)
+    } catch {
+      setError('שגיאה בטעינה')
+    } finally {
+      setLoading(false)
+    }
+  }, [secret])
+
+  useEffect(() => { void loadPage(selectedSlug) }, [selectedSlug, loadPage])
+
+  async function save() {
+    if (!page) return
+    setSaving(true)
+    setSaved(false)
+    setError(null)
+    try {
+      const res = await fetch(`/api/admin/pages/${page.slug}`, {
+        method: 'PATCH', headers,
+        body: JSON.stringify({
+          title_he: page.title_he,
+          title_en: page.title_en,
+          sections_he: page.sections_he,
+          sections_en: page.sections_en,
+        }),
+      })
+      if (!res.ok) throw new Error((await res.json() as { error?: string }).error ?? 'שגיאה')
+      setSaved(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'שגיאה')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const inputCls = 'w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-brand-500 focus:outline-none'
+  const labelCls = 'mb-1 block text-xs font-medium text-gray-400'
+
+  return (
+    <div className="space-y-4">
+      {/* Page selector */}
+      <div className="flex gap-2">
+        {Object.entries(PAGE_LABELS).map(([slug, label]) => (
+          <button key={slug} onClick={() => setSelectedSlug(slug)}
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+              selectedSlug === slug ? 'bg-white/10 text-white' : 'border border-white/10 text-gray-400 hover:text-white'
+            }`}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {error && (
+        <div className="rounded-lg bg-red-500/20 border border-red-500/30 p-3 text-red-300 text-sm">{error}</div>
+      )}
+
+      {loading && <p className="text-gray-500 py-8 text-center">טוען...</p>}
+
+      {!loading && page && (
+        <div className="rounded-xl border border-white/10 bg-white/[0.02] p-5 space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold text-gray-300">{PAGE_LABELS[page.slug] ?? page.slug}</h3>
+            {saved && <span className="text-xs text-green-400">✓ נשמר</span>}
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className={labelCls}>כותרת בעברית</label>
+              <input className={inputCls} value={page.title_he}
+                onChange={(e) => setPage((p) => p ? { ...p, title_he: e.target.value } : p)} />
+            </div>
+            <div>
+              <label className={labelCls}>כותרת באנגלית</label>
+              <input className={inputCls} value={page.title_en}
+                onChange={(e) => setPage((p) => p ? { ...p, title_en: e.target.value } : p)} />
+            </div>
+          </div>
+
+          <div>
+            <p className={labelCls}>סעיפים בעברית</p>
+            <div className="space-y-2">
+              {page.sections_he.map((sec, i) => (
+                <div key={i} className="rounded-lg border border-white/5 bg-white/[0.02] p-3 space-y-2">
+                  <input className={inputCls} placeholder="כותרת סעיף (אופציונלי)"
+                    value={sec.heading ?? ''}
+                    onChange={(e) => setPage((p) => {
+                      if (!p) return p
+                      const updated = [...p.sections_he]
+                      updated[i] = { ...updated[i], heading: e.target.value || undefined }
+                      return { ...p, sections_he: updated }
+                    })} />
+                  <textarea rows={3} className={inputCls} placeholder="תוכן"
+                    value={sec.text}
+                    onChange={(e) => setPage((p) => {
+                      if (!p) return p
+                      const updated = [...p.sections_he]
+                      updated[i] = { ...updated[i], text: e.target.value }
+                      return { ...p, sections_he: updated }
+                    })} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <p className={labelCls}>סעיפים באנגלית</p>
+            <div className="space-y-2">
+              {page.sections_en.map((sec, i) => (
+                <div key={i} className="rounded-lg border border-white/5 bg-white/[0.02] p-3 space-y-2">
+                  <input className={inputCls} placeholder="Section heading (optional)"
+                    value={sec.heading ?? ''}
+                    onChange={(e) => setPage((p) => {
+                      if (!p) return p
+                      const updated = [...p.sections_en]
+                      updated[i] = { ...updated[i], heading: e.target.value || undefined }
+                      return { ...p, sections_en: updated }
+                    })} />
+                  <textarea rows={3} className={inputCls} placeholder="Content"
+                    value={sec.text}
+                    onChange={(e) => setPage((p) => {
+                      if (!p) return p
+                      const updated = [...p.sections_en]
+                      updated[i] = { ...updated[i], text: e.target.value }
+                      return { ...p, sections_en: updated }
+                    })} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <button onClick={save} disabled={saving}
+            className="rounded-lg bg-brand-600 px-5 py-2 text-sm font-medium text-white hover:bg-brand-500 disabled:opacity-50">
+            {saving ? 'שומר...' : 'שמור'}
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Product Copy Editor ────────────────────────────────────────────────────────
+
+function ProductCopyEditor({ secret }: { secret: string }) {
+  const [copy, setCopy] = useState<ProductCopy | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [kitHe, setKitHe] = useState('')
+  const [kitEn, setKitEn] = useState('')
+
+  const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${secret}` }
+
+  useEffect(() => {
+    void (async () => {
+      try {
+        const res = await fetch('/api/admin/product-copy', { headers: { Authorization: `Bearer ${secret}` } })
+        const data = await res.json() as ProductCopy
+        setCopy(data)
+        setKitHe((data.kit_contents_he ?? []).join('\n'))
+        setKitEn((data.kit_contents_en ?? []).join('\n'))
+      } catch {
+        setError('שגיאה בטעינה')
+      } finally {
+        setLoading(false)
+      }
+    })()
+  }, [secret])
+
+  async function save() {
+    if (!copy) return
+    setSaving(true)
+    setSaved(false)
+    setError(null)
+    try {
+      const res = await fetch('/api/admin/product-copy', {
+        method: 'PATCH', headers,
+        body: JSON.stringify({
+          ...copy,
+          kit_contents_he: kitHe.split('\n').map((s) => s.trim()).filter(Boolean),
+          kit_contents_en: kitEn.split('\n').map((s) => s.trim()).filter(Boolean),
+        }),
+      })
+      if (!res.ok) throw new Error((await res.json() as { error?: string }).error ?? 'שגיאה')
+      setSaved(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'שגיאה')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const inputCls = 'w-full rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder-gray-500 focus:border-brand-500 focus:outline-none'
+  const labelCls = 'mb-1 block text-xs font-medium text-gray-400'
+
+  if (loading) return <p className="text-gray-500 py-8 text-center">טוען...</p>
+  if (!copy) return null
+
+  return (
+    <div className="rounded-xl border border-white/10 bg-white/[0.02] p-5 space-y-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-sm font-semibold text-gray-300">תוכן מוצר</h3>
+        {saved && <span className="text-xs text-green-400">✓ נשמר</span>}
+      </div>
+
+      {error && (
+        <div className="rounded-lg bg-red-500/20 border border-red-500/30 p-3 text-red-300 text-sm">{error}</div>
+      )}
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="sm:col-span-2">
+          <label className={labelCls}>שם מוצר</label>
+          <input className={inputCls} value={copy.name}
+            onChange={(e) => setCopy((c) => c ? { ...c, name: e.target.value } : c)} />
+        </div>
+        <div>
+          <label className={labelCls}>סלוגן בעברית</label>
+          <input className={inputCls} value={copy.tagline_he}
+            onChange={(e) => setCopy((c) => c ? { ...c, tagline_he: e.target.value } : c)} />
+        </div>
+        <div>
+          <label className={labelCls}>סלוגן באנגלית</label>
+          <input className={inputCls} value={copy.tagline_en}
+            onChange={(e) => setCopy((c) => c ? { ...c, tagline_en: e.target.value } : c)} />
+        </div>
+        <div>
+          <label className={labelCls}>תיאור בעברית</label>
+          <textarea rows={3} className={inputCls} value={copy.description_he}
+            onChange={(e) => setCopy((c) => c ? { ...c, description_he: e.target.value } : c)} />
+        </div>
+        <div>
+          <label className={labelCls}>תיאור באנגלית</label>
+          <textarea rows={3} className={inputCls} value={copy.description_en}
+            onChange={(e) => setCopy((c) => c ? { ...c, description_en: e.target.value } : c)} />
+        </div>
+        <div>
+          <label className={labelCls}>תכולת קיט בעברית (שורה לכל פריט)</label>
+          <textarea rows={6} className={inputCls} value={kitHe}
+            onChange={(e) => setKitHe(e.target.value)} />
+        </div>
+        <div>
+          <label className={labelCls}>תכולת קיט באנגלית (שורה לכל פריט)</label>
+          <textarea rows={6} className={inputCls} value={kitEn}
+            onChange={(e) => setKitEn(e.target.value)} />
+        </div>
+      </div>
+
+      <button onClick={save} disabled={saving}
+        className="rounded-lg bg-brand-600 px-5 py-2 text-sm font-medium text-white hover:bg-brand-500 disabled:opacity-50">
+        {saving ? 'שומר...' : 'שמור'}
+      </button>
+    </div>
   )
 }
 

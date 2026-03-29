@@ -35,6 +35,8 @@ const DEFAULTS: SiteConfig = {
   ticker_enabled: true,
   discount_pct_b2c: 0,
   discount_pct_b2b: 0,
+  how_it_works_video1_id: '',
+  how_it_works_video2_id: '',
 }
 
 export async function getConfig(): Promise<SiteConfig> {
@@ -68,8 +70,10 @@ export async function getConfig(): Promise<SiteConfig> {
       age_gate_enabled:        (map.age_gate_enabled        as boolean)   ?? DEFAULTS.age_gate_enabled,
       visible_colors:          (map.visible_colors          as string[])  ?? DEFAULTS.visible_colors,
       ticker_enabled:          (map.ticker_enabled          as boolean)   ?? DEFAULTS.ticker_enabled,
-      discount_pct_b2c:        (map.discount_pct_b2c        as number)    ?? DEFAULTS.discount_pct_b2c,
-      discount_pct_b2b:        (map.discount_pct_b2b        as number)    ?? DEFAULTS.discount_pct_b2b,
+      discount_pct_b2c:           (map.discount_pct_b2c           as number) ?? DEFAULTS.discount_pct_b2c,
+      discount_pct_b2b:           (map.discount_pct_b2b           as number) ?? DEFAULTS.discount_pct_b2b,
+      how_it_works_video1_id:     (map.how_it_works_video1_id     as string) ?? DEFAULTS.how_it_works_video1_id,
+      how_it_works_video2_id:     (map.how_it_works_video2_id     as string) ?? DEFAULTS.how_it_works_video2_id,
     }
     configCachedAt = Date.now()
     return configCache

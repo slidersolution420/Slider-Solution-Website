@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl'
 import { useStore } from '@/store'
 import { formatPrice } from '@/lib/currency'
 import { calcPrice } from '@/lib/pricing'
-import type { ProductContent } from '@/lib/keystatic'
+import type { ProductContent } from '@/lib/cms'
 
 interface StickyCartBarProps {
   product: ProductContent

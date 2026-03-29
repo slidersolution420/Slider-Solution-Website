@@ -5,9 +5,6 @@ const withNextIntl = createNextIntlPlugin('./src/i18n/request.ts')
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
-  outputFileTracingIncludes: {
-    '/*': ['./content/**/*.json'],
-  },
   images: {
     remotePatterns: [
       {

@@ -21,6 +21,8 @@ export interface SiteConfig {
   ticker_enabled: boolean
   discount_pct_b2c: number  // 0 = no discount, 1–100 = percentage off (retail)
   discount_pct_b2b: number  // 0 = no discount, 1–100 = percentage off (wholesale)
+  how_it_works_video1_id: string
+  how_it_works_video2_id: string
 }
 
 import { localeConfig } from '@/i18n/routing'

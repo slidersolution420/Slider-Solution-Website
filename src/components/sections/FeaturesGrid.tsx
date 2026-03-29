@@ -4,7 +4,7 @@ import {
   ArchiveBoxIcon,
   ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
-import type { ProductContent } from '@/lib/keystatic'
+import type { ProductContent } from '@/lib/cms'
 
 interface FeaturesGridProps {
   product: ProductContent

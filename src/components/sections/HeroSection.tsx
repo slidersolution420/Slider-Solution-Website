@@ -8,7 +8,7 @@ import { useStore } from '@/store'
 import { formatPrice } from '@/lib/currency'
 import { calcPrice } from '@/lib/pricing'
 import { ShieldCheckIcon, LockClosedIcon } from '@heroicons/react/24/solid'
-import type { ProductContent } from '@/lib/keystatic'
+import type { ProductContent } from '@/lib/cms'
 
 interface HeroSectionProps {
   product: ProductContent
