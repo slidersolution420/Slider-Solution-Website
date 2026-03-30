@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
-import { localized } from '@/lib/cms'
+import { localized } from '@/lib/localized'
 import type { FaqItem } from '@/lib/cms'
 
 interface FaqAccordionProps {

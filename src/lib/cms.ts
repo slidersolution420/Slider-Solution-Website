@@ -7,33 +7,10 @@
  */
 import { createServiceClient } from '@/lib/supabase-server'
 
-// ── Locale-aware field helper ────────────────────────────────────────────────
-// Usage: localized(item, 'title', locale) → item.title_es ?? item.title_en
-// Falls back to English when the requested locale column is empty or missing.
-
-export function localized<T extends Record<string, unknown>>(
-  obj: T,
-  field: string,
-  locale: string,
-): string {
-  const val = obj[`${field}_${locale}`]
-  if (typeof val === 'string' && val) return val
-  // Fallback to English
-  const fallback = obj[`${field}_en`]
-  return typeof fallback === 'string' ? fallback : ''
-}
-
-/** Like localized() but for array fields (e.g. sections, kit_contents). */
-export function localizedArray<V>(
-  obj: Record<string, unknown>,
-  field: string,
-  locale: string,
-): V[] {
-  const val = obj[`${field}_${locale}`]
-  if (Array.isArray(val) && val.length > 0) return val as V[]
-  const fallback = obj[`${field}_en`]
-  return Array.isArray(fallback) ? (fallback as V[]) : []
-}
+// ── Locale-aware field helpers (re-exported from shared module) ──────────────
+// These live in localized.ts so Client Components can import them
+// without pulling in supabase-server.ts.
+export { localized, localizedArray } from '@/lib/localized'
 
 // ── Types ────────────────────────────────────────────────────────────────────
 

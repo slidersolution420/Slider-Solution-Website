@@ -7,7 +7,7 @@ import {
   ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
 import { useTranslations } from 'next-intl'
-import { localized } from '@/lib/cms'
+import { localized } from '@/lib/localized'
 import type { ProductContent } from '@/lib/cms'
 
 interface FeaturesGridProps {
