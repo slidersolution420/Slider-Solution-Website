@@ -10,6 +10,7 @@ export interface SiteConfig {
   ticker_he: string
   ticker_en: string
   ticker_es: string
+  ticker_de: string
   instagram_url: string
   facebook_url: string
   whatsapp_number: string

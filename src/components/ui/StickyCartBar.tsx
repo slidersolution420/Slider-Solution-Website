@@ -29,6 +29,7 @@ export default function StickyCartBar({ product, locale, discountPct, priceUsd }
       name_he: `${product.name} — ${colorData.name_he}`,
       name_en: `${product.name} — ${colorData.name_en}`,
       name_es: `${product.name} — ${colorData.name_es || colorData.name_en}`,
+      name_de: `${product.name} — ${colorData.name_de || colorData.name_en}`,
     })
     openCart()
   }

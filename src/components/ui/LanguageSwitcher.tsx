@@ -12,6 +12,7 @@ const localeLabels: Record<Locale, string> = {
   en: 'English (USD $)',
   he: 'עברית (₪ ILS)',
   es: 'Español (EUR €)',
+  de: 'Deutsch (EUR €)',
 }
 
 export default function LanguageSwitcher() {

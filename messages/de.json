@@ -1,0 +1,241 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "contact": "Kontakt",
+    "wholesale": "Gro\u00dfhandel",
+    "my_orders": "Meine Bestellungen"
+  },
+  "ageGate": {
+    "headline": "Bitte best\u00e4tige dein Alter",
+    "sub": "Diese Seite ist f\u00fcr Erwachsene ab 21 Jahren bestimmt",
+    "yes": "Ja, ich bin 21+",
+    "no": "Nein, ich bin unter 21"
+  },
+  "hero": {
+    "badge_shipping": "Kostenloser Versand",
+    "badge_customers": "+1.000 zufriedene Kunden",
+    "badge_patent": "Patentgesch\u00fctzt",
+    "add_to_cart": "In den Warenkorb",
+    "order_now": "Jetzt bestellen",
+    "shipping_pill": "Kostenloser Versand in die USA & Europa ab 3+ Artikeln \ud83d\ude9a",
+    "stat_patent_primary": "Patentgesch\u00fctzt",
+    "stat_patent_secondary": "Patentiertes Design",
+    "stat_customers_number": "+1K",
+    "stat_customers_label": "Zufriedene Kunden",
+    "color_label": "Farbe",
+    "free_shipping_badge": "Kostenloser Versand",
+    "units_label": "St\u00fcck",
+    "decrease_qty": "Menge verringern",
+    "increase_qty": "Menge erh\u00f6hen",
+    "need_more": "Mehr als 10 ben\u00f6tigt? ",
+    "join_wholesaler": "Gro\u00dfh\u00e4ndler werden",
+    "secure_payment": "Sichere Zahlung"
+  },
+  "how_it_works": {
+    "title_before": "So ",
+    "title_highlight": "funktioniert's",
+    "subtitle": "Schau dir unsere Tutorials an und lerne, wie du das Beste aus dem SLIDER herausholst",
+    "card1_title": "F\u00fcr alle, die nicht drehen k\u00f6nnen",
+    "card1_desc": "Du brauchst niemanden mehr, der f\u00fcr dich dreht! Das SLIDER Kit kommt mit 5 leeren Cones, sofort einsatzbereit",
+    "card2_title": "F\u00fcr alle, die gerne drehen",
+    "card2_desc": "Lerne, wie du SLIDER nutzt, um \u00fcberall und jederzeit zu drehen"
+  },
+  "qty": {
+    "label": "Menge",
+    "kit_1": "1 Kit",
+    "kit_2": "2 Kits",
+    "kit_3": "3 Kits",
+    "most_popular": "Am beliebtesten",
+    "free_shipping": "Kostenloser Versand"
+  },
+  "trust": {
+    "shipping_title": "Kostenloser Versand",
+    "shipping_sub": "EU-weite Lieferung",
+    "secure_title": "Sichere Zahlung",
+    "secure_sub": "SSL-verschl\u00fcsselt"
+  },
+  "cart": {
+    "title": "Dein Warenkorb",
+    "empty": "Dein Warenkorb ist leer",
+    "checkout": "Zur Kasse",
+    "remove": "Entfernen",
+    "subtotal": "Zwischensumme",
+    "shipping": "Versand",
+    "shipping_free": "Kostenlos",
+    "shipping_calculated": "Wird an der Kasse berechnet",
+    "total": "Gesamt",
+    "discount": "Rabatt",
+    "continue_shopping": "Weiter einkaufen"
+  },
+  "checkout": {
+    "title": "Bestelldetails",
+    "section_contact": "Kontaktinformationen",
+    "section_shipping": "Lieferadresse",
+    "name": "Vollst\u00e4ndiger Name",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "address": "Adresse",
+    "city": "Stadt",
+    "country": "Land",
+    "zip": "PLZ",
+    "order_summary": "Bestell\u00fcbersicht",
+    "subtotal": "Zwischensumme",
+    "shipping_cost": "Versand",
+    "shipping_free": "Kostenlos",
+    "discount": "Rabatt",
+    "total": "Gesamt",
+    "submit": "Weiter zur Zahlung",
+    "submitting": "Wird verarbeitet...",
+    "error": "Ein Fehler ist aufgetreten. Bitte versuche es erneut."
+  },
+  "success": {
+    "title": "Bestellung eingegangen! \ud83c\udf89",
+    "sub": "Vielen Dank f\u00fcr deinen Einkauf. Eine Best\u00e4tigung wird an deine E-Mail gesendet.",
+    "order_number": "Bestellnummer",
+    "email_sent": "Best\u00e4tigung an deine E-Mail gesendet",
+    "back": "Zur\u00fcck zum Shop",
+    "tracking_title": "Sendung verfolgen",
+    "tracking_sub": "Wir benachrichtigen dich, sobald dein Paket versendet wird",
+    "verifying": "Zahlung wird \u00fcberpr\u00fcft...",
+    "errorTitle": "Zahlung konnte nicht \u00fcberpr\u00fcft werden",
+    "errorBody": "Falls dir ein Betrag berechnet wurde, kontaktiere uns bitte und wir l\u00f6sen das sofort.",
+    "backHome": "Zur\u00fcck zur Startseite",
+    "orderRef": "Bestellreferenz",
+    "body": "Vielen Dank f\u00fcr deinen Einkauf. Eine Best\u00e4tigung wird an deine E-Mail gesendet.",
+    "trackingButton": "Sendung verfolgen"
+  },
+  "wholesale": {
+    "title": "Gro\u00dfhandel-Portal",
+    "subtitle": "Sonderpreise f\u00fcr H\u00e4ndler",
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "logout": "Abmelden",
+    "dashboard_title": "Meine Bestellungen",
+    "no_orders": "Noch keine Bestellungen",
+    "business_name": "Firmenname",
+    "contact_name": "Kontaktperson",
+    "phone": "Telefon",
+    "username": "Benutzername",
+    "store_name": "Shopname",
+    "address": "Adresse",
+    "city": "Stadt",
+    "country": "Land",
+    "zip": "PLZ",
+    "password": "Passwort",
+    "submit_login": "Anmelden",
+    "submit_register": "Registrieren",
+    "error_invalid": "Ung\u00fcltige Anmeldedaten",
+    "error_exists": "Benutzer existiert bereits",
+    "pending": "Dein Konto wird \u00fcberpr\u00fcft",
+    "blocked": "Konto gesperrt. Bitte kontaktiere uns.",
+    "cta_title": "Werde Teil unseres H\u00e4ndlernetzwerks",
+    "cta_sub": "Gro\u00dfhandelspreis: 82\u00a0$ pro Display-Box (6 Kits)",
+    "cta_button": "H\u00e4ndler-Login"
+  },
+  "contact": {
+    "title": "Kontakt",
+    "subtitle": "Wir beantworten gerne jede Frage",
+    "name": "Name",
+    "email": "E-Mail",
+    "message": "Nachricht",
+    "submit": "Senden",
+    "submitting": "Wird gesendet...",
+    "success": "Deine Nachricht wurde erfolgreich gesendet!",
+    "error": "Senden fehlgeschlagen. Bitte versuche es erneut."
+  },
+  "footer": {
+    "tagline": "Das Original Cone Kit",
+    "follow_us": "Folge uns",
+    "home": "Startseite",
+    "contact": "Kontakt",
+    "wholesale": "Gro\u00dfhandel",
+    "terms": "Nutzungsbedingungen",
+    "refund": "R\u00fcckgaberichtlinie",
+    "cookies": "Cookies",
+    "copyright": "Alle Rechte vorbehalten",
+    "pages_heading": "Seiten",
+    "legal_heading": "Rechtliches"
+  },
+  "currency": {
+    "label": "W\u00e4hrung",
+    "ils": "\u20aa ILS",
+    "usd": "$ USD",
+    "eur": "\u20ac EUR"
+  },
+  "forms": {
+    "consent_pre": "Ich habe die ",
+    "terms_link": "Nutzungsbedingungen",
+    "consent_mid": " und die ",
+    "privacy_link": "Datenschutzrichtlinie",
+    "consent_required": "Du musst den Bedingungen zustimmen, um fortzufahren"
+  },
+  "reviews": {
+    "title": "Was unsere Kunden sagen",
+    "subtitle": "Schlie\u00dfe dich 1.000+ zufriedenen Kunden an",
+    "rating_summary": "{count} verifizierte Bewertungen",
+    "leave_review": "Bewertung schreiben",
+    "form_title": "Teile deine Erfahrung",
+    "form_name": "Dein Name",
+    "form_rating": "Deine Bewertung",
+    "form_body": "Schreibe deine Bewertung...",
+    "form_submit": "Bewertung absenden",
+    "form_submitting": "Wird gesendet...",
+    "form_success_title": "Vielen Dank!",
+    "form_success_body": "Deine Bewertung wurde eingereicht und wartet auf Freigabe.",
+    "form_close": "Schlie\u00dfen",
+    "verified": "Verifizierter Kauf",
+    "empty": "Sei der Erste, der eine Bewertung schreibt!"
+  },
+  "features": {
+    "title": "Warum SLIDER?",
+    "subtitle": "Vier Vorteile, die das gesamte Erlebnis ver\u00e4ndern"
+  },
+  "faq": {
+    "title": "H\u00e4ufig gestellte Fragen"
+  },
+  "reviews_carousel": {
+    "title": "Was Kunden sagen"
+  },
+  "wholesale_landing": {
+    "per_box": "Pro Display-Box",
+    "kits_per_box": "Kits pro Box",
+    "savings": "Ersparnis vs. Einzelhandel"
+  },
+  "wholesale_dashboard": {
+    "order_box": "Display-Box bestellen",
+    "kits_label": "6 Kits pro Box",
+    "order_now": "Jetzt bestellen",
+    "date": "Datum",
+    "total": "Gesamt",
+    "status": "Status",
+    "pending_review": "Dein Konto wird \u00fcberpr\u00fcft",
+    "pending_sub": "Wir genehmigen dein Konto innerhalb von 24 Stunden"
+  },
+  "instagram": {
+    "title": "Folge uns"
+  },
+  "order_details": {
+    "title": "Bestellung eingegangen!",
+    "subtitle": "Vielen Dank f\u00fcr deinen Einkauf",
+    "order_number": "Bestellung #",
+    "total": "Gesamt",
+    "status": "Status",
+    "tracking": "Sendungsverfolgung",
+    "confirmation_sent": "Best\u00e4tigung gesendet an:",
+    "back": "Zur\u00fcck zum Shop"
+  },
+  "meta": {
+    "title": "SLIDER \u2014 Das Original All-in-One Cone Kit",
+    "description": "Das weltweit erste ALL IN ONE Cone Kit. Eckiger Grinder, integrierter Trichter, 5 Cones. Kostenloser Versand."
+  },
+  "errors": {
+    "required": "Erforderlich",
+    "email_invalid": "Ung\u00fcltige E-Mail-Adresse",
+    "min_length": "Mindestens {count} Zeichen",
+    "generic": "Ein Fehler ist aufgetreten. Bitte versuche es erneut.",
+    "paymentFailed": "Zahlung fehlgeschlagen",
+    "paymentFailedBody": "Etwas ist schiefgelaufen. Dir wurde nichts berechnet. Bitte versuche es erneut.",
+    "tryAgain": "Erneut versuchen",
+    "backHome": "Zur\u00fcck zur Startseite"
+  }
+}

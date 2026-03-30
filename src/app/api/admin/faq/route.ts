@@ -39,9 +39,11 @@ export async function POST(request: Request) {
       question_he: string
       question_en: string
       question_es?: string
+      question_de?: string
       answer_he: string
       answer_en: string
       answer_es?: string
+      answer_de?: string
       sort_order: number
     }
 
@@ -72,9 +74,11 @@ export async function PATCH(request: Request) {
       question_he?: string
       question_en?: string
       question_es?: string
+      question_de?: string
       answer_he?: string
       answer_en?: string
       answer_es?: string
+      answer_de?: string
       sort_order?: number
     }
 

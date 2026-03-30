@@ -44,9 +44,11 @@ export async function PATCH(request: Request, { params }: RouteParams) {
       title_he?: string
       title_en?: string
       title_es?: string
+      title_de?: string
       sections_he?: unknown[]
       sections_en?: unknown[]
       sections_es?: unknown[]
+      sections_de?: unknown[]
     }
 
     const supabase = createServiceClient()

@@ -354,9 +354,11 @@ interface FaqRow {
   question_he: string
   question_en: string
   question_es: string
+  question_de: string
   answer_he: string
   answer_en: string
   answer_es: string
+  answer_de: string
   sort_order: number
 }
 
@@ -366,9 +368,11 @@ interface PageRow {
   title_he: string
   title_en: string
   title_es: string
+  title_de: string
   sections_he: { heading?: string; text: string }[]
   sections_en: { heading?: string; text: string }[]
   sections_es: { heading?: string; text: string }[]
+  sections_de: { heading?: string; text: string }[]
 }
 
 interface ProductCopy {
@@ -376,12 +380,15 @@ interface ProductCopy {
   tagline_he: string
   tagline_en: string
   tagline_es: string
+  tagline_de: string
   description_he: string
   description_en: string
   description_es: string
+  description_de: string
   kit_contents_he: string[]
   kit_contents_en: string[]
   kit_contents_es: string[]
+  kit_contents_de: string[]
 }
 
 type CmsSection = 'faq' | 'pages' | 'product'
@@ -423,7 +430,7 @@ function FaqEditor({ secret }: { secret: string }) {
   const [editId, setEditId] = useState<string | null>(null)
   const [adding, setAdding] = useState(false)
   const [newItem, setNewItem] = useState<Omit<FaqRow, 'id'>>({
-    slug: '', question_he: '', question_en: '', question_es: '', answer_he: '', answer_en: '', answer_es: '', sort_order: 0,
+    slug: '', question_he: '', question_en: '', question_es: '', question_de: '', answer_he: '', answer_en: '', answer_es: '', answer_de: '', sort_order: 0,
   })
 
   const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${secret}` }
@@ -454,9 +461,11 @@ function FaqEditor({ secret }: { secret: string }) {
           question_he: item.question_he,
           question_en: item.question_en,
           question_es: item.question_es,
+          question_de: item.question_de,
           answer_he: item.answer_he,
           answer_en: item.answer_en,
           answer_es: item.answer_es,
+          answer_de: item.answer_de,
           sort_order: item.sort_order,
         }),
       })
@@ -496,7 +505,7 @@ function FaqEditor({ secret }: { secret: string }) {
       })
       if (!res.ok) throw new Error((await res.json() as { error?: string }).error ?? 'שגיאה')
       setAdding(false)
-      setNewItem({ slug: '', question_he: '', question_en: '', question_es: '', answer_he: '', answer_en: '', answer_es: '', sort_order: 0 })
+      setNewItem({ slug: '', question_he: '', question_en: '', question_es: '', question_de: '', answer_he: '', answer_en: '', answer_es: '', answer_de: '', sort_order: 0 })
       await load()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'שגיאה')
@@ -536,6 +545,11 @@ function FaqEditor({ secret }: { secret: string }) {
                   onChange={(e) => setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, question_es: e.target.value } : i))} />
               </div>
               <div>
+                <label className={labelCls}>שאלה בגרמנית</label>
+                <input className={inputCls} value={item.question_de}
+                  onChange={(e) => setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, question_de: e.target.value } : i))} />
+              </div>
+              <div>
                 <label className={labelCls}>תשובה בעברית</label>
                 <textarea rows={3} className={inputCls} value={item.answer_he}
                   onChange={(e) => setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, answer_he: e.target.value } : i))} />
@@ -549,6 +563,11 @@ function FaqEditor({ secret }: { secret: string }) {
                 <label className={labelCls}>תשובה בספרדית</label>
                 <textarea rows={3} className={inputCls} value={item.answer_es}
                   onChange={(e) => setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, answer_es: e.target.value } : i))} />
+              </div>
+              <div>
+                <label className={labelCls}>תשובה בגרמנית</label>
+                <textarea rows={3} className={inputCls} value={item.answer_de}
+                  onChange={(e) => setItems((prev) => prev.map((i) => i.id === item.id ? { ...i, answer_de: e.target.value } : i))} />
               </div>
               <div>
                 <label className={labelCls}>סדר הצגה</label>
@@ -619,6 +638,11 @@ function FaqEditor({ secret }: { secret: string }) {
                 onChange={(e) => setNewItem((n) => ({ ...n, question_es: e.target.value }))} />
             </div>
             <div>
+              <label className={labelCls}>שאלה בגרמנית</label>
+              <input className={inputCls} value={newItem.question_de}
+                onChange={(e) => setNewItem((n) => ({ ...n, question_de: e.target.value }))} />
+            </div>
+            <div>
               <label className={labelCls}>תשובה בעברית</label>
               <textarea rows={3} className={inputCls} value={newItem.answer_he}
                 onChange={(e) => setNewItem((n) => ({ ...n, answer_he: e.target.value }))} />
@@ -632,6 +656,11 @@ function FaqEditor({ secret }: { secret: string }) {
               <label className={labelCls}>תשובה בספרדית</label>
               <textarea rows={3} className={inputCls} value={newItem.answer_es}
                 onChange={(e) => setNewItem((n) => ({ ...n, answer_es: e.target.value }))} />
+            </div>
+            <div>
+              <label className={labelCls}>תשובה בגרמנית</label>
+              <textarea rows={3} className={inputCls} value={newItem.answer_de}
+                onChange={(e) => setNewItem((n) => ({ ...n, answer_de: e.target.value }))} />
             </div>
           </div>
           <div className="flex gap-2">
@@ -702,9 +731,11 @@ function PagesEditor({ secret }: { secret: string }) {
           title_he: page.title_he,
           title_en: page.title_en,
           title_es: page.title_es,
+          title_de: page.title_de,
           sections_he: page.sections_he,
           sections_en: page.sections_en,
           sections_es: page.sections_es,
+          sections_de: page.sections_de,
         }),
       })
       if (!res.ok) throw new Error((await res.json() as { error?: string }).error ?? 'שגיאה')
@@ -761,6 +792,11 @@ function PagesEditor({ secret }: { secret: string }) {
               <label className={labelCls}>כותרת בספרדית</label>
               <input className={inputCls} value={page.title_es}
                 onChange={(e) => setPage((p) => p ? { ...p, title_es: e.target.value } : p)} />
+            </div>
+            <div>
+              <label className={labelCls}>כותרת בגרמנית</label>
+              <input className={inputCls} value={page.title_de}
+                onChange={(e) => setPage((p) => p ? { ...p, title_de: e.target.value } : p)} />
             </div>
           </div>
 
@@ -847,6 +883,37 @@ function PagesEditor({ secret }: { secret: string }) {
             </div>
           </div>
 
+          <div>
+            <p className={labelCls}>סעיפים בגרמנית</p>
+            <div className="space-y-2">
+              {(page.sections_de ?? []).map((sec, i) => (
+                <div key={i} className="rounded-lg border border-white/5 bg-white/[0.02] p-3 space-y-2">
+                  <input className={inputCls} placeholder="Überschrift (optional)"
+                    value={sec.heading ?? ''}
+                    onChange={(e) => setPage((p) => {
+                      if (!p) return p
+                      const updated = [...(p.sections_de ?? [])]
+                      updated[i] = { ...updated[i], heading: e.target.value || undefined }
+                      return { ...p, sections_de: updated }
+                    })} />
+                  <textarea rows={3} className={inputCls} placeholder="Inhalt"
+                    value={sec.text}
+                    onChange={(e) => setPage((p) => {
+                      if (!p) return p
+                      const updated = [...(p.sections_de ?? [])]
+                      updated[i] = { ...updated[i], text: e.target.value }
+                      return { ...p, sections_de: updated }
+                    })} />
+                </div>
+              ))}
+              {(page.sections_de ?? []).length === 0 && (
+                <p className="text-xs text-gray-600 py-2">אין סעיפים בגרמנית. הוסף סעיף ראשון:</p>
+              )}
+              <button onClick={() => setPage((p) => p ? { ...p, sections_de: [...(p.sections_de ?? []), { heading: '', text: '' }] } : p)}
+                className="text-xs text-brand-400 hover:text-brand-300">+ הוסף סעיף</button>
+            </div>
+          </div>
+
           <button onClick={save} disabled={saving}
             className="rounded-lg bg-brand-600 px-5 py-2 text-sm font-medium text-white hover:bg-brand-500 disabled:opacity-50">
             {saving ? 'שומר...' : 'שמור'}
@@ -868,6 +935,7 @@ function ProductCopyEditor({ secret }: { secret: string }) {
   const [kitHe, setKitHe] = useState('')
   const [kitEn, setKitEn] = useState('')
   const [kitEs, setKitEs] = useState('')
+  const [kitDe, setKitDe] = useState('')
 
   const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${secret}` }
 
@@ -880,6 +948,7 @@ function ProductCopyEditor({ secret }: { secret: string }) {
         setKitHe((data.kit_contents_he ?? []).join('\n'))
         setKitEn((data.kit_contents_en ?? []).join('\n'))
         setKitEs((data.kit_contents_es ?? []).join('\n'))
+        setKitDe((data.kit_contents_de ?? []).join('\n'))
       } catch {
         setError('שגיאה בטעינה')
       } finally {
@@ -901,6 +970,7 @@ function ProductCopyEditor({ secret }: { secret: string }) {
           kit_contents_he: kitHe.split('\n').map((s) => s.trim()).filter(Boolean),
           kit_contents_en: kitEn.split('\n').map((s) => s.trim()).filter(Boolean),
           kit_contents_es: kitEs.split('\n').map((s) => s.trim()).filter(Boolean),
+          kit_contents_de: kitDe.split('\n').map((s) => s.trim()).filter(Boolean),
         }),
       })
       if (!res.ok) throw new Error((await res.json() as { error?: string }).error ?? 'שגיאה')
@@ -951,6 +1021,11 @@ function ProductCopyEditor({ secret }: { secret: string }) {
             onChange={(e) => setCopy((c) => c ? { ...c, tagline_es: e.target.value } : c)} />
         </div>
         <div>
+          <label className={labelCls}>סלוגן בגרמנית</label>
+          <input className={inputCls} value={copy.tagline_de}
+            onChange={(e) => setCopy((c) => c ? { ...c, tagline_de: e.target.value } : c)} />
+        </div>
+        <div>
           <label className={labelCls}>תיאור בעברית</label>
           <textarea rows={3} className={inputCls} value={copy.description_he}
             onChange={(e) => setCopy((c) => c ? { ...c, description_he: e.target.value } : c)} />
@@ -966,6 +1041,11 @@ function ProductCopyEditor({ secret }: { secret: string }) {
             onChange={(e) => setCopy((c) => c ? { ...c, description_es: e.target.value } : c)} />
         </div>
         <div>
+          <label className={labelCls}>תיאור בגרמנית</label>
+          <textarea rows={3} className={inputCls} value={copy.description_de}
+            onChange={(e) => setCopy((c) => c ? { ...c, description_de: e.target.value } : c)} />
+        </div>
+        <div>
           <label className={labelCls}>תכולת קיט בעברית (שורה לכל פריט)</label>
           <textarea rows={6} className={inputCls} value={kitHe}
             onChange={(e) => setKitHe(e.target.value)} />
@@ -979,6 +1059,11 @@ function ProductCopyEditor({ secret }: { secret: string }) {
           <label className={labelCls}>תכולת קיט בספרדית (שורה לכל פריט)</label>
           <textarea rows={6} className={inputCls} value={kitEs}
             onChange={(e) => setKitEs(e.target.value)} />
+        </div>
+        <div>
+          <label className={labelCls}>תכולת קיט בגרמנית (שורה לכל פריט)</label>
+          <textarea rows={6} className={inputCls} value={kitDe}
+            onChange={(e) => setKitDe(e.target.value)} />
         </div>
       </div>
 
@@ -1009,6 +1094,7 @@ function ContentTab({ config, secret }: { config: SiteConfig; secret: string }) 
     ticker_he: config.ticker_he,
     ticker_en: config.ticker_en,
     ticker_es: config.ticker_es,
+    ticker_de: config.ticker_de,
   })
   const [tickerEnabled, setTickerEnabled] = useState(config.ticker_enabled)
   const [socials, setSocials] = useState({
@@ -1148,6 +1234,11 @@ function ContentTab({ config, secret }: { config: SiteConfig; secret: string }) 
             <input type="text" className={inputCls} value={ticker.ticker_es}
               onChange={(e) => setTicker((t) => ({ ...t, ticker_es: e.target.value }))} />
           </div>
+          <div>
+            <label className={labelCls}>טקסט בגרמנית</label>
+            <input type="text" className={inputCls} value={ticker.ticker_de}
+              onChange={(e) => setTicker((t) => ({ ...t, ticker_de: e.target.value }))} />
+          </div>
         </div>
         <SaveRow sectionId="ticker" saving={saving} saved={saved}
           onSave={() => saveSection('ticker', [
@@ -1155,6 +1246,7 @@ function ContentTab({ config, secret }: { config: SiteConfig; secret: string }) 
             ['ticker_he', ticker.ticker_he],
             ['ticker_en', ticker.ticker_en],
             ['ticker_es', ticker.ticker_es],
+            ['ticker_de', ticker.ticker_de],
           ])} />
       </Section>
 

@@ -95,6 +95,7 @@ export default function HeroSection({ product, locale, visibleColors, discountPc
       name_he: `${product.name} — ${selectedColorData.name_he}`,
       name_en: `${product.name} — ${selectedColorData.name_en}`,
       name_es: `${product.name} — ${selectedColorData.name_es || selectedColorData.name_en}`,
+      name_de: `${product.name} — ${selectedColorData.name_de || selectedColorData.name_en}`,
     })
     openCart()
   }

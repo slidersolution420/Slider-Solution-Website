@@ -4,6 +4,7 @@ export const localeConfig = {
   en: { currency: 'USD', dir: 'ltr', label: 'EN' },
   he: { currency: 'ILS', dir: 'rtl', label: 'עב' },
   es: { currency: 'EUR', dir: 'ltr', label: 'ES' },
+  de: { currency: 'EUR', dir: 'ltr', label: 'DE' },
 } as const
 
 export type Locale = keyof typeof localeConfig

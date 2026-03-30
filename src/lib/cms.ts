@@ -18,6 +18,7 @@ export interface ColorItem {
   name_he: string
   name_en: string
   name_es?: string
+  name_de?: string
   slug: string
   image: string
   gradient: string
@@ -28,9 +29,11 @@ export interface FeatureItem {
   title_he: string
   title_en: string
   title_es?: string
+  title_de?: string
   desc_he: string
   desc_en: string
   desc_es?: string
+  desc_de?: string
   icon: string
   [key: string]: unknown
 }
@@ -39,9 +42,11 @@ export interface StepItem {
   title_he: string
   title_en: string
   title_es?: string
+  title_de?: string
   desc_he: string
   desc_en: string
   desc_es?: string
+  desc_de?: string
   [key: string]: unknown
 }
 
@@ -50,9 +55,11 @@ export interface ProductContent {
   tagline_he: string
   tagline_en: string
   tagline_es?: string
+  tagline_de?: string
   description_he: string
   description_en: string
   description_es?: string
+  description_de?: string
   price_b2c_usd: number
   price_b2b_usd: number
   image_b2c: string
@@ -63,6 +70,7 @@ export interface ProductContent {
   kit_contents_he: string[]
   kit_contents_en: string[]
   kit_contents_es?: string[]
+  kit_contents_de?: string[]
   stock: number
   [key: string]: unknown
 }
@@ -72,9 +80,11 @@ export interface FaqItem {
   question_he: string
   question_en: string
   question_es?: string
+  question_de?: string
   answer_he: string
   answer_en: string
   answer_es?: string
+  answer_de?: string
   order: number
   [key: string]: unknown
 }
@@ -88,9 +98,11 @@ export interface PageContent {
   title_he: string
   title_en: string
   title_es?: string
+  title_de?: string
   sections_he: PageSection[]
   sections_en: PageSection[]
   sections_es?: PageSection[]
+  sections_de?: PageSection[]
   [key: string]: unknown
 }
 
@@ -160,7 +172,7 @@ export async function getFaq(): Promise<FaqItem[]> {
     const supabase = createServiceClient()
     const { data, error } = await supabase
       .from('cms_faq')
-      .select('slug, question_he, question_en, question_es, answer_he, answer_en, answer_es, sort_order')
+      .select('slug, question_he, question_en, question_es, question_de, answer_he, answer_en, answer_es, answer_de, sort_order')
       .order('sort_order', { ascending: true })
 
     if (error ?? !data) return []
@@ -170,9 +182,11 @@ export async function getFaq(): Promise<FaqItem[]> {
       question_he: row.question_he as string,
       question_en: row.question_en as string,
       question_es: (row.question_es as string) || '',
+      question_de: (row.question_de as string) || '',
       answer_he: row.answer_he as string,
       answer_en: row.answer_en as string,
       answer_es: (row.answer_es as string) || '',
+      answer_de: (row.answer_de as string) || '',
       order: row.sort_order as number,
     }))
     faqCachedAt = Date.now()
@@ -189,7 +203,7 @@ export async function getPage(slug: string): Promise<PageContent | null> {
     const supabase = createServiceClient()
     const { data, error } = await supabase
       .from('cms_pages')
-      .select('title_he, title_en, title_es, sections_he, sections_en, sections_es')
+      .select('title_he, title_en, title_es, title_de, sections_he, sections_en, sections_es, sections_de')
       .eq('slug', slug)
       .single()
 
@@ -199,9 +213,11 @@ export async function getPage(slug: string): Promise<PageContent | null> {
       title_he: data.title_he as string,
       title_en: data.title_en as string,
       title_es: (data.title_es as string) || '',
+      title_de: (data.title_de as string) || '',
       sections_he: data.sections_he as PageSection[],
       sections_en: data.sections_en as PageSection[],
       sections_es: (data.sections_es as PageSection[]) || [],
+      sections_de: (data.sections_de as PageSection[]) || [],
     }
   } catch {
     return null
