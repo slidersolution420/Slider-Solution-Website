@@ -11,6 +11,7 @@ import type { Locale } from '@/i18n/routing'
 const localeLabels: Record<Locale, string> = {
   en: 'English (USD $)',
   he: 'עברית (₪ ILS)',
+  es: 'Español (EUR €)',
 }
 
 export default function LanguageSwitcher() {

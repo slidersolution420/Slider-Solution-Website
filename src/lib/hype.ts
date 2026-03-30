@@ -26,8 +26,12 @@ export interface CustomerInfo {
   items: Array<{ name: string; quantity: number; price: number }>
   total: number
   orderRef: string // cart session UUID — used as Hype's Order reference
-  currency: 'ILS' | 'USD'
+  currency: 'ILS' | 'USD' | 'EUR'
 }
+
+// Hype Coin codes: 1=ILS, 2=USD, 3=EUR, 4=GBP
+const HYPE_COIN: Record<CustomerInfo['currency'], string> = { ILS: '1', USD: '2', EUR: '3' }
+const HYPE_LANG: Record<CustomerInfo['currency'], string> = { ILS: 'HEB', USD: 'ENG', EUR: 'ENG' }
 
 /**
  * Step 1+2: Call APISign (SIGN) to get signed payment page params, then build the payment URL.
@@ -51,7 +55,7 @@ export async function initiatePayment(customer: CustomerInfo): Promise<HypePayme
   const firstName = nameParts[0] ?? customer.name
   const lastName = nameParts.slice(1).join(' ') || firstName
 
-  const isUsd = customer.currency === 'USD'
+  const curr = customer.currency
 
   // Build item list for Hype receipt: [0~Name~Qty~Price][...]
   const heshParts = customer.items.map(
@@ -75,8 +79,8 @@ export async function initiatePayment(customer: CustomerInfo): Promise<HypePayme
     SendHesh: 'True',
     heshDesc,
     Pritim: 'True',
-    PageLang: isUsd ? 'ENG' : 'HEB',
-    Coin: isUsd ? '2' : '1',
+    PageLang: HYPE_LANG[curr],
+    Coin: HYPE_COIN[curr],
     Tash: '1',
     FixTash: 'False',
     ClientName: firstName,

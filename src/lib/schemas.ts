@@ -10,7 +10,7 @@ export const cartItemSchema = z.object({
 
 export const checkoutSchema = z.object({
   items: z.array(cartItemSchema).min(1),
-  currency: z.enum(['ILS', 'USD']),
+  currency: z.enum(['ILS', 'USD', 'EUR']),
   name: z.string().min(2),
   email: z.string().email(),
   phone: z.string().min(7),

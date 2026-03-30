@@ -151,7 +151,8 @@
   "currency": {
     "label": "Currency",
     "ils": "₪ ILS",
-    "usd": "$ USD"
+    "usd": "$ USD",
+    "eur": "€ EUR"
   },
   "forms": {
     "consent_pre": "I have read and agree to the ",

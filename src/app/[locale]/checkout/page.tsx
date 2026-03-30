@@ -10,6 +10,6 @@ interface CheckoutPageProps {
 export default async function CheckoutPage({ params }: CheckoutPageProps) {
   const { locale } = await params
   const cfg = await getConfig()
-  const defaultCountry = locale === 'he' ? 'IL' : 'US'
+  const defaultCountry = locale === 'he' ? 'IL' : locale === 'es' ? 'ES' : 'US'
   return <CheckoutClient discountPct={cfg.discount_pct_b2c} priceUsd={cfg.price_b2c_usd} defaultCountry={defaultCountry} />
 }

@@ -47,11 +47,12 @@ export async function POST(request: Request) {
 
     const cart = cartSession?.cart as CartPayload | null
     const customer = cart?.customer
-    const chargedInUsd = cart?.chargeCurrency === 'USD'
+    const chargeCurrency = cart?.chargeCurrency ?? 'ILS'
+    const hypeAmount = parseFloat(amountStr ?? '0')
     const totalUsd = cart?.totalUsd
-      ?? (chargedInUsd
-        ? parseFloat(amountStr ?? '0')
-        : Math.round((parseFloat(amountStr ?? '0') / EXCHANGE_RATES.ILS) * 100) / 100)
+      ?? (chargeCurrency === 'USD'
+        ? hypeAmount
+        : Math.round((hypeAmount / EXCHANGE_RATES[chargeCurrency]) * 100) / 100)
 
     const { data: order, error } = await supabase
       .from('orders')

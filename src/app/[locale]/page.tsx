@@ -63,7 +63,8 @@ export default async function HomePage({ params }: HomePageProps) {
     // Service client unavailable (e.g. missing env var in preview) — show no reviews
   }
 
-  const tickerText = locale === 'he' ? siteConfig.ticker_he : siteConfig.ticker_en
+  const tickerKey = `ticker_${locale}` as keyof typeof siteConfig
+  const tickerText = (siteConfig[tickerKey] as string) || siteConfig.ticker_en
 
   return (
     <>

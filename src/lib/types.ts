@@ -9,6 +9,7 @@ export interface SiteConfig {
   stock: number
   ticker_he: string
   ticker_en: string
+  ticker_es: string
   instagram_url: string
   facebook_url: string
   whatsapp_number: string
@@ -120,7 +121,7 @@ export interface CartPayload {
   }
   totalUsd: number
   totalIls?: number
-  chargeCurrency?: 'ILS' | 'USD'
+  chargeCurrency?: Currency
 }
 
 export interface CartSession {

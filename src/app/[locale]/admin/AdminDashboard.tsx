@@ -923,6 +923,7 @@ function ContentTab({ config, secret }: { config: SiteConfig; secret: string }) 
   const [ticker, setTicker] = useState({
     ticker_he: config.ticker_he,
     ticker_en: config.ticker_en,
+    ticker_es: config.ticker_es,
   })
   const [tickerEnabled, setTickerEnabled] = useState(config.ticker_enabled)
   const [socials, setSocials] = useState({
@@ -1046,7 +1047,7 @@ function ContentTab({ config, secret }: { config: SiteConfig; secret: string }) 
             onChange={(e) => setTickerEnabled(e.target.checked)} />
           <span className="text-sm text-gray-300">הצג פס גלילה בדף הבית</span>
         </label>
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-3">
           <div>
             <label className={labelCls}>טקסט בעברית</label>
             <input type="text" className={inputCls} value={ticker.ticker_he}
@@ -1057,12 +1058,18 @@ function ContentTab({ config, secret }: { config: SiteConfig; secret: string }) 
             <input type="text" className={inputCls} value={ticker.ticker_en}
               onChange={(e) => setTicker((t) => ({ ...t, ticker_en: e.target.value }))} />
           </div>
+          <div>
+            <label className={labelCls}>טקסט בספרדית</label>
+            <input type="text" className={inputCls} value={ticker.ticker_es}
+              onChange={(e) => setTicker((t) => ({ ...t, ticker_es: e.target.value }))} />
+          </div>
         </div>
         <SaveRow sectionId="ticker" saving={saving} saved={saved}
           onSave={() => saveSection('ticker', [
             ['ticker_enabled', tickerEnabled],
             ['ticker_he', ticker.ticker_he],
             ['ticker_en', ticker.ticker_en],
+            ['ticker_es', ticker.ticker_es],
           ])} />
       </Section>
 
