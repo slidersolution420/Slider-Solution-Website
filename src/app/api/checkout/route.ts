@@ -32,7 +32,8 @@ export async function POST(request: Request) {
       intlCost: cfg.intl_paid_shipping_usd,
     })
     const totalUsd = subtotalUsd + shippingUsd
-    const totalIls = convertPrice(totalUsd, 'ILS')
+    const isUsd = currency === 'USD'
+    const totalIls = isUsd ? null : convertPrice(totalUsd, 'ILS')
 
     // Save full order data to cart_sessions.
     // The session UUID becomes the Hype Order reference so we can look it up after payment.
@@ -41,7 +42,8 @@ export async function POST(request: Request) {
       items,
       customer: { name, email, phone, address, city, country, zip },
       totalUsd: Math.round(totalUsd * 100) / 100,
-      totalIls: Math.round(totalIls),
+      ...(totalIls != null ? { totalIls: Math.round(totalIls) } : {}),
+      chargeCurrency: currency,
     }
 
     const { data: existing, error: selectError } = await supabase
@@ -69,13 +71,15 @@ export async function POST(request: Request) {
       sessionId = newSession.id
     }
 
-    // Build Hype item list for the receipt — use server-known per-item ILS price (with discount)
-    const priceIlsPerKit = convertPrice(effectivePrice, 'ILS')
+    // Build Hype item list for the receipt — use server-known per-item price in charge currency
+    const pricePerKit = isUsd ? effectivePrice : convertPrice(effectivePrice, 'ILS')
     const hypeItems = items.map(i => ({
       name: i.color ? `Slider Kit (${i.color})` : 'Slider Cone Kit',
       quantity: i.quantity,
-      priceIls: priceIlsPerKit,
+      price: pricePerKit,
     }))
+
+    const chargeTotal = isUsd ? Math.round(totalUsd) : Math.round(totalIls!)
 
     const result = await initiatePayment({
       name,
@@ -86,8 +90,9 @@ export async function POST(request: Request) {
       country,
       zip,
       items: hypeItems,
-      totalIls: Math.round(totalIls),
+      total: chargeTotal,
       orderRef: sessionId,
+      currency: isUsd ? 'USD' : 'ILS',
     })
 
     return NextResponse.json({

@@ -23,9 +23,10 @@ export interface CustomerInfo {
   city: string
   country: string
   zip: string
-  items: Array<{ name: string; quantity: number; priceIls: number }>
-  totalIls: number
+  items: Array<{ name: string; quantity: number; price: number }>
+  total: number
   orderRef: string // cart session UUID — used as Hype's Order reference
+  currency: 'ILS' | 'USD'
 }
 
 /**
@@ -41,7 +42,7 @@ export async function initiatePayment(customer: CustomerInfo): Promise<HypePayme
   if (!apiKey || !masof || !passP) {
     // Dev mock: redirect straight to thank-you with mock params
     return {
-      payment_url: `${appUrl}/thankyou?Order=${customer.orderRef}&CCode=0&Amount=${Math.round(customer.totalIls)}&Id=mock_${Date.now()}&mock=1`,
+      payment_url: `${appUrl}/thankyou?Order=${customer.orderRef}&CCode=0&Amount=${Math.round(customer.total)}&Id=mock_${Date.now()}&mock=1`,
       order_ref: customer.orderRef,
     }
   }
@@ -50,9 +51,11 @@ export async function initiatePayment(customer: CustomerInfo): Promise<HypePayme
   const firstName = nameParts[0] ?? customer.name
   const lastName = nameParts.slice(1).join(' ') || firstName
 
-  // Build item list for Hype receipt: [0~Name~Qty~PriceIls][...]
+  const isUsd = customer.currency === 'USD'
+
+  // Build item list for Hype receipt: [0~Name~Qty~Price][...]
   const heshParts = customer.items.map(
-    i => `0~${i.name}~${i.quantity}~${Math.round(i.priceIls)}`
+    i => `0~${i.name}~${i.quantity}~${Math.round(i.price)}`
   )
   const heshDesc = `[${heshParts.join('][')}]`
 
@@ -64,7 +67,7 @@ export async function initiatePayment(customer: CustomerInfo): Promise<HypePayme
     Masof: masof,
     Order: customer.orderRef,
     Info: `Slider Kit ${customer.orderRef.slice(0, 8)}`,
-    Amount: String(Math.round(customer.totalIls)),
+    Amount: String(Math.round(customer.total)),
     UTF8: 'True',
     UTF8out: 'True',
     Sign: 'True',
@@ -72,8 +75,8 @@ export async function initiatePayment(customer: CustomerInfo): Promise<HypePayme
     SendHesh: 'True',
     heshDesc,
     Pritim: 'True',
-    PageLang: 'HEB',
-    Coin: '1', // ILS
+    PageLang: isUsd ? 'ENG' : 'HEB',
+    Coin: isUsd ? '2' : '1',
     Tash: '1',
     FixTash: 'False',
     ClientName: firstName,

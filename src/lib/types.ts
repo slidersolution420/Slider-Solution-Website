@@ -119,7 +119,8 @@ export interface CartPayload {
     zip: string
   }
   totalUsd: number
-  totalIls: number
+  totalIls?: number
+  chargeCurrency?: 'ILS' | 'USD'
 }
 
 export interface CartSession {
