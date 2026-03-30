@@ -95,7 +95,7 @@ export default function CartDrawer() {
                   className="flex items-center gap-4 rounded-xl border border-white/10 bg-gray-900/50 p-3"
                 >
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-white">{locale === 'he' ? item.name_he || item.name : item.name_en || item.name}</p>
+                    <p className="truncate text-sm font-medium text-white">{(item as Record<string, unknown>)[`name_${locale}`] as string || item.name_en || item.name}</p>
                     <p className="text-xs text-gray-500">× {item.quantity}</p>
                   </div>
                   <div className="shrink-0 text-sm font-semibold text-white">

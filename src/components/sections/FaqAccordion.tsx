@@ -1,7 +1,9 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
+import { localized } from '@/lib/cms'
 import type { FaqItem } from '@/lib/cms'
 
 interface FaqAccordionProps {
@@ -10,6 +12,7 @@ interface FaqAccordionProps {
 }
 
 export default function FaqAccordion({ items, locale }: FaqAccordionProps) {
+  const t = useTranslations('faq')
   const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
@@ -17,14 +20,14 @@ export default function FaqAccordion({ items, locale }: FaqAccordionProps) {
       <div className="mx-auto max-w-3xl px-4">
         <div className="mb-12 text-center">
           <h2 className="text-3xl font-bold text-white">
-            {locale === 'he' ? 'שאלות נפוצות' : 'Frequently Asked Questions'}
+            {t('title')}
           </h2>
         </div>
 
         <div className="space-y-3">
           {items.map((item, i) => {
-            const question = locale === 'he' ? item.question_he : item.question_en
-            const answer = locale === 'he' ? item.answer_he : item.answer_en
+            const question = localized(item, 'question', locale)
+            const answer = localized(item, 'answer', locale)
             const isOpen = openIndex === i
 
             return (

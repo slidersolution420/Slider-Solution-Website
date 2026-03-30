@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 import { checkWholesaleSession } from '@/lib/auth-server'
 import { createServiceClient } from '@/lib/supabase-server'
 import type { Order } from '@/lib/types'
@@ -20,6 +21,8 @@ interface WholesalePageProps {
 
 export default async function WholesalePage({ params }: WholesalePageProps) {
   const { locale } = await params
+  const tw = await getTranslations('wholesale')
+  const td = await getTranslations('wholesale_dashboard')
   const account = await checkWholesaleSession()
 
   if (!account) {
@@ -38,7 +41,7 @@ export default async function WholesalePage({ params }: WholesalePageProps) {
         <NavBar />
         <main className="flex min-h-screen items-center justify-center bg-surface pt-16">
           <p className="text-red-400">
-            {locale === 'he' ? 'החשבון חסום. פנה אלינו.' : 'Account blocked. Please contact us.'}
+            {tw('blocked')}
           </p>
         </main>
         <Footer />
@@ -53,12 +56,10 @@ export default async function WholesalePage({ params }: WholesalePageProps) {
         <main className="flex min-h-screen items-center justify-center bg-surface pt-16">
           <div className="text-center">
             <p className="text-lg text-yellow-400">
-              {locale === 'he' ? 'החשבון שלך בבדיקה' : 'Your account is under review'}
+              {td('pending_review')}
             </p>
             <p className="mt-2 text-sm text-gray-500">
-              {locale === 'he'
-                ? 'נאשר את החשבון תוך 24 שעות'
-                : "We'll approve your account within 24 hours"}
+              {td('pending_sub')}
             </p>
           </div>
         </main>

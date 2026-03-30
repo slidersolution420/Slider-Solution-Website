@@ -7,37 +7,75 @@
  */
 import { createServiceClient } from '@/lib/supabase-server'
 
+// ── Locale-aware field helper ────────────────────────────────────────────────
+// Usage: localized(item, 'title', locale) → item.title_es ?? item.title_en
+// Falls back to English when the requested locale column is empty or missing.
+
+export function localized<T extends Record<string, unknown>>(
+  obj: T,
+  field: string,
+  locale: string,
+): string {
+  const val = obj[`${field}_${locale}`]
+  if (typeof val === 'string' && val) return val
+  // Fallback to English
+  const fallback = obj[`${field}_en`]
+  return typeof fallback === 'string' ? fallback : ''
+}
+
+/** Like localized() but for array fields (e.g. sections, kit_contents). */
+export function localizedArray<V>(
+  obj: Record<string, unknown>,
+  field: string,
+  locale: string,
+): V[] {
+  const val = obj[`${field}_${locale}`]
+  if (Array.isArray(val) && val.length > 0) return val as V[]
+  const fallback = obj[`${field}_en`]
+  return Array.isArray(fallback) ? (fallback as V[]) : []
+}
+
 // ── Types ────────────────────────────────────────────────────────────────────
 
 export interface ColorItem {
   name_he: string
   name_en: string
+  name_es?: string
   slug: string
   image: string
   gradient: string
+  [key: string]: unknown // allow localized() to access dynamic locale fields
 }
 
 export interface FeatureItem {
   title_he: string
   title_en: string
+  title_es?: string
   desc_he: string
   desc_en: string
+  desc_es?: string
   icon: string
+  [key: string]: unknown
 }
 
 export interface StepItem {
   title_he: string
   title_en: string
+  title_es?: string
   desc_he: string
   desc_en: string
+  desc_es?: string
+  [key: string]: unknown
 }
 
 export interface ProductContent {
   name: string
   tagline_he: string
   tagline_en: string
+  tagline_es?: string
   description_he: string
   description_en: string
+  description_es?: string
   price_b2c_usd: number
   price_b2b_usd: number
   image_b2c: string
@@ -47,16 +85,21 @@ export interface ProductContent {
   steps: StepItem[]
   kit_contents_he: string[]
   kit_contents_en: string[]
+  kit_contents_es?: string[]
   stock: number
+  [key: string]: unknown
 }
 
 export interface FaqItem {
   slug: string
   question_he: string
   question_en: string
+  question_es?: string
   answer_he: string
   answer_en: string
+  answer_es?: string
   order: number
+  [key: string]: unknown
 }
 
 export interface PageSection {
@@ -67,8 +110,11 @@ export interface PageSection {
 export interface PageContent {
   title_he: string
   title_en: string
+  title_es?: string
   sections_he: PageSection[]
   sections_en: PageSection[]
+  sections_es?: PageSection[]
+  [key: string]: unknown
 }
 
 // ── Defaults (shown if Supabase unreachable) ──────────────────────────────────
@@ -137,7 +183,7 @@ export async function getFaq(): Promise<FaqItem[]> {
     const supabase = createServiceClient()
     const { data, error } = await supabase
       .from('cms_faq')
-      .select('slug, question_he, question_en, answer_he, answer_en, sort_order')
+      .select('slug, question_he, question_en, question_es, answer_he, answer_en, answer_es, sort_order')
       .order('sort_order', { ascending: true })
 
     if (error ?? !data) return []
@@ -146,8 +192,10 @@ export async function getFaq(): Promise<FaqItem[]> {
       slug: row.slug as string,
       question_he: row.question_he as string,
       question_en: row.question_en as string,
+      question_es: (row.question_es as string) || '',
       answer_he: row.answer_he as string,
       answer_en: row.answer_en as string,
+      answer_es: (row.answer_es as string) || '',
       order: row.sort_order as number,
     }))
     faqCachedAt = Date.now()
@@ -164,7 +212,7 @@ export async function getPage(slug: string): Promise<PageContent | null> {
     const supabase = createServiceClient()
     const { data, error } = await supabase
       .from('cms_pages')
-      .select('title_he, title_en, sections_he, sections_en')
+      .select('title_he, title_en, title_es, sections_he, sections_en, sections_es')
       .eq('slug', slug)
       .single()
 
@@ -173,8 +221,10 @@ export async function getPage(slug: string): Promise<PageContent | null> {
     return {
       title_he: data.title_he as string,
       title_en: data.title_en as string,
+      title_es: (data.title_es as string) || '',
       sections_he: data.sections_he as PageSection[],
       sections_en: data.sections_en as PageSection[],
+      sections_es: (data.sections_es as PageSection[]) || [],
     }
   } catch {
     return null

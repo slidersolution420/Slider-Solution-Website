@@ -12,6 +12,7 @@ interface WholesaleLandingProps {
 
 export default function WholesaleLanding({ locale }: WholesaleLandingProps) {
   const t = useTranslations('wholesale')
+  const tl = useTranslations('wholesale_landing')
   const [modalOpen, setModalOpen] = useState(false)
   const router = useRouter()
 
@@ -34,9 +35,9 @@ export default function WholesaleLanding({ locale }: WholesaleLandingProps) {
 
         <div className="mb-10 grid gap-4 sm:grid-cols-3">
           {[
-            { value: '$82', label: locale === 'he' ? 'לקופסת תצוגה' : 'Per display box' },
-            { value: '6', label: locale === 'he' ? 'קיטים בקופסה' : 'Kits per box' },
-            { value: '30%', label: locale === 'he' ? 'חיסכון' : 'Savings vs retail' },
+            { value: '$82', label: tl('per_box') },
+            { value: '6', label: tl('kits_per_box') },
+            { value: '30%', label: tl('savings') },
           ].map((stat) => (
             <div
               key={stat.value}

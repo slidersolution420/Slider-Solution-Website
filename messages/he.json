@@ -19,9 +19,17 @@
     "order_now": "הזמן עכשיו",
     "shipping_pill": "משלוח חינם לכל הארץ 🚚",
     "stat_patent_primary": "מוגן בפטנט",
-    "stat_patent_secondary": "Patent Protected",
+    "stat_patent_secondary": "פטנט רשום",
     "stat_customers_number": "+1K",
-    "stat_customers_label": "לקוחות מרוצים"
+    "stat_customers_label": "לקוחות מרוצים",
+    "color_label": "צבע",
+    "free_shipping_badge": "משלוח חינם",
+    "units_label": "יחידות",
+    "decrease_qty": "הפחת כמות",
+    "increase_qty": "הוסף כמות",
+    "need_more": "צריך יותר מ-10? ",
+    "join_wholesaler": "הצטרף כמשווק",
+    "secure_payment": "תשלום מאובטח"
   },
   "how_it_works": {
     "title_before": "איך זה ",
@@ -177,6 +185,48 @@
     "form_close": "סגור",
     "verified": "רכישה מאומתת",
     "empty": "היה הראשון לכתוב ביקורת!"
+  },
+  "features": {
+    "title": "למה SLIDER?",
+    "subtitle": "ארבעה יתרונות שמשנים את כל החוויה"
+  },
+  "faq": {
+    "title": "שאלות נפוצות"
+  },
+  "reviews_carousel": {
+    "title": "מה הלקוחות אומרים?"
+  },
+  "wholesale_landing": {
+    "per_box": "לקופסת תצוגה",
+    "kits_per_box": "קיטים בקופסה",
+    "savings": "חיסכון"
+  },
+  "wholesale_dashboard": {
+    "order_box": "הזמן קופסת תצוגה",
+    "kits_label": "6 קיטים לקופסה",
+    "order_now": "הזמן עכשיו",
+    "date": "תאריך",
+    "total": "סה\"כ",
+    "status": "סטטוס",
+    "pending_review": "החשבון שלך בבדיקה",
+    "pending_sub": "נאשר את החשבון תוך 24 שעות"
+  },
+  "instagram": {
+    "title": "עקבו אחרינו"
+  },
+  "order_details": {
+    "title": "ההזמנה התקבלה!",
+    "subtitle": "תודה על הרכישה",
+    "order_number": "מספר הזמנה",
+    "total": "סה\"כ",
+    "status": "סטטוס",
+    "tracking": "מעקב",
+    "confirmation_sent": "אישור נשלח ל:",
+    "back": "חזרה לחנות"
+  },
+  "meta": {
+    "title": "SLIDER — קיט הגלגול המושלם",
+    "description": "קיט ה-ALL IN ONE הראשון בעולם. מטחנה מרובעת, משפך מובנה, 5 קונוסים. משלוח חינם בכל הארץ."
   },
   "errors": {
     "required": "שדה חובה",

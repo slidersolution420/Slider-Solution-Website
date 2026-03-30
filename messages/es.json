@@ -18,10 +18,18 @@
     "add_to_cart": "Añadir al Carrito",
     "order_now": "Pedir Ahora",
     "shipping_pill": "Envío gratis a EE.UU. y Europa en pedidos de 3+ artículos 🚚",
-    "stat_patent_primary": "מוגן בפטנט",
-    "stat_patent_secondary": "Protegido por Patente",
+    "stat_patent_primary": "Patente Protegida",
+    "stat_patent_secondary": "Diseño Patentado",
     "stat_customers_number": "+1K",
-    "stat_customers_label": "Clientes Satisfechos"
+    "stat_customers_label": "Clientes Satisfechos",
+    "color_label": "Color",
+    "free_shipping_badge": "Envío Gratis",
+    "units_label": "unidades",
+    "decrease_qty": "Reducir cantidad",
+    "increase_qty": "Aumentar cantidad",
+    "need_more": "¿Necesitas más de 10? ",
+    "join_wholesaler": "Únete como mayorista",
+    "secure_payment": "Pago Seguro"
   },
   "how_it_works": {
     "title_before": "Cómo ",
@@ -177,6 +185,48 @@
     "form_close": "Cerrar",
     "verified": "Compra Verificada",
     "empty": "¡Sé el primero en dejar una reseña!"
+  },
+  "features": {
+    "title": "¿Por Qué SLIDER?",
+    "subtitle": "Cuatro ventajas que cambian toda la experiencia"
+  },
+  "faq": {
+    "title": "Preguntas Frecuentes"
+  },
+  "reviews_carousel": {
+    "title": "¿Qué Dicen los Clientes?"
+  },
+  "wholesale_landing": {
+    "per_box": "Por caja de exhibición",
+    "kits_per_box": "Kits por caja",
+    "savings": "Ahorro vs minorista"
+  },
+  "wholesale_dashboard": {
+    "order_box": "Pedir Caja de Exhibición",
+    "kits_label": "6 kits por caja",
+    "order_now": "Pedir Ahora",
+    "date": "Fecha",
+    "total": "Total",
+    "status": "Estado",
+    "pending_review": "Tu cuenta está en revisión",
+    "pending_sub": "Aprobaremos tu cuenta en 24 horas"
+  },
+  "instagram": {
+    "title": "Síguenos"
+  },
+  "order_details": {
+    "title": "¡Pedido Recibido!",
+    "subtitle": "Gracias por tu compra",
+    "order_number": "Pedido #",
+    "total": "Total",
+    "status": "Estado",
+    "tracking": "Seguimiento",
+    "confirmation_sent": "Confirmación enviada a:",
+    "back": "Volver a la Tienda"
+  },
+  "meta": {
+    "title": "SLIDER — El Kit de Conos Original Todo en Uno",
+    "description": "El primer kit de conos ALL IN ONE del mundo. Grinder cuadrado, embudo integrado, 5 conos. Envío gratis."
   },
   "errors": {
     "required": "Requerido",

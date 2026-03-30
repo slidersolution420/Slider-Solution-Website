@@ -50,6 +50,7 @@ export interface CartItem {
   name: string
   name_he: string
   name_en: string
+  [key: string]: unknown // allow dynamic locale name fields (name_es, name_de, etc.)
 }
 
 export interface ShippingAddress {

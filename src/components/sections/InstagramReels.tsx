@@ -1,3 +1,7 @@
+'use client'
+
+import { useTranslations } from 'next-intl'
+
 interface InstagramReelsProps {
   locale: string
 }
@@ -12,8 +16,8 @@ const REEL_IDS = [
 ]
 
 export default function InstagramReels({ locale }: InstagramReelsProps) {
-  const isHe = locale === 'he'
-  const title = isHe ? 'עקבו אחרינו' : 'Follow Us'
+  const t = useTranslations('instagram')
+  const title = t('title')
   const instagramUrl = 'https://www.instagram.com/slider.solution'
 
   return (

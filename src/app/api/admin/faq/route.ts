@@ -38,8 +38,10 @@ export async function POST(request: Request) {
       slug: string
       question_he: string
       question_en: string
+      question_es?: string
       answer_he: string
       answer_en: string
+      answer_es?: string
       sort_order: number
     }
 
@@ -69,8 +71,10 @@ export async function PATCH(request: Request) {
       id: string
       question_he?: string
       question_en?: string
+      question_es?: string
       answer_he?: string
       answer_en?: string
+      answer_es?: string
       sort_order?: number
     }
 

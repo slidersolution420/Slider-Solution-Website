@@ -8,6 +8,7 @@ import { useStore } from '@/store'
 import { formatPrice } from '@/lib/currency'
 import { calcPrice } from '@/lib/pricing'
 import { ShieldCheckIcon, LockClosedIcon } from '@heroicons/react/24/solid'
+import { localized } from '@/lib/cms'
 import type { ProductContent } from '@/lib/cms'
 
 interface HeroSectionProps {
@@ -33,8 +34,8 @@ export default function HeroSection({ product, locale, visibleColors, discountPc
     useStore()
 
   const isHe = locale === 'he'
-  const tagline = isHe ? product.tagline_he : product.tagline_en
-  const description = isHe ? product.description_he : product.description_en
+  const tagline = localized(product, 'tagline', locale)
+  const description = localized(product, 'description', locale)
 
   const { before, highlight } = splitHighlight(tagline, isHe ? 1 : 2)
 
@@ -93,6 +94,7 @@ export default function HeroSection({ product, locale, visibleColors, discountPc
       name: `${product.name} — ${selectedColorData.name_en}`,
       name_he: `${product.name} — ${selectedColorData.name_he}`,
       name_en: `${product.name} — ${selectedColorData.name_en}`,
+      name_es: `${product.name} — ${selectedColorData.name_es || selectedColorData.name_en}`,
     })
     openCart()
   }
@@ -145,7 +147,7 @@ export default function HeroSection({ product, locale, visibleColors, discountPc
                 imageUrl && (
                   <Image
                     src={imageUrl}
-                    alt={`SLIDER Kit — ${isHe ? selectedColorData?.name_he : selectedColorData?.name_en}`}
+                    alt={`SLIDER Kit — ${selectedColorData ? localized(selectedColorData, 'name', locale) : ''}`}
                     width={280}
                     height={280}
                     className="object-contain"
@@ -157,7 +159,7 @@ export default function HeroSection({ product, locale, visibleColors, discountPc
             {/* Color selector */}
             {displayColors.length > 1 && (
               <div className="mb-6">
-                <div className="flex gap-3" role="radiogroup" aria-label={isHe ? 'צבע' : 'Color'}>
+                <div className="flex gap-3" role="radiogroup" aria-label={t('color_label')}>
                   {displayColors.map((color) => (
                     <button
                       key={color.slug}
@@ -169,7 +171,7 @@ export default function HeroSection({ product, locale, visibleColors, discountPc
                           ? 'border-brand-400 scale-110 ring-2 ring-brand-500/50'
                           : 'border-white/20 hover:border-white/40'
                       }`}
-                      aria-label={isHe ? color.name_he : color.name_en}
+                      aria-label={localized(color, 'name', locale)}
                     />
                   ))}
                 </div>
@@ -195,9 +197,9 @@ export default function HeroSection({ product, locale, visibleColors, discountPc
                   })()}
                 </p>
                 {(isHe || selectedQty >= 3) ? (
-                  <p className="text-xs text-green-400">{isHe ? 'משלוח חינם' : 'Free Shipping'}</p>
+                  <p className="text-xs text-green-400">{t('free_shipping_badge')}</p>
                 ) : (
-                  <p className="text-xs text-gray-500">{isHe ? 'יחידות' : 'units'}</p>
+                  <p className="text-xs text-gray-500">{t('units_label')}</p>
                 )}
               </div>
               <div className="flex items-center gap-3">
@@ -205,7 +207,7 @@ export default function HeroSection({ product, locale, visibleColors, discountPc
                   onClick={() => setSelectedQty(Math.max(1, selectedQty - 1))}
                   disabled={selectedQty === 1}
                   className="flex size-9 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-xl font-bold text-white transition-colors hover:border-white/30 hover:bg-white/10 disabled:opacity-30"
-                  aria-label={isHe ? 'הפחת כמות' : 'decrease quantity'}
+                  aria-label={t('decrease_qty')}
                 >
                   −
                 </button>
@@ -214,7 +216,7 @@ export default function HeroSection({ product, locale, visibleColors, discountPc
                   onClick={() => setSelectedQty(Math.min(10, selectedQty + 1))}
                   disabled={selectedQty >= 10}
                   className="flex size-9 items-center justify-center rounded-xl border border-white/15 bg-white/5 text-xl font-bold text-white transition-colors hover:border-white/30 hover:bg-white/10 disabled:opacity-30"
-                  aria-label={isHe ? 'הוסף כמות' : 'increase quantity'}
+                  aria-label={t('increase_qty')}
                 >
                   +
                 </button>
@@ -222,12 +224,12 @@ export default function HeroSection({ product, locale, visibleColors, discountPc
             </div>
             {selectedQty === 10 && (
               <p className="-mt-4 mb-4 text-xs text-gray-400">
-                {isHe ? 'צריך יותר מ-10? ' : 'Need more than 10? '}
+                {t('need_more')}
                 <Link
                   href="/wholesale"
                   className="text-brand-400 underline hover:text-brand-300"
                 >
-                  {isHe ? 'הצטרף כמשווק' : 'Join as a wholesaler'}
+                  {t('join_wholesaler')}
                 </Link>
               </p>
             )}
@@ -254,7 +256,7 @@ export default function HeroSection({ product, locale, visibleColors, discountPc
               <span className="flex flex-col items-start rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5">
                 <span className="flex items-center gap-1.5 text-sm font-bold text-white">
                   <LockClosedIcon className="size-4 text-brand-400" />
-                  {isHe ? 'תשלום מאובטח' : 'Secure Payment'}
+                  {t('secure_payment')}
                 </span>
                 <span className="mt-0.5 flex items-center gap-1">
                   <svg className="size-4 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" aria-hidden="true">
@@ -291,7 +293,7 @@ export default function HeroSection({ product, locale, visibleColors, discountPc
                 {imageUrl && (
                   <Image
                     src={imageUrl}
-                    alt={`SLIDER Kit — ${isHe ? selectedColorData?.name_he : selectedColorData?.name_en}`}
+                    alt={`SLIDER Kit — ${selectedColorData ? localized(selectedColorData, 'name', locale) : ''}`}
                     fill
                     className="object-contain"
                     priority

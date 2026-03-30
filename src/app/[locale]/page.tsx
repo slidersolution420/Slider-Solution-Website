@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
-import { getProduct, getFaq } from '@/lib/cms'
+import { getTranslations } from 'next-intl/server'
+import { getProduct, getFaq, localized } from '@/lib/cms'
 import { getConfig } from '@/lib/config'
 import { createServiceClient } from '@/lib/supabase-server'
 import type { Review } from '@/lib/types'
@@ -26,13 +27,11 @@ interface HomePageProps {
 
 export async function generateMetadata({ params }: HomePageProps): Promise<Metadata> {
   const { locale } = await params
-  const isHe = locale === 'he'
+  const t = await getTranslations({ locale, namespace: 'meta' })
 
   return {
-    title: isHe ? 'SLIDER — קיט הגלגול המושלם' : 'SLIDER — The Original All-in-One Cone Kit',
-    description: isHe
-      ? 'קיט ה-ALL IN ONE הראשון בעולם. מטחנה מרובעת, משפך מובנה, 5 קונוסים. משלוח חינם בכל הארץ.'
-      : "The world's first ALL IN ONE cone kit. Square grinder, built-in funnel, 5 cones. Free shipping.",
+    title: t('title'),
+    description: t('description'),
     openGraph: {
       images: ['/og-image.jpg'],
     },
@@ -83,7 +82,7 @@ export default async function HomePage({ params }: HomePageProps) {
               '@context': 'https://schema.org',
               '@type': 'Product',
               name: 'SLIDER Cone Kit',
-              description: locale === 'he' ? product.description_he : product.description_en,
+              description: localized(product, 'description', locale),
               brand: { '@type': 'Brand', name: 'Slider Solution' },
               offers: {
                 '@type': 'Offer',

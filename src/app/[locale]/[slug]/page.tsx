@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { getPage } from '@/lib/cms'
+import { getPage, localized, localizedArray } from '@/lib/cms'
 import type { PageSection } from '@/lib/cms'
 import NavBar from '@/components/ui/NavBar'
 import Footer from '@/components/ui/Footer'
@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!page) return {}
 
   return {
-    title: `${locale === 'he' ? page.title_he : page.title_en} — SLIDER`,
+    title: `${localized(page, 'title', locale)} — SLIDER`,
   }
 }
 
@@ -34,9 +34,8 @@ export default async function ContentPage({ params }: PageProps) {
 
   if (!page) notFound()
 
-  const isHe = locale === 'he'
-  const title = isHe ? page.title_he : page.title_en
-  const sections: PageSection[] = isHe ? page.sections_he : page.sections_en
+  const title = localized(page, 'title', locale)
+  const sections = localizedArray<PageSection>(page, 'sections', locale)
 
   return (
     <>

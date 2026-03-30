@@ -17,6 +17,7 @@ interface WholesaleDashboardProps {
 
 export default function WholesaleDashboard({ account, orders, locale, priceB2bUsd }: WholesaleDashboardProps) {
   const t = useTranslations('wholesale')
+  const td = useTranslations('wholesale_dashboard')
   const { currency } = useStore()
   const router = useRouter()
 
@@ -44,10 +45,10 @@ export default function WholesaleDashboard({ account, orders, locale, priceB2bUs
         {/* B2B buy section */}
         <div className="mb-8 rounded-2xl border border-brand-700/40 bg-brand-900/20 p-6">
           <h2 className="mb-2 font-semibold text-white">
-            {locale === 'he' ? 'הזמן קופסת תצוגה' : 'Order Display Box'}
+            {td('order_box')}
           </h2>
           <p className="mb-4 text-sm text-gray-400">
-            {locale === 'he' ? '6 קיטים לקופסה' : '6 kits per box'} —{' '}
+            {td('kits_label')} —{' '}
             <span className="font-bold text-brand-300">
               {formatPrice(priceB2bUsd, currency)}
             </span>
@@ -56,7 +57,7 @@ export default function WholesaleDashboard({ account, orders, locale, priceB2bUs
             href="/checkout"
             className="inline-block rounded-xl bg-gradient-to-r from-brand-500 to-brand-700 px-6 py-3 font-bold text-white transition-opacity hover:opacity-90"
           >
-            {locale === 'he' ? 'הזמן עכשיו' : 'Order Now'}
+            {td('order_now')}
           </Link>
         </div>
 
@@ -72,7 +73,7 @@ export default function WholesaleDashboard({ account, orders, locale, priceB2bUs
             <table className="w-full text-sm">
               <thead className="border-b border-white/10 bg-gray-900/80">
                 <tr>
-                  {['#', locale === 'he' ? 'תאריך' : 'Date', locale === 'he' ? 'סה"כ' : 'Total', locale === 'he' ? 'סטטוס' : 'Status'].map(
+                  {['#', td('date'), td('total'), td('status')].map(
                     (h) => (
                       <th key={h} className="px-4 py-3 text-start text-xs font-medium text-gray-500">
                         {h}
@@ -88,7 +89,7 @@ export default function WholesaleDashboard({ account, orders, locale, priceB2bUs
                       {order.id.slice(0, 8).toUpperCase()}
                     </td>
                     <td className="px-4 py-3 text-gray-400">
-                      {new Date(order.created_at).toLocaleDateString(locale === 'he' ? 'he-IL' : 'en-US')}
+                      {new Date(order.created_at).toLocaleDateString(locale)}
                     </td>
                     <td className="px-4 py-3 font-medium text-white">
                       ${order.total_usd.toFixed(2)}

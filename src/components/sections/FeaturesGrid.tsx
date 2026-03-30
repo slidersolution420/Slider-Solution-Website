@@ -1,9 +1,13 @@
+'use client'
+
 import {
   CogIcon,
   FunnelIcon,
   ArchiveBoxIcon,
   ShieldCheckIcon,
 } from '@heroicons/react/24/outline'
+import { useTranslations } from 'next-intl'
+import { localized } from '@/lib/cms'
 import type { ProductContent } from '@/lib/cms'
 
 interface FeaturesGridProps {
@@ -19,6 +23,7 @@ const ICON_MAP: Record<string, React.ElementType> = {
 }
 
 export default function FeaturesGrid({ product, locale }: FeaturesGridProps) {
+  const t = useTranslations('features')
   const features = product.features ?? []
 
   return (
@@ -26,20 +31,18 @@ export default function FeaturesGrid({ product, locale }: FeaturesGridProps) {
       <div className="mx-auto max-w-6xl px-4">
         <div className="mb-12 text-center">
           <h2 className="text-3xl font-bold text-white md:text-4xl">
-            {locale === 'he' ? 'למה SLIDER?' : 'Why SLIDER?'}
+            {t('title')}
           </h2>
           <p className="mt-3 text-gray-400">
-            {locale === 'he'
-              ? 'ארבעה יתרונות שמשנים את כל החוויה'
-              : 'Four advantages that change the whole experience'}
+            {t('subtitle')}
           </p>
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {features.map((feature, i) => {
             const Icon = ICON_MAP[feature.icon] ?? CogIcon
-            const title = locale === 'he' ? feature.title_he : feature.title_en
-            const desc = locale === 'he' ? feature.desc_he : feature.desc_en
+            const title = localized(feature, 'title', locale)
+            const desc = localized(feature, 'desc', locale)
 
             return (
               <div

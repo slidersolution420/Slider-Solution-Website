@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { StarIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid'
 import type { Review } from '@/lib/types'
 
@@ -10,6 +11,7 @@ interface ReviewsCarouselProps {
 }
 
 export default function ReviewsCarousel({ reviews, locale }: ReviewsCarouselProps) {
+  const t = useTranslations('reviews_carousel')
   const [index, setIndex] = useState(0)
   const isRtl = locale === 'he'
 
@@ -30,7 +32,7 @@ export default function ReviewsCarousel({ reviews, locale }: ReviewsCarouselProp
       <div className="mx-auto max-w-4xl px-4">
         <div className="mb-10 text-center">
           <h2 className="text-3xl font-bold text-white">
-            {locale === 'he' ? 'מה הלקוחות אומרים?' : 'What Customers Say'}
+            {t('title')}
           </h2>
         </div>
 

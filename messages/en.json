@@ -18,10 +18,18 @@
     "add_to_cart": "Add to Cart",
     "order_now": "Order Now",
     "shipping_pill": "Free Shipping to the US & Europe on 3+ items 🚚",
-    "stat_patent_primary": "מוגן בפטנט",
-    "stat_patent_secondary": "Patent Protected",
+    "stat_patent_primary": "Patent Protected",
+    "stat_patent_secondary": "Patented Design",
     "stat_customers_number": "+1K",
-    "stat_customers_label": "Happy Customers"
+    "stat_customers_label": "Happy Customers",
+    "color_label": "Color",
+    "free_shipping_badge": "Free Shipping",
+    "units_label": "units",
+    "decrease_qty": "Decrease quantity",
+    "increase_qty": "Increase quantity",
+    "need_more": "Need more than 10? ",
+    "join_wholesaler": "Join as a wholesaler",
+    "secure_payment": "Secure Payment"
   },
   "how_it_works": {
     "title_before": "How It ",
@@ -177,6 +185,48 @@
     "form_close": "Close",
     "verified": "Verified Purchase",
     "empty": "Be the first to leave a review!"
+  },
+  "features": {
+    "title": "Why SLIDER?",
+    "subtitle": "Four advantages that change the whole experience"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions"
+  },
+  "reviews_carousel": {
+    "title": "What Customers Say"
+  },
+  "wholesale_landing": {
+    "per_box": "Per display box",
+    "kits_per_box": "Kits per box",
+    "savings": "Savings vs retail"
+  },
+  "wholesale_dashboard": {
+    "order_box": "Order Display Box",
+    "kits_label": "6 kits per box",
+    "order_now": "Order Now",
+    "date": "Date",
+    "total": "Total",
+    "status": "Status",
+    "pending_review": "Your account is under review",
+    "pending_sub": "We'll approve your account within 24 hours"
+  },
+  "instagram": {
+    "title": "Follow Us"
+  },
+  "order_details": {
+    "title": "Order Received!",
+    "subtitle": "Thank you for your purchase",
+    "order_number": "Order #",
+    "total": "Total",
+    "status": "Status",
+    "tracking": "Tracking",
+    "confirmation_sent": "Confirmation sent to:",
+    "back": "Back to Shop"
+  },
+  "meta": {
+    "title": "SLIDER — The Original All-in-One Cone Kit",
+    "description": "The world's first ALL IN ONE cone kit. Square grinder, built-in funnel, 5 cones. Free shipping."
   },
   "errors": {
     "required": "Required",
