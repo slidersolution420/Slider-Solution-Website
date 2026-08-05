@@ -1,11 +1,17 @@
 import { NextResponse } from 'next/server'
 import { createServiceClient } from '@/lib/supabase-server'
+import { SITE_CLOSED } from '@/lib/site-status'
 
 export async function POST(request: Request) {
   // Verify cron secret
   const authHeader = request.headers.get('authorization')
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  }
+
+  // Site is temporarily closed — skip abandoned-cart emails entirely.
+  if (SITE_CLOSED) {
+    return NextResponse.json({ skipped: 'site closed' })
   }
 
   try {
@@ -30,14 +36,17 @@ export async function POST(request: Request) {
     for (const session of abandoned) {
       try {
         // Send abandoned cart email via Resend
-        await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/email/abandoned-cart`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${process.env.CRON_SECRET}`,
+        await fetch(
+          `${process.env.NEXT_PUBLIC_APP_URL}/api/email/abandoned-cart`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${process.env.CRON_SECRET}`,
+            },
+            body: JSON.stringify({ email: session.email, cart: session.cart }),
           },
-          body: JSON.stringify({ email: session.email, cart: session.cart }),
-        })
+        )
 
         // Mark as abandoned so we don't email again
         await supabase
